@@ -1,0 +1,33 @@
+{
+  "name": "technological-grief-interactive",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Locate yourself in the Change Grief Cycle relative to AI adoption.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate:content": "vitest run src/content/validate.test.ts",
+    "typecheck": "tsc -b --noEmit",
+    "check:bundle": "node scripts/check-bundle.mjs"
+  },
+  "dependencies": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "zustand": "5.0.2"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.0",
+    "@testing-library/react": "16.1.0",
+    "@types/react": "19.0.1",
+    "@types/react-dom": "19.0.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "jsdom": "25.0.1",
+    "typescript": "5.7.2",
+    "vite": "6.0.3",
+    "vitest": "^3.2.7"
+  }
+}

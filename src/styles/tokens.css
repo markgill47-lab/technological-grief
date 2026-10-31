@@ -1,0 +1,45 @@
+/*
+ * Design tokens. See specs/ui-specification.md section 6.
+ *
+ * The stage palette is unchanged from v1. The terrain tokens are new.
+ */
+:root {
+  /* Surface */
+  --bg: #2a2d34;
+  --text: #f5f5f0;
+  --text-dim: rgba(245, 245, 240, 0.72);
+  --text-faint: rgba(245, 245, 240, 0.46);
+  --accent: #00d9ff;
+  --accent-dim: rgba(0, 217, 255, 0.18);
+
+  /* Stages */
+  --loss: #c83737;
+  --doubt: #b83a4b;
+  --discomfort: #e8a547;
+  --discovery: #f4c542;
+  --understanding: #4a9b8e;
+  --integration: #2f6b5d;
+
+  /* Terrain */
+  /* Sky and ground need real separation or the lower half of the graphic
+     reads as empty space rather than as terrain. */
+  --sky-top: #15181e;
+  --sky-bottom: #232832;
+  --ground-top: #3d4654;
+  --ground-bottom: #2b313c;
+  --trail: rgba(245, 245, 240, 0.14);
+  --trail-edge: rgba(245, 245, 240, 0.3);
+  --field: #8a93a5;
+  /* The regression path uses Doubt's colour because that is where it leads. */
+  --regress: #b83a4b;
+
+  /* Surfaces */
+  --panel: #31353d;
+  --panel-raised: #383d46;
+  --hairline: rgba(245, 245, 240, 0.12);
+
+  /* Metrics */
+  --measure: 72ch;
+  --radius: 8px;
+  --focus-ring: 2px solid var(--accent);
+}
