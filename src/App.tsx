@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Terrain } from './terrain/Terrain';
 import { AssembledContent } from './components/AssembledContent';
 import { QuickSurvey } from './components/QuickSurvey';
+import { ConversationSurvey } from './components/ConversationSurvey';
 import { DiagnosisResult } from './components/DiagnosisResult';
 import { useStore } from './store';
 import { STAGES } from './domain/stages';
@@ -16,7 +17,15 @@ export default function App() {
   const selectStage = useStore((s) => s.selectStage);
   const resetSession = useStore((s) => s.resetSession);
   const startQuick = useStore((s) => s.startQuick);
+  const startConversation = useStore((s) => s.startConversation);
+  const probeConversation = useStore((s) => s.probeConversation);
   const finishReveal = useStore((s) => s.finishReveal);
+
+  // One probe at mount. A missing or misconfigured proxy hides the
+  // Conversation card rather than offering a button that fails.
+  useEffect(() => {
+    void probeConversation();
+  }, [probeConversation]);
 
   // The reveal beat: the user sees themselves placed, then the trail
   // coloured, then the comparison to their field. Leading with the gap would
@@ -45,6 +54,7 @@ export default function App() {
         mode={mode}
         onStageSelect={mode === 'explore' ? selectStage : undefined}
         revealing={status === 'revealing'}
+        thinking={status === 'thinking'}
       />
 
       <div className="controls">
@@ -99,7 +109,8 @@ export default function App() {
         ) : (
           <DiagnoseView
             status={status}
-            onStart={startQuick}
+            onStartQuick={startQuick}
+            onStartConversation={startConversation}
             diagnosis={diagnosis}
             rationale={rationale}
           />
@@ -144,16 +155,19 @@ function ExploreIntro({ onPick }: { onPick: (s: import('./domain/types').Stage) 
 
 function DiagnoseView({
   status,
-  onStart,
+  onStartQuick,
+  onStartConversation,
   diagnosis,
   rationale,
 }: {
   status: string;
-  onStart: () => void;
+  onStartQuick: () => void;
+  onStartConversation: () => void;
   diagnosis: import('./domain/types').Diagnosis | null;
   rationale: string | null;
 }) {
   const conversationAvailable = useStore((s) => s.conversationAvailable);
+  const fallbackNotice = useStore((s) => s.fallbackNotice);
 
   if (status === 'done' && diagnosis) {
     return <DiagnosisResult diagnosis={diagnosis} rationale={rationale} />;
@@ -167,8 +181,21 @@ function DiagnoseView({
     );
   }
 
+  if (status === 'talking' || status === 'thinking') {
+    return <ConversationSurvey />;
+  }
+
   if (status === 'asking') {
-    return <QuickSurvey />;
+    return (
+      <>
+        {fallbackNotice && (
+          <p className="notice" role="status">
+            {fallbackNotice}
+          </p>
+        )}
+        <QuickSurvey />
+      </>
+    );
   }
 
   return (
@@ -186,7 +213,7 @@ function DiagnoseView({
             Multiple choice. About two minutes. Nothing you enter leaves your
             browser.
           </p>
-          <button type="button" className="button button--primary" onClick={onStart}>
+          <button type="button" className="button button--primary" onClick={onStartQuick}>
             Begin
           </button>
         </div>
@@ -198,10 +225,11 @@ function DiagnoseView({
             <h2>Talk it through</h2>
             <p>
               A short back-and-forth. More accurate, and it can follow what you
-              actually say.
+              actually say. Your answers go to Anthropic to generate the next
+              question, and are not stored anywhere.
             </p>
-            <button type="button" className="button" disabled>
-              Not yet available
+            <button type="button" className="button" onClick={onStartConversation}>
+              Start talking
             </button>
           </div>
         )}

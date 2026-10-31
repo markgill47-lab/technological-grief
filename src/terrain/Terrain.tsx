@@ -30,6 +30,8 @@ export interface TerrainProps {
   onStageSelect?: (s: Stage) => void;
   /** True while the diagnosis reveal sequence is running. */
   revealing?: boolean;
+  /** True while a model call is in flight. Drives the trail sweep. */
+  thinking?: boolean;
 }
 
 /** |gap| below this and the two markers would overlap illegibly. */
@@ -44,6 +46,7 @@ export function Terrain({
   mode,
   onStageSelect,
   revealing = false,
+  thinking = false,
 }: TerrainProps) {
   const uid = useId();
   const compact = useCompact();
@@ -418,16 +421,23 @@ export function Terrain({
             </g>
           )}
 
-          {mode === 'diagnose' && revealing && (
-            <text
-              x={VIEW_W / 2}
-              y={40}
-              textAnchor="middle"
-              className="terrain__annotation"
-              fill="var(--text-faint)"
-            >
-              Thinking…
-            </text>
+          {/* The thinking indicator lives on the trail rather than in a
+              separate spinner, because the trail is what is about to
+              change. Under reduced motion the CSS swaps the sweep for a
+              static label. */}
+          {thinking && (
+            <g data-testid="trail-sweep" className="terrain__sweep">
+              <path d={TRAIL_BAND_D} fill="var(--accent)" opacity={0.18} />
+              <text
+                x={VIEW_W / 2}
+                y={28}
+                textAnchor="middle"
+                className="terrain__annotation terrain__sweep-label"
+                fill="var(--text-faint)"
+              >
+                Thinking…
+              </text>
+            </g>
           )}
         </svg>
       )}

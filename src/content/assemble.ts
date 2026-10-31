@@ -119,7 +119,7 @@ export function assemble(stage: Stage, diagnosis: Diagnosis | null): AssembledPa
     blockId: core.id,
   });
 
-  if (diagnosis) {
+  if (diagnosis?.rogers) {
     const pace = PACE_NOTES[diagnosis.rogers];
     if (pace) {
       sections.push({

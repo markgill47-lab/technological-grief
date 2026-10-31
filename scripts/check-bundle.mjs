@@ -12,7 +12,6 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import { join, extname } from 'node:path';
-import { createRequire } from 'node:module';
 
 const DIST = 'dist';
 const MAX_JS_GZIP = 180 * 1024;
@@ -31,13 +30,21 @@ function walk(dir) {
   return out;
 }
 
-// --- S-01: the Anthropic SDK must not be a client dependency --------------
-const require = createRequire(import.meta.url);
-const pkg = require('../package.json');
-if (pkg.dependencies?.['@anthropic-ai/sdk']) {
-  failures.push(
-    'S-01 @anthropic-ai/sdk is a client dependency. It belongs on the proxy only.',
-  );
+// --- S-01: no client source may import the Anthropic SDK ------------------
+//
+// The SDK IS a root dependency: the serverless function under api/ needs it,
+// and Vercel's zero-config build resolves /api against the root package.
+// So the dependency list cannot be the guarantee — and never really could
+// be, since a workspace would hoist the package into root node_modules
+// anyway. What actually keeps the key out of the browser is that nothing
+// under src/ imports it, which is what this checks. S-02 and S-03 below then
+// verify the same thing from the other end, against the built output.
+const SDK_IMPORT = /\bfrom\s+['"]@anthropic-ai\/sdk|require\(\s*['"]@anthropic-ai\/sdk/;
+for (const file of walk('src')) {
+  if (!['.ts', '.tsx', '.js', '.jsx'].includes(extname(file))) continue;
+  if (SDK_IMPORT.test(readFileSync(file, 'utf8'))) {
+    failures.push(`S-01 ${file} imports @anthropic-ai/sdk. It belongs on the proxy only.`);
+  }
 }
 
 // --- S-04: no VITE_-prefixed secret names ---------------------------------

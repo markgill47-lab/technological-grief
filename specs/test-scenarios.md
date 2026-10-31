@@ -208,7 +208,7 @@ Mocked proxy. Every test asserts the fallback behavior, not merely that an error
 | I-14 | `rationale` contains markup | rendered as text, not parsed |
 | I-15 | No proxy configured (`HEAD` 404) | Conversation card hidden; Quick is the only path offered |
 | I-16 | Proxy becomes unavailable mid-conversation | fallback, transcript preserved |
-| I-17 | User abandons after turn 1 and switches to Quick | the Q1 answer carries over |
+| I-17 | User abandons after turn 1 and switches to Quick | Quick starts clean; the transcript is retained but **not** used to pre-fill ([survey-methodology.md](survey-methodology.md) §4.2) |
 
 ### 8.1 Proxy tests
 
@@ -231,7 +231,8 @@ I-P-04 through I-P-06 are the substance of §5.7's claim that the proxy owns the
 
 | ID | Check |
 |---|---|
-| S-01 | `@anthropic-ai/sdk` absent from client `package.json` dependencies |
+| S-01 | No file under `src/` imports `@anthropic-ai/sdk` (the dependency list cannot be the guarantee — see [software-design-document.md](software-design-document.md) §7.1) |
+| S-01b | The S-01 check is itself verified against a deliberate violation, so it is known to be able to fail |
 | S-02 | Built bundle contains no `sk-ant-` |
 | S-03 | Built bundle contains no reference to `api.anthropic.com` |
 | S-04 | No `VITE_`-prefixed variable name contains `KEY`, `SECRET`, or `TOKEN` |
@@ -253,7 +254,7 @@ I-P-04 through I-P-06 are the substance of §5.7's claim that the proxy owns the
 | UJ-06 | **Integration journey.** Teaching others, satisfied. | Integration; breadcrumb offers no "next"; content is outward-facing |
 | UJ-07 | **Negative gap.** Coordination domain, Understanding stage. | Gap is negative; span rendered in the accent color; pace note uses the `userAhead` framing |
 | UJ-08 | **Conversation path, happy.** Full dialogue to diagnosis. | ~6 turns; reveal sequence completes; rationale cites something the user said |
-| UJ-09 | **Conversation fails mid-way.** Proxy dies at turn 3. | Graceful fallback message; Quick path offered; earlier answers retained |
+| UJ-09 | **Conversation fails mid-way.** Proxy dies at turn 3. | Graceful fallback message; Quick path starts at question 1; transcript retained in session state |
 | UJ-10 | **Diagnose then explore.** Diagnose, then browse all six stages. | Personalization persists across every stage; the diagnosed stage is marked on the terrain throughout |
 | UJ-11 | **Start fresh.** Diagnose, then reset. | All state cleared; terrain returns to undiagnosed; sessionStorage key removed |
 | UJ-12 | **Refresh mid-conversation.** Reload at turn 3. | Transcript restored from sessionStorage |

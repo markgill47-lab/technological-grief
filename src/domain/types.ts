@@ -72,7 +72,8 @@ export interface Diagnosis {
   domain: Domain;
   /** Ordered, primary first. Length 1-2. */
   threats: ThreatId[];
-  rogers: RogersPosition;
+  /** Null when unknown, which omits the pace note rather than guessing one. */
+  rogers: RogersPosition | null;
   /** Signed, in stations. fieldPosition(domain) - stagePosition. Always computed locally. */
   gap: number;
   /** True when behaviour and emotion point two or more stations apart. */

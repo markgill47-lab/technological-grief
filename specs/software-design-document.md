@@ -278,36 +278,40 @@ Notes on each, because three of these are places v1 would now fail:
 One call at the end of the conversation, using structured outputs.
 
 ```typescript
-const DIAGNOSIS_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  required: ['stage', 'stageConfidence', 'domain', 'threats', 'rogers', 'rationale'],
-  properties: {
-    stage:           { type: 'string', enum: STAGES },
-    stageConfidence: { type: 'string', enum: ['high', 'moderate', 'low'] },
-    transitionToward:{ type: ['string', 'null'], enum: [...STAGES, null] },
-    domain:          { type: 'string', enum: DOMAINS },
-    threats:         { type: 'array', items: { type: 'string', enum: THREATS },
-                       minItems: 1, maxItems: 2 },
-    rogers:          { type: 'string', enum: ROGERS },
-    rationale:       { type: 'string', maxLength: 600 },
-    signalConflict:  { type: 'boolean' },
-  },
-} as const;
+import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 
-{
+const DiagnosisSchema = z.object({
+  stage:            z.enum(STAGES),
+  stageConfidence:  z.enum(['high', 'moderate', 'low']),
+  transitionToward: z.enum(STAGES).nullable(),
+  domain:           z.enum(DOMAINS),
+  threats:          z.array(z.enum(THREATS)),
+  rogers:           z.enum(ROGERS),
+  rationale:        z.string(),
+  signalConflict:   z.boolean(),
+  ethicalPosition:  z.boolean(),
+});
+
+const DIAGNOSIS_FORMAT = zodOutputFormat(DiagnosisSchema);   // built once
+
+await client.messages.parse({
   model: MODEL,
   max_tokens: 1024,
   system: [{ type: 'text', text: SYSTEM_PROMPT,
              cache_control: { type: 'ephemeral' } }],
   thinking: { type: 'adaptive' },
-  output_config: {
-    effort: 'low',
-    format: { type: 'json_schema', schema: DIAGNOSIS_SCHEMA },
-  },
+  output_config: { effort: 'low', format: DIAGNOSIS_FORMAT },
   messages: [...transcript, { role: 'user', content: CLASSIFY_INSTRUCTION }],
-}
+});
+// → response.parsed_output, which is null when parsing failed. Guard it.
 ```
+
+> **Corrected during implementation.** This specified a hand-written
+> `{ type: 'json_schema', schema }` object. The documented TypeScript path is
+> `zodOutputFormat(schema)` passed to `messages.parse()`, which also returns a
+> parsed, typed `parsed_output` instead of text to deserialize. Array
+> `min`/`max` constraints are not relied on to survive schema conversion, so
+> the two-threat rule is enforced in code — at the proxy and again at assembly.
 
 > **This is the single most important correction in v2.** v1 planned to force a diagnosis with `tool_choice: {type: 'tool', name: '...'}`. On current models **forced tool choice returns HTTP 400** — both `{type: 'any'}` and `{type: 'tool', name}` have been removed. v1's diagnostic path would not run at all.
 >
@@ -372,7 +376,11 @@ This is the structural payoff of having a zero-dependency path: there is no erro
 
 ### 5.6 System prompt
 
-Assembled at build time from [grief-framework-context.md](grief-framework-context.md) plus diagnostic instructions. Byte-stable, so it caches.
+**Generated** at build time from [grief-framework-context.md](grief-framework-context.md) plus diagnostic instructions, by `scripts/build-system-prompt.mjs` into `api/_system-prompt.ts` (~7,600 tokens). The output is committed, so the serverless function does not depend on `specs/` being present in the deployment, and a test fails if the committed prompt no longer matches the document — the framework stays a single source of truth rather than being hand-copied into a second one that drifts.
+
+The generator strips the document's housekeeping sections and **all** cross-document references — markdown links, `(see foo.md)` parentheticals, and bare filenames alike — so the model is never invited to cite a spec filename at the user.
+
+Byte-stable, so it caches. Nothing is interpolated at request time, and `_system-prompt.test.ts` asserts the absence of timestamps and template markers for exactly that reason.
 
 ```
 You are conducting a brief, warm conversation to help someone locate
@@ -416,10 +424,17 @@ Responsibilities, in priority order:
 
 1. **Hold the API key.** `ANTHROPIC_API_KEY` as a server-side env var. Never a `VITE_`-prefixed name — that prefix is what puts a value into the client bundle, which is exactly how v1's design leaked it.
 2. **Build the request.** The client sends only turns. Model, system prompt, effort, and schema are all server-side, so a crafted client cannot change the model, enlarge `max_tokens`, or replace the system prompt.
-3. **Rate limit.** 20 requests per IP per 10 minutes, 120 per hour. Sufficient for ~3 honest sessions per 10 minutes.
+3. **Rate limit.** 20 requests per IP per 10 minutes, 120 per hour — roughly three honest sessions per 10 minutes. The window is **in-memory and therefore per-instance**: serverless containers are ephemeral and several may run at once, so the effective limit is looser than those numbers. This raises the cost of abuse rather than making it impossible, which is the right trade for a public tool with no accounts. A shared store (KV, Redis, a Durable Object) is the upgrade path if abuse actually materialises. Stated here rather than left as a silently approximate guarantee.
 4. **Cap input.** Reject transcripts over 12 turns or 8,000 characters total — the flow never produces more, so anything larger is abuse.
-5. **Log nothing from the body.** Status codes, latency, and token counts only. Never messages, never the diagnosis. This must be explicit in the handler, because the default behavior of most platform loggers is to capture request bodies on error.
+5. **Log nothing from the body** — but do log. One line per request carrying request shape, status and latency (`[converse] turn 502 205ms`), and nothing else: never messages, never the diagnosis, never the client key. This has to be explicit in the handler on both counts. Most platform loggers capture request bodies on the error path by default, and a handler that catches everything and logs nothing leaves a failing deployment completely silent, which is its own kind of unoperable.
 6. **Same-origin only.** No CORS headers; the proxy is deployed alongside the app.
+7. **Answer the availability probe.** `HEAD /api/converse` returns 200 with a key configured and 404 without, which is what hides the Conversation card rather than offering a button that fails.
+
+#### Running it locally
+
+Vite loads `.env` into `import.meta.env` for the **client**, and only for `VITE_`-prefixed names. The handler runs in Node and reads `process.env.ANTHROPIC_API_KEY` — deliberately unprefixed so it can never reach the bundle. Those two facts together mean a key in a local `.env` is invisible to the dev middleware, and the Conversation path cannot be exercised locally at all.
+
+The dev-server plugin therefore bridges the two explicitly, via `loadEnv` in its `config` hook. Without it the endpoint 404s in development, the probe fails, and the path silently disappears — which looks identical to a deliberate static-only deployment and is very easy to misread as a client bug.
 
 ---
 
@@ -458,7 +473,8 @@ interface Diagnosis {
   transitionToward: Stage | null;
   domain: Domain;
   threats: ThreatId[];              // ordered, primary first, length 1-2
-  rogers: RogersPosition;
+  /** Null when unknown, which omits the pace note instead of guessing one. */
+  rogers: RogersPosition | null;
   gap: number;                      // signed, stations. Always computed locally.
   signalConflict: boolean;
   ethicalPosition: 'primary' | null;
@@ -525,9 +541,12 @@ v1 contradicted itself: §5.1 constructed an `Anthropic` client in the browser w
 
 Enforced, not merely intended:
 
-- `@anthropic-ai/sdk` is absent from the client `package.json`
-- A CI check greps the built bundle for `sk-ant-` and for `anthropic.com`, and fails on a hit
-- `VITE_`-prefixed secrets are banned by lint rule; the proxy's key is `ANTHROPIC_API_KEY`, unprefixed
+- **No file under `src/` imports `@anthropic-ai/sdk`.** Checked by CI, and the check is verified against a deliberate violation so it is known to be capable of failing.
+- A CI check greps the built bundle for `sk-ant-` and for `anthropic.com`, and fails on a hit — the same guarantee from the output end.
+- `VITE_`-prefixed secrets are banned; the proxy's key is `ANTHROPIC_API_KEY`, unprefixed.
+- `connect-src 'self'` means the client cannot reach api.anthropic.com even if code to try were reintroduced.
+
+> **Corrected during implementation.** The original check was "`@anthropic-ai/sdk` is absent from the client `package.json` dependencies." That cannot hold and was never the real guarantee. The SDK has to be a root dependency because the serverless function under `api/` needs it and Vercel's zero-config build resolves `/api` against the root package — and moving it to a workspace would not help either, since npm hoists into root `node_modules` regardless, leaving it importable from `src/` all the same. What actually keeps the key out of the browser is the import graph, so that is what is checked.
 
 ### 7.2 Data handling
 
@@ -707,5 +726,6 @@ Deferred, and not specified here:
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.1 | 2026-10-31 | Conversation path implemented. Corrections made against the running code: structured outputs use `zodOutputFormat` + `messages.parse()`, not a hand-written `json_schema` (§5.3); the system prompt is generated from the framework document and committed, with a test guarding drift (§5.6); the S-01 guarantee is import-based rather than dependency-list-based, because the latter cannot hold (§7.1); the rate limiter is per-instance and says so (§5.7); the proxy logs shape, status and latency, because logging nothing at all is unoperable (§5.7); a dev-server bridge is required to run the path locally at all (§5.7); `rogers` is nullable so an unrecognised position omits the pace note rather than guessing (§6). |
 | 1.0 | 2026-01-24 | Initial design document |
 | 2.0 | 2026-10-31 | Static-first architecture: Explore mode makes no API calls (§1.4). Removed all four Claude-callable UI tools. Replaced forced `tool_choice` with structured outputs (§5.3) — the v1 mechanism now returns 400. Moved the API key to a required proxy and added CI enforcement (§7.1), resolving v1's self-contradiction. Updated model to `claude-opus-5-5` with a cost table (§5.4). Added `thinking: adaptive` / `effort` in place of the removed `budget_tokens`. Added prompt caching on the system block. Added the two-path diagnostic with universal Quick fallback (§5.5). Added domain and threat taxonomies to the data model (§6). Settled `isDangerZone` to Discomfort only, with `regressionTarget`. Removed Framer Motion. Dropped v1's performance measures that existed only to mask API latency (§8.1). |

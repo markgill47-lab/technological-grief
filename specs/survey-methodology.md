@@ -312,7 +312,11 @@ Welcome ──▶ Q1 (fixed opener) ──▶ adaptive turns 2..n ──▶ clas
                                          └── on any failure ──▶ Quick path
 ```
 
-The opening question is fixed and identical to Quick's Q1, so a user who abandons Conversation after one answer can be handed to Quick without losing their place.
+The opening question is fixed and phrased identically to Quick's Q1.
+
+> **Corrected during implementation.** This went on to say that a user who abandons Conversation "can be handed to Quick without losing their place." They cannot, and should not be. The conversation's opening takes **free text**; Quick's Q1 is **multiple choice**. Transferring the answer would mean classifying that text onto one of six options — and on the fallback path, classification is precisely the thing that has just failed. A keyword guess that lands on the wrong option corrupts the diagnosis silently and invisibly.
+>
+> The fallback therefore carries nothing across and asks the six questions cleanly. The transcript is retained in session state, so nothing the person wrote is discarded; it simply is not used to pre-fill an answer.
 
 ### 4.3 Question progression
 

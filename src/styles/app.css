@@ -748,6 +748,151 @@ p:last-child {
   padding: 60px 0;
 }
 
+.notice {
+  background: var(--panel);
+  border-left: 4px solid var(--discomfort);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+/* ---------- conversation ---------- */
+
+.talk {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.talk__transcript {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.talk__turn {
+  max-width: 46ch;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  font-size: 17px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.talk__turn--assistant {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  align-self: flex-start;
+  border-bottom-left-radius: 2px;
+}
+
+.talk__turn--user {
+  background: var(--accent-dim);
+  border: 1px solid rgba(0, 217, 255, 0.35);
+  align-self: flex-end;
+  border-bottom-right-radius: 2px;
+}
+
+.talk__dots {
+  display: inline-flex;
+  gap: 5px;
+  padding: 2px 0;
+}
+
+.talk__dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  animation: talk-pulse 1.3s ease-in-out infinite;
+}
+
+.talk__dots i:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.talk__dots i:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes talk-pulse {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+.talk__compose {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  border-top: 1px solid var(--hairline);
+  padding-top: 18px;
+}
+
+.talk__input {
+  flex: 1;
+  font: inherit;
+  font-size: 17px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 56px;
+  padding: 13px 16px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+.talk__input:focus-visible {
+  border-color: var(--accent);
+}
+
+.talk__input:disabled {
+  opacity: 0.55;
+}
+
+.talk__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--text-faint);
+}
+
+/* The thinking indicator sweeps along the trail, because the trail is what
+   is about to change. */
+.terrain__sweep path {
+  animation: sweep 2.4s linear infinite;
+  transform-origin: center;
+}
+
+.terrain__sweep-label {
+  animation: talk-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  0% {
+    opacity: 0.05;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.05;
+  }
+}
+
 /* ---------- result ---------- */
 
 .result__conflict {
