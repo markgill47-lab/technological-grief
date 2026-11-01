@@ -133,6 +133,7 @@ App
 │   ├── TriadRow                  three cards across
 │   └── Door ×2
 ├── DetailModal ×2                why / what to do: text + image
+├── SourcesModal                  the model, the field, what helps
 └── SurveyModal                   open when mode === 'diagnose'
     ├── WelcomeScreen
     ├── QuickSurvey
@@ -521,6 +522,7 @@ Deferred, and not specified here:
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.7 | 2026-11-01 | **Sources replace the ephemeral badge** ([README.md](README.md) D-14). New `content/sources.ts` and `components/SourcesModal.tsx`: three groups — the model and the case against it, the field currently selected, and what helps — sourced entirely from `specs/research/evidence-review.md`, with per-entry caveats. The privacy claim it displaces is unchanged and still made in the colophon and in the Locate overlay. `LockGlyph` removed. |
 | 2.6 | 2026-11-01 | **The field is switchable** ([README.md](README.md) D-13). `viewDomain` added to the store and persisted; `viewDiagnosis()` in `domain/view.ts` applies it, recomputing the gap and passing everything else through without mutating the stored diagnosis. `DomainLensBlock` gains `summary`, surfaced in a new panel section with a `<select>`. `briefFor(stage, door, domain)` resolves a per-domain image with the stage-level one as fallback, so `DOMAIN_IMAGE_BRIEFS` can be filled a cell at a time. The 25 unauthored lenses and their images are deliberately still unwritten, pending the evidence review. |
 | 2.5 | 2026-11-01 | **NextEd design system, light and dark** ([README.md](README.md) D-12). New `src/theme/`: `palette.ts` mirrors tokens.css so contrast can be asserted, `useTheme.ts` owns the toggle. `tokens.css` rewritten for both themes; the stage ramp is six design system tokens rather than six hexes, so `StageData.color` is now a CSS variable reference and the domain no longer owns the palette. Stage colour became a fill — Bold Orange is 2.59:1 on white and cannot be type. Masthead, colophon and theme toggle added. Fonts are the system's stacks, not Google's: a webfont request would break D-8. |
 | 2.4 | 2026-11-01 | **Panel and two doors** ([README.md](README.md) D-11). Two-column layout: the dial is a sticky left column, the stage is a panel on the right holding the description, the triad as three cards, and two buttons. `Why this happens` and `What to do about it` open modals of text plus an image; the Locate flow moved into its own overlay, opened by the store's mode so `#/locate` still works. `AssembledContent` replaced by `StagePanel`; new `panels.ts` makes the split and `U-P-01` asserts nothing is lost in it. New `Modal`, `DetailModal`, `SurveyModal`, `imageBriefs.ts`. `Dial` gained `selected`, so a result on the dial no longer moves when you read another band. |

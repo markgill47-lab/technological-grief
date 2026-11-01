@@ -460,16 +460,6 @@ p:last-child {
   font-size: 14px;
 }
 
-/* Ink Muted is 4.4:1 on Surface Subtle — the design system flags it and
-   asks for 18px or a move to Surface. These sit at 14px, so they take the
-   body ink instead. */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ink-body);
-}
-
 /* ---------- buttons ---------- */
 
 /* Secondary by default: black outline, square, uppercase condensed. */
@@ -1370,6 +1360,105 @@ p:last-child {
   margin: 12px 0 0;
   padding-left: 12px;
   border-left: 3px solid var(--link);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-body);
+}
+
+/* ---------- sources ---------- */
+
+.sources__lead {
+  margin: 0 0 20px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* The honest paragraph. It sits above the list rather than under it, because
+   a caveat printed after the evidence reads as a disclaimer. */
+.sources__standing {
+  margin: 0 0 32px;
+  padding: 20px 24px;
+  background: var(--surface-subtle);
+  border-left: var(--rule) solid var(--brand);
+}
+
+.sources__standing h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  /* Ink Muted is 4.4:1 on Surface Subtle, which this box is. */
+  color: var(--ink-body);
+}
+
+.sources__standing p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.sources__group {
+  margin-bottom: 32px;
+}
+
+.sources__group:last-child {
+  margin-bottom: 0;
+}
+
+.sources__group > h3 {
+  margin: 0 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 20px;
+}
+
+.sources__intro {
+  margin: 0 0 16px;
+  font-size: 15px;
+  color: var(--ink-body);
+}
+
+.sources__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.source {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.source:last-child {
+  border-bottom: 0;
+}
+
+.source__title {
+  margin: 0 0 2px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.source__meta {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--ink-body);
+}
+
+.source__note {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* Caveats are not small print: they are the reason to trust the rest. */
+.source__caveat {
+  margin: 6px 0 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--border-strong);
   font-size: 14px;
   line-height: 1.5;
   color: var(--ink-body);

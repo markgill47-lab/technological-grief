@@ -217,6 +217,32 @@ None of that authoring has started, deliberately. The evidence review running ag
 
 **Note on the completeness rule**: [content-architecture.md](content-architecture.md) §5 requires every stage to have all five lenses or none. The empty state in the panel — "Nothing specific to this field at this stage yet" — is what that rule looks like from the reader's side at the five unauthored stages, and it goes away as each stage is completed.
 
+### D-14 — The ephemeral badge becomes a Sources button
+
+**Before**: a lock glyph and the words "Ephemeral session" sat beside Start fresh, asserting a privacy property.
+
+**Now**: a **Sources** button in the same place, opening a modal with the reading behind the tool.
+
+**Why the badge went**: it was a claim rather than an affordance, and the same claim is already made twice elsewhere, in better places — the colophon on every screen ("Nothing you enter leaves this browser") and the Locate overlay itself, immediately above the questions, which is where someone actually weighs it. A badge that restates a promise next to nothing it can act on spends the most visible control slot in the app on reassurance. The promise is unchanged; only the badge is gone.
+
+**What the modal holds**, in three groups, because a reader arrives with one of three questions:
+
+| Group | Answers |
+|---|---|
+| The model, and the case against it | Is any of this real? |
+| In *your kind of work* | Does it apply to me? |
+| What actually helps | What do I do? |
+
+The middle group follows the field selector (D-13), so switching from Craft to Coordination changes the reading as well as the text. With no field chosen it says so and tells the reader how to get one, rather than showing a heading above nothing.
+
+**The group names matter.** It is "the model, **and the case against it**", and the list contains the work that goes against this tool: the one direct empirical test of stage theory, which found the predicted first stage was not first, and the paper warning clinicians against walking people through stages. `U-S-05` asserts both are present, because the pressure to quietly drop them later is real and a sources list that only flatters the thing it supports is an advertisement.
+
+Above the groups sits a short answer to "how much of this is established?" — that the stages are a practitioner model, their order is a convention rather than a finding, and the Grief Gap is our own untested hypothesis. It is placed *above* the citations rather than under them, because a caveat printed after the evidence reads as a disclaimer.
+
+**Provenance**: every entry comes from [research/evidence-review.md](research/evidence-review.md), the assessment of this framework against the literature. Nothing is listed that was not read there, and the review's own caveats travel with the entries: preprints, vendor-published surveys and self-selected samples each carry their own warning rather than a blanket note at the bottom. `U-S-06` asserts the caveats exist and `U-S-03` that every entry says in our own words why it is there — a bare citation is a reading list, not an answer to "where does this come from".
+
+**Still open**: the review is on an unmerged branch and proposes 15 edits to [grief-framework-context.md](grief-framework-context.md), including corrections to two of the five field-maturity constants that this tool displays. The sources modal cites the review's evidence; the framework document has not yet been changed by it.
+
 ---
 
 ## Contradictions resolved

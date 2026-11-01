@@ -358,7 +358,15 @@ The invariant core leads each modal, because the modal is named after it. The pe
 
 Each modal is two sections side by side: the text, and one image (§12). Below 1100px the image moves under the text.
 
-### 8.3 Modal behaviour
+### 8.3 Sources
+
+A **Sources** button sits under the dial where the ephemeral badge was ([README.md](README.md) D-14), opening a modal with three groups: the model and the case against it, the reading for the field currently selected, and what the evidence says actually helps. The middle group follows the field selector (§8.1), and when no field is chosen it says so and tells the reader how to get one.
+
+Entries come from [research/evidence-review.md](research/evidence-review.md) and carry their own caveats — preprint, vendor-published, self-selected sample — rather than one blanket note at the bottom. The first group is named "the model, **and the case against it**" and contains the work that argues against this tool; `U-S-05` asserts its two key entries are still present, because the pressure to quietly drop them later is real.
+
+The standing note — that the stages are a practitioner model, that their order is a convention rather than a finding, and that the Grief Gap is an untested hypothesis of ours — sits above the citations, not below them. A caveat printed after the evidence reads as a disclaimer.
+
+### 8.4 Modal behaviour
 
 Every dialog in the app — both doors and the Locate flow — uses the same component, which does the four things a dialog has to do:
 
@@ -369,7 +377,7 @@ Every dialog in the app — both doors and the Locate flow — uses the same com
 
 The app root is marked `inert` behind an open dialog, and body scroll is locked. Verified in the browser rather than in jsdom: focus restoration and `inert` are exactly the behaviours a unit test will happily assert and a browser will then not do.
 
-### 8.4 Locate
+### 8.5 Locate
 
 The whole flow is in one overlay, opened by `Find your station` under the dial and by `#/locate`. It is a single task with a beginning and an end, which is what a modal is for; in the page it competed with the stage being read. The dial stays visible behind it, so the result lands on something the reader has already been looking at.
 

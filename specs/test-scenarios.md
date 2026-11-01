@@ -107,8 +107,24 @@ In [view.test.ts](../src/domain/view.test.ts) ([README.md](README.md) D-13).
 
 U-V-03 is the one worth keeping honest: the stored diagnosis is the record of what someone said, and five fields can be read through it without any of them rewriting it.
 
+### 3.3 Sources
 
-### 3.3 Palette and themes
+In [sources.test.ts](../src/content/sources.test.ts) ([README.md](README.md) D-14).
+
+| ID | Test | Expect |
+|---|---|---|
+| U-S-01 | Each of the five fields | at least two sources of its own; a heading above nothing reads as "nothing to say about your work" |
+| U-S-02 | Every entry | authors, title, venue and a four-digit year — enough to find it without the link |
+| U-S-03 | Every entry | a note, in our own words, on why it is there |
+| U-S-04 | Every link | parses as an absolute https URL |
+| U-S-05 | The framework group | still contains the two works that argue against this tool |
+| U-S-06 | Preprints and vendor surveys | each carries its own caveat, not a blanket note |
+| U-S-07 | The whole list | nothing appears twice |
+
+U-S-05 is the one with a reason to exist beyond tidiness. The two entries it names — the direct test that found stage theory does not hold, and the paper warning against walking people through stages — are the ones most likely to be dropped in a later tidy-up, and dropping them turns the list into marketing.
+
+
+### 3.4 Palette and themes
 
 In [palette.test.ts](../src/theme/palette.test.ts) ([README.md](README.md) D-12).
 

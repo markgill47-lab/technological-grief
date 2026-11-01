@@ -3,6 +3,7 @@ import { Dial } from './dial/Dial';
 import { StagePanel } from './components/StagePanel';
 import { DetailModal } from './components/DetailModal';
 import { SurveyModal } from './components/SurveyModal';
+import { SourcesModal } from './components/SourcesModal';
 import { assemble } from './content/assemble';
 import { viewDiagnosis, isBorrowedDomain } from './domain/view';
 import { groupIntoPanels } from './content/panels';
@@ -27,6 +28,7 @@ export default function App() {
   const finishReveal = useStore((s) => s.finishReveal);
 
   const [detail, setDetail] = useState<Detail>(null);
+  const [sourcesOpen, setSourcesOpen] = useState(false);
   const [theme, toggleTheme] = useTheme();
 
   // The reveal beat: the user sees themselves placed, then the band they are
@@ -59,7 +61,7 @@ export default function App() {
   const page = panelStage ? assemble(panelStage, seen) : null;
   const groups = page ? groupIntoPanels(page) : null;
 
-  const overlayOpen = surveyOpen || detail !== null;
+  const overlayOpen = surveyOpen || detail !== null || sourcesOpen;
 
   return (
     <>
@@ -108,9 +110,14 @@ export default function App() {
                     Start fresh
                   </button>
                 )}
-                <span className="badge" title="Nothing is saved or analysed.">
-                  <LockGlyph /> Ephemeral session
-                </span>
+                <button
+                  type="button"
+                  className="link-button"
+                  onClick={() => setSourcesOpen(true)}
+                  aria-haspopup="dialog"
+                >
+                  Sources
+                </button>
               </div>
             </div>
           </div>
@@ -160,6 +167,12 @@ export default function App() {
           />
         </>
       )}
+
+      <SourcesModal
+        open={sourcesOpen}
+        onClose={() => setSourcesOpen(false)}
+        domain={seen?.domain ?? null}
+      />
 
       <SurveyModal open={surveyOpen} onClose={() => setMode('explore')} />
     </>
@@ -240,16 +253,5 @@ function PanelIntro({ onPick }: { onPick: (s: Stage) => void }) {
         ))}
       </div>
     </div>
-  );
-}
-
-function LockGlyph() {
-  return (
-    <svg width="12" height="14" viewBox="0 0 12 14" aria-hidden="true" focusable="false">
-      <path
-        d="M2 6V4a4 4 0 0 1 8 0v2h.5A1.5 1.5 0 0 1 12 7.5v5A1.5 1.5 0 0 1 10.5 14h-9A1.5 1.5 0 0 1 0 12.5v-5A1.5 1.5 0 0 1 1.5 6H2Zm1.5 0h5V4a2.5 2.5 0 0 0-5 0v2Z"
-        fill="currentColor"
-      />
-    </svg>
   );
 }
