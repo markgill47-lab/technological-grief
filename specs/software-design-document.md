@@ -15,7 +15,7 @@ Architecture and implementation strategy for the Technological Grief Interactive
 ### 1.2 Modes
 
 - **Explore** — navigate the six stages. Static content, assembled at render time from authored blocks.
-- **Diagnose** — six multiple-choice questions, deterministic client-side scoring.
+- **Locate** — six multiple-choice questions, deterministic client-side scoring.
 
 Both are entirely local. **The application makes no network requests after the page loads.**
 
@@ -51,7 +51,7 @@ See [README.md](README.md) for the rationale on each, and **D-8** for why the Co
 ║                       Browser  (everything)                       ║
 ║                                                                   ║
 ║   ┌────────────────┐   ┌──────────────┐   ┌───────────────────┐  ║
-║   │  Terrain (SVG) │   │ Content Pane │   │ Quick Survey      │  ║
+║   │  Dial (SVG)   │   │ Content Pane │   │ Quick Survey      │  ║
 ║   └───────┬────────┘   └──────┬───────┘   └─────────┬─────────┘  ║
 ║           │                   │                     │             ║
 ║           └───────────┬───────┴─────────────────────┘             ║
@@ -102,7 +102,7 @@ Three runtime dependencies in total: `react`, `react-dom`, `zustand`.
 
 ### 2.2 Why Zustand survived the rewrite
 
-With Explore mode now synchronous and pure, the store holds very little: current mode, selected stage, the diagnosis, and survey progress. A `useReducer` in context would do. Zustand is retained because the terrain subscribes to a narrow slice (position, confidence, gap) and re-renders on nothing else, and selector-based subscription is the thing it does well. It is a 1.2KB dependency doing real work.
+With Explore mode now synchronous and pure, the store holds very little: current mode, selected stage, the diagnosis, and survey progress. A `useReducer` in context would do. Zustand is retained because the dial subscribes to a narrow slice (position, confidence, gap) and re-renders on nothing else, and selector-based subscription is the thing it does well. It is a 1.2KB dependency doing real work.
 
 ---
 
@@ -110,40 +110,44 @@ With Explore mode now synchronous and pure, the store holds very little: current
 
 ```
 App
-├── Terrain                       SVG, subscribes to {stage, confidence, gap, domain}
-│   ├── Ridge                     generated path
-│   ├── TrailBand                 variable-width fill
-│   ├── RegressionPath
-│   ├── SaddleGlow                only when stage === 'discomfort'
-│   ├── Station ×6
-│   ├── UncertaintyBand
+├── Dial                          SVG, subscribes to {stage, confidence, gap, domain}
+
+│   ├── Band ×6                   annulus sectors, generated from the span table
+│   ├── DangerWedge               only when stage === 'discomfort'
+│   ├── UncertaintyWedge
+│   ├── RetreatArc
+│   ├── GapSweep
 │   ├── YouMarker
 │   ├── FieldMarker
-│   ├── GapSpan
+│   ├── Readout                   the hole: kicker, stage name, position
 │   └── TextView                  the a11y table alternative
-├── Controls
-│   ├── ModeToggle
+├── Masthead                      NextEd mark, title, theme toggle
+├── Controls                      under the dial, in its column
+│   ├── LocateButton              opens the survey overlay
 │   ├── SessionReset
 │   └── PrivacyBadge
-└── ContentPane
-    ├── ExploreView
-    │   ├── StageHeader
-    │   ├── Breadcrumb            no wrap at the ends
-    │   ├── AssembledContent      renders the block stack
-    │   └── ExperienceTable
-    └── DiagnoseView
-        ├── WelcomeScreen
-        ├── QuickSurvey
-        │   └── QuestionScreen
-        └── DiagnosisResult
-            └── ExportButton
+├── StagePanel                    the right column
+│   ├── StageHeader
+│   ├── Breadcrumb                no wrap at the ends
+│   ├── Description               the overview section
+│   ├── TriadRow                  three cards across
+│   └── Door ×2
+├── DetailModal ×2                why / what to do: text + image
+└── SurveyModal                   open when mode === 'diagnose'
+    ├── WelcomeScreen
+    ├── QuickSurvey
+    │   └── QuestionScreen
+    └── DiagnosisResult
+        └── ExportButton
+Colophon                          Minnesota State line
 ```
 
 ### 3.1 Key interfaces
 
 ```typescript
-interface TerrainProps {
-  stage: Stage | null;
+interface DialProps {
+  stage: Stage | null;              // where the result put you
+  selected?: Stage | null;          // the band being read
   confidence: Confidence | null;
   transitionToward: Stage | null;
   gap: number | null;
@@ -153,13 +157,15 @@ interface TerrainProps {
   revealing: boolean;
 }
 
-interface AssembledContentProps {
+interface StagePanelProps {
   stage: Stage;
-  diagnosis: Diagnosis | null;   // null = anonymous browse, core only
+  groups: PanelGroups;           // from groupIntoPanels(assemble(stage, diagnosis))
+  onNavigate: (s: Stage) => void;
+  onOpen: (which: 'why' | 'forward') => void;
 }
 ```
 
-`Terrain` is a pure function of its props. It holds no state except the memoized path-length table ([ui-specification.md](ui-specification.md) §4.5).
+`Dial` is a pure function of its props apart from two pieces of view state: the roving-tabindex focus index, and the text-view toggle. There is no path-length table to memoize — the geometry is closed-form arithmetic evaluated once at module load ([ui-specification.md](ui-specification.md) §4.5).
 
 ---
 
@@ -201,7 +207,7 @@ Cleared on: tab close (by the browser), `Start fresh`, and a schema-version mism
 
 ### 4.2 URL state
 
-`#/explore/<stage>` and `#/diagnose`. Stage selections are linkable and the back button works. The diagnosis is never in the URL — it would survive in history and in anything that logs referrers.
+`#/explore/<stage>` and `#/locate`. Stage selections are linkable and the back button works. The diagnosis is never in the URL — it would survive in history and in anything that logs referrers.
 
 Three pieces are required and only the first is obvious:
 
@@ -286,29 +292,29 @@ interface Turn {
 export const STAGES: Record<Stage, StageData> = {
   loss: { id: 'loss', name: 'Loss', position: 1,
     emotion: 'Fear', cognition: 'Denial', behavior: 'Withdrawn',
-    color: '#C83737', isDangerZone: false, regressionTarget: null },
+    color: 'var(--stage-loss)', isDangerZone: false, regressionTarget: null },
 
   doubt: { id: 'doubt', name: 'Doubt', position: 2,
     emotion: 'Resentment', cognition: 'Skeptical', behavior: 'Defensive',
-    color: '#B83A4B', isDangerZone: false, regressionTarget: null },
+    color: 'var(--stage-doubt)', isDangerZone: false, regressionTarget: null },
 
   // The Danger Zone. Stage 3 only — see framework §2.1 for why v1's
   // three conflicting definitions were settled this way.
   discomfort: { id: 'discomfort', name: 'Discomfort', position: 3,
     emotion: 'Anxiety', cognition: 'Confused', behavior: 'Unproductive',
-    color: '#E8A547', isDangerZone: true, regressionTarget: 'doubt' },
+    color: 'var(--stage-discomfort)', isDangerZone: true, regressionTarget: 'doubt' },
 
   discovery: { id: 'discovery', name: 'Discovery', position: 4,
     emotion: 'Anticipation', cognition: 'Resourceful', behavior: 'Experimental',
-    color: '#F4C542', isDangerZone: false, regressionTarget: null },
+    color: 'var(--stage-discovery)', isDangerZone: false, regressionTarget: null },
 
   understanding: { id: 'understanding', name: 'Understanding', position: 5,
     emotion: 'Confidence', cognition: 'Pragmatic', behavior: 'Productive',
-    color: '#4A9B8E', isDangerZone: false, regressionTarget: null },
+    color: 'var(--stage-understanding)', isDangerZone: false, regressionTarget: null },
 
   integration: { id: 'integration', name: 'Integration', position: 6,
     emotion: 'Satisfaction', cognition: 'Flexible', behavior: 'Generous',
-    color: '#2F6B5D', isDangerZone: false, regressionTarget: null },
+    color: 'var(--stage-integration)', isDangerZone: false, regressionTarget: null },
 };
 
 /** Where each field sits, 1-6. OPEN ITEM — see framework §5.3. */
@@ -410,7 +416,7 @@ Explore mode's cost went to zero, because assembling four bundled strings is not
 
 - Route-level code splitting: `DiagnoseView` lazy-loads; a user who only explores never downloads the survey
 - The content library is one chunk, imported eagerly — it is small, and it is the thing the app is for
-- `Terrain` memoizes the path-length table; everything else is cheap enough to re-render
+- The dial builds its bands once at module load; everything else is cheap enough to re-render
 - Fonts: `font-display: swap`, subset to Latin, self-hosted (so `font-src 'self'` holds)
 
 ---
@@ -443,7 +449,7 @@ Under v1 this logic lived inside a model call and could only be evaluated statis
 |---|---|---|
 | Unit | Vitest | Scoring, assembly, gap, variant resolution, path geometry |
 | Content validation | Vitest, in CI | All eight checks in [content-architecture.md](content-architecture.md) §5 |
-| Component | Vitest + Testing Library | Terrain states, survey flow, keyboard nav |
+| Component | Vitest + Testing Library | Dial states, survey flow, keyboard nav |
 | E2E | Playwright | Both paths end to end, export, deep links |
 | Accessibility | axe-core + manual | Automated on every view; manual screen-reader pass |
 
@@ -515,6 +521,10 @@ Deferred, and not specified here:
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.6 | 2026-11-01 | **The field is switchable** ([README.md](README.md) D-13). `viewDomain` added to the store and persisted; `viewDiagnosis()` in `domain/view.ts` applies it, recomputing the gap and passing everything else through without mutating the stored diagnosis. `DomainLensBlock` gains `summary`, surfaced in a new panel section with a `<select>`. `briefFor(stage, door, domain)` resolves a per-domain image with the stage-level one as fallback, so `DOMAIN_IMAGE_BRIEFS` can be filled a cell at a time. The 25 unauthored lenses and their images are deliberately still unwritten, pending the evidence review. |
+| 2.5 | 2026-11-01 | **NextEd design system, light and dark** ([README.md](README.md) D-12). New `src/theme/`: `palette.ts` mirrors tokens.css so contrast can be asserted, `useTheme.ts` owns the toggle. `tokens.css` rewritten for both themes; the stage ramp is six design system tokens rather than six hexes, so `StageData.color` is now a CSS variable reference and the domain no longer owns the palette. Stage colour became a fill — Bold Orange is 2.59:1 on white and cannot be type. Masthead, colophon and theme toggle added. Fonts are the system's stacks, not Google's: a webfont request would break D-8. |
+| 2.4 | 2026-11-01 | **Panel and two doors** ([README.md](README.md) D-11). Two-column layout: the dial is a sticky left column, the stage is a panel on the right holding the description, the triad as three cards, and two buttons. `Why this happens` and `What to do about it` open modals of text plus an image; the Locate flow moved into its own overlay, opened by the store's mode so `#/locate` still works. `AssembledContent` replaced by `StagePanel`; new `panels.ts` makes the split and `U-P-01` asserts nothing is lost in it. New `Modal`, `DetailModal`, `SurveyModal`, `imageBriefs.ts`. `Dial` gained `selected`, so a result on the dial no longer moves when you read another band. |
+| 2.3 | 2026-11-01 | **The terrain becomes an open dial** ([README.md](README.md) D-10). `src/terrain/` replaced by `src/dial/`: `Dial`, `DialTextView`, and a geometry module whose source of truth is a table of angular spans rather than station coordinates. The 14 terrain geometry tests are replaced by 18 dial ones (U-D-01 to U-D-12), one of which caught the first span table making Loss wider than Integration. Mode 2 renamed Locate (D-9), route `#/locate`. The "You" marker now waits for a result instead of following the Explore selection. |
 | 2.2 | 2026-11-01 | **Conversation path and proxy removed** ([README.md](README.md) D-8). The application now makes no network requests at all: no API, no key, no serverless function, no environment variables, no analytics. §5 is a removal note retaining the three API facts worth not re-deriving. S-00 added (§7.1) and S-01 restored to check dependencies as well as imports, both verified against planted violations. Accuracy measurement dropped rather than kept as the one thing that reaches the network. `rogers` back to non-nullable and `DiagnosticPath` narrowed to `'quick'`, since the only producer always sets them. Deployment is now static files with nothing to configure (§10). |
 | 2.1 | 2026-10-31 | Conversation path implemented. Corrections made against the running code: structured outputs use `zodOutputFormat` + `messages.parse()`, not a hand-written `json_schema` (§5.3); the system prompt is generated from the framework document and committed, with a test guarding drift (§5.6); the S-01 guarantee is import-based rather than dependency-list-based, because the latter cannot hold (§7.1); the rate limiter is per-instance and says so (§5.7); the proxy logs shape, status and latency, because logging nothing at all is unoperable (§5.7); a dev-server bridge is required to run the path locally at all (§5.7); `rogers` is nullable so an unrecognised position omits the pace note rather than guessing (§6). |
 | 1.0 | 2026-01-24 | Initial design document |

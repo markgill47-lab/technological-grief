@@ -5,10 +5,11 @@ const QUERY = '(max-width: 767px)';
 /**
  * True on phone-width screens.
  *
- * The terrain scales its whole coordinate space down to the viewport, so at
- * 375px a 15-unit label renders at about 6px. Six stage names cannot be made
- * legible at that width, so the compact layout shows numbers and names only
- * the current stage - with the full table one tap away behind Text view.
+ * The dial scales its whole coordinate space down to the viewport, so at 375px
+ * a 19-unit label renders at about 11px. Six stage names will not fit around a
+ * ring at that width, so the compact layout drops the outer labels and keeps
+ * the numbers on the bands and the name in the hole - with the full table one
+ * tap away behind Text view.
  */
 export function useCompact(): boolean {
   const [compact, setCompact] = useState(

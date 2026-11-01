@@ -238,7 +238,7 @@ Totals: **discomfort 21.5**, doubt 8.0, all others 0.
 - `gap = 3.1 − 3 = +0.1` → roughly aligned; **the field is at the saddle too**
 - `threats: ['verification', 'identity_authority']` → both render. These are not one of the redundancy pairs in [content-architecture.md](content-architecture.md) §4.3: losing the ability to verify someone's work and losing standing as the one who knows are genuinely different losses. The pair that *would* collapse here is `verification` + `control_opacity`.
 
-The gap result is the point of the whole construct. This person is not behind — their entire profession is standing where they are. The terrain shows both markers nearly superimposed at the saddle, and the pace note renders its `neutral` framing rather than the apologetic `fieldAhead` one.
+The gap result is the point of the whole construct. This person is not behind — their entire profession is standing where they are. The dial shows both markers nearly superimposed on the narrow band, and the pace note renders its `neutral` framing rather than the apologetic `fieldAhead` one.
 
 ### 3.3 Worked example — the negative-gap case
 

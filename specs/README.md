@@ -17,7 +17,7 @@
 | 3 | [content-blocks.md](content-blocks.md) | The authored content itself, plus authoring templates for the remaining blocks. | New |
 | 4 | [content-specification.md](content-specification.md) | Tone, voice, and generation guardrails. | Revised |
 | 5 | [survey-methodology.md](survey-methodology.md) | Both diagnostic paths, question bank, and the deterministic scoring algorithm. | Revised |
-| 6 | [ui-specification.md](ui-specification.md) | The terrain visualization and the full interface. | Revised |
+| 6 | [ui-specification.md](ui-specification.md) | The dial and the full interface. | Revised |
 | 7 | [software-design-document.md](software-design-document.md) | Architecture, data shapes, API surface, deployment. | Revised |
 | 8 | [test-scenarios.md](test-scenarios.md) | Test plan. | Revised, trimmed |
 
@@ -119,6 +119,104 @@ It is recoverable: the whole path is one commit (`d97cd46`), and `git revert` of
 
 **Why**: asking someone to hand-transcribe a result the tool just produced is a poor ending to an otherwise careful experience, and it is solvable without weakening the privacy stance at all.
 
+### D-9 — "Diagnose" is now "Locate"
+
+**v2.0**: the second mode was called Diagnose — in the toggle, in the route (`#/diagnose`), and throughout these documents.
+
+**Now**: the mode is **Locate**, the route is `#/locate`, and the button that opens it reads "Find your station".
+
+**Why**: "diagnose" puts the tool in the clinician's chair and the reader in the patient's, which is the one frame this material works hardest against — the framework's central claim is that these stages are a normal response to real loss, not a pathology. It also sat badly next to the result screen's own promise that this is a reflection and not a judgment. "Locate" is a verb about the path rather than about the person, and it borrows the vocabulary the stations already use.
+
+**Not renamed**: the internal identifiers — `Mode = 'explore' | 'diagnose'`, `Diagnosis`, `DiagnosisResult`, `DiagnoseView` — and the framework's own use of "diagnosis" as a construct. Those are a separate pass, deferred until the word has settled in use.
+
+### D-10 — The terrain becomes an open dial
+
+**v2.0**: a terrain cross-section — a wide, short side elevation with six stations, climbing to a narrow saddle at Discomfort and descending into a widening valley (D-4).
+
+**Now**: an **open dial** — six bands around a 297° ring with a 63° opening at the bottom, read clockwise from the lower left. Band width encodes available options, the two markers and the gap sweep live inside the ring, and the hole is a readout. See [ui-specification.md](ui-specification.md) §2 and §4.
+
+**Why**: the terrain was right about the content and wrong about the object. Every structural claim D-4 made for it survives the move — the path still opens rather than closing, the Grief Gap is still two marks and a span, the retreat still runs from Discomfort to Doubt and nowhere else, the triad still lives in a table rather than on the graphic. What the terrain did not have was any reason to look at it twice. A ring is the more engaging object, and v1 was right to reach for one; it was the *closing* of the ring that was wrong, not the shape.
+
+Where each of D-4's claims now sits:
+
+| D-4 said the terrain carried it as | The dial carries it as |
+|---|---|
+| A path with a start and an end, not a circle | A 63° opening at the bottom, asserted by `U-D-03` |
+| The hardest point is the narrowest point | A 20° band against Integration's 74° |
+| Both exits downhill, so people cycle | The retreat arc, drawn backward, with the forward band adjacent |
+| Width is available options | Angular span, ordered and asserted by `U-D-04` |
+| The Grief Gap as a distance | An arc at `R_GAP` between two markers, signed by its sweep direction |
+
+**What it cost**: elevation. "This is the hard part" was more immediate as height than it is as narrowness, and the saddle's two-downhill-exits reading has no exact equivalent. The 20° sliver carries most of it, and the `danger zone` annotation carries the rest in a word.
+
+**What is not reinstated**: v1's wheel. The ring does not close, nothing is written on a rotated baseline, the hole holds a readout rather than a gear, and the emotion/cognition/behavior triad stays out of the ring. The objections in [ui-specification.md](ui-specification.md) §1 all still hold against v1 — they were objections to a closed pie of rotated text, not to radial geometry.
+
+**Known cost of the span ordering**: making width mean options and centring the narrow band at twelve o'clock are mutually exclusive, because Integration has to be the widest and it has to end at the bottom right. Width won. Discomfort sits at −34°, upper left, and the dial has no summit.
+
+### D-11 — The page becomes a panel and two doors
+
+**Before**: the dial sat in a full-width banner with the whole assembled page — two to eight sections of prose — in one column beneath it.
+
+**Now**: two columns. The dial is a sticky column on the left. The right column holds the stage name, the **description**, **what you might be feeling** as three cards across, and two buttons: **Why this happens** and **What to do about it**. Each opens a modal with the text on one side and an image on the other. The Locate survey has its own overlay. Nothing sits below the fold any more.
+
+**Why**: all of that text is worth keeping and none of it was worth reading first. A stage arrived as a wall, so the thing the reader actually needed — which stage am I looking at, and what does it feel like — was the smallest element on the screen. Putting the explanation and the advice behind named doors makes the panel answerable at a glance and makes each piece of long-form prose a thing someone chose to open.
+
+**How the split is made**: in [panels.ts](../src/content/panels.ts), not in a component, so it is testable. The invariant that matters is that nothing is lost: `U-P-01` asserts that every section of the assembled page lands in exactly one of the four groups, for every stage and for three diagnosis shapes. "Moved behind a button" and "quietly dropped" look identical from the outside.
+
+| Group | Sections |
+|---|---|
+| Panel | `overview`, `experience` |
+| Why this happens | `why`, then `lens`, `threat` |
+| What to do about it | `forward`, then `experiment`, `pace` |
+
+The invariant core leads each modal because the modal is named after it; the personalized layers follow in page order, which is what preserves the ethical override from D-2 (`U-P-04`).
+
+**The images**: twelve, one per stage per door, not yet generated — the modals show a dashed placeholder with the brief's caption. Briefs and house rules are in [imageBriefs.ts](../src/content/imageBriefs.ts) and summarised in [ui-specification.md](ui-specification.md) §12.1. The rules exist because the obvious stock image for any of these stages — head in hands, glowing brain, robot hand — would contradict the writing on the same screen.
+
+**What it costs**: the explanation is now two clicks from the stage rather than zero, and someone who wants the whole page has to open both dialogs. Each door's hint says what is behind it and how much ("what is driving it, and 2 more for your situation"), because an unlabelled button that hides an unknown quantity of text gets opened exactly once. The export (§9) is unchanged and still contains everything in one file, which remains the way to read it all at once.
+
+**Also**: the dial now takes `selected` separately from `stage`, so with a result on the dial you can click through the other five bands without the marker following you. The terrain could not do this — it had one position and used it for both — and the dial drawing "You" at whatever you were reading was the thing D-10 had just fixed in the other direction.
+
+### D-12 — The app takes the NextEd design system, in two themes
+
+**Before**: the v1 look — charcoal `#2A2D34`, cyan `#00D9FF`, Inter, 8px corners, and the red → amber → teal stage ramp. Not one NextEd value appeared anywhere in `src/`. The design canvas was in NextEd and the running app was not.
+
+**Now**: the app is in the design system. [tokens.css](../src/styles/tokens.css) carries NextEd's palette in light and dark, mirrored in [palette.ts](../src/theme/palette.ts) so the rules can be tested. Roboto Condensed for display and Roboto for body; square corners; borders over shadows; 44px targets; a 3px focus ring with a 3px offset. Spirit Red on the primary button and on the 4px rule above each card; the NextEd mark in a `surface-inverse` masthead; the Minnesota State line in the colophon.
+
+**The hard part was the stage ramp.** Six stages need six ordered, distinguishable fills, and NextEd reserves red for the institution and for errors, Bold Orange for warnings, and blue for forward motion — so v1's ramp was unavailable in full. Each stage is now a design system token (Steel, Border Strong, Bold Orange, Glacier Blue, Gateway Blue, Gateway Deep), and because each token carries its own light and dark value, the dark theme is the same ramp rather than a second palette. The Danger Zone landing on the system's warning colour is the one place where the brand's semantics and the framework's agree exactly. Full table in [ui-specification.md](ui-specification.md) §6.1.
+
+**Colour became a fill and stopped being type.** Bold Orange is 2.59:1 on white and Glacier Blue is 3.5:1; neither can carry text. The stage name, the triad values and the result headline are `--ink`, and the stage's colour appears as a swatch, a band, or a 4px rule. This is a visible change from v2.3, where headings were tinted by stage.
+
+**Two themes.** Light by default, `prefers-color-scheme` until the reader touches the toggle, their choice after that, kept as one word in `localStorage` under `grief.theme`. It is the only thing the app keeps across tabs; the session itself still dies with the tab. See [ui-specification.md](ui-specification.md) §7.4.
+
+**What is tested** (`palette.test.ts`, U-N-01 to U-N-09): that `tokens.css` and the palette record agree; that the two dark rule blocks — the media query and the attribute — stay identical; that every band's number clears 4.5:1 on its own band; that every band keyline clears 3:1; that the text pairs the app uses clear AA in both themes; and that Spirit Red and Granite Black are present in both.
+
+**What the tests could not see.** Token-level checks pass while the page still fails, because what matters is the colour an element actually computes against the background it actually has. The rendered page was walked in both themes, measuring every text node, and it found four failures the token tests could not: the skip link still carrying a v1 hex, the Danger Zone flag and the triad values in Bold Orange, and `--ink-muted` at 14px on `--surface-subtle` — which is the 4.4:1 case the design system itself warns about. All four are fixed; the walk now reports nothing in either theme, modals included.
+
+**What was not done**: the fonts are not loaded from Google. NextEd says to, but a request to `fonts.googleapis.com` on every page load breaks D-8, and the zero-network claim is printed next to the survey. The app uses the design system's own stacks, fallbacks included. Self-hosting the two woff2 files satisfies both and is the right fix when the real condensed face is wanted.
+
+**Known limitation**: in light the ramp reads in greyscale and peaks at stage 3; in dark, Discovery and Understanding sit within 0.03 luminance of each other. They are told apart by hue, by their numbers and by their labels — colour is never the only carrier — but the dark ramp is less expressive than the light one.
+
+### D-13 — The field is switchable, and it is visible before you open a door
+
+**Before**: Q2 recorded a domain, the domain selected a lens block, and the lens appeared only inside the "Why this happens" modal. Since only the five Discomfort lenses were ever authored, the domain changed what you read at **one stage out of six**, in the least visible place in the app, and changing it meant answering the survey again.
+
+**Now**: the panel carries an **In your work** section with a field selector and a one-line note, and the field can be changed at any time without retaking anything.
+
+**Why switchable at all**: Q2 asks what kind of work you do, and plenty of people sit between two answers — a faculty member who also runs a programme is in teaching and in coordination. Making the answer a commitment put weight on a question that cannot carry it. It is now the default rather than a verdict, which also lowers the stakes of getting it wrong.
+
+**The gap follows the field, and that is the whole decision in this change.** The Grief Gap is defined as the distance between where you are and where *that field* sits ([grief-framework-context.md](grief-framework-context.md) §5), so reading as Coordination & Care while showing Craft's distance would put a number on screen that belongs to neither. Switching therefore recomputes it — and at Discomfort, switching from Craft to Coordination takes the gap from +1.2 to −0.6 and flips its meaning from adaptive pressure to isolation. What never moves is the reader: `stage`, `threats`, `rogers` and the confidence are passed through untouched, the marker stays where the result put it, and the stored diagnosis is never rewritten, because it is the record of what someone actually answered and the export has to reproduce it. `viewDiagnosis()` in [view.ts](../src/domain/view.ts) is the only place that applies the switch; `U-V-01` to `U-V-06` assert all of it.
+
+A line appears under the note whenever the field being read is not the one they answered with, because a number that changed for a reason the reader did not connect is worse than no number.
+
+**The new content field**: `DomainLensBlock.summary`, one sentence, shown in the panel. It is the thing that makes the switcher worth operating — the full lens stays behind the door. Five exist, condensed from the five Discomfort bodies; the other 25 are authored with their blocks.
+
+**What this sets up, and what it is waiting for.** [content-architecture.md](content-architecture.md) §3 always drew the lens layer as 6 × 5 = 30 blocks; five are written, all at one stage. The mechanism is now in place for the other 25 plus a parallel image matrix — `briefFor(stage, door, domain)` already resolves a per-domain image and falls back to the stage-level one, so `DOMAIN_IMAGE_BRIEFS` can be filled in a cell at a time without touching a component.
+
+None of that authoring has started, deliberately. The evidence review running against this framework was asked whether domain-specific content is worth authoring at all, or whether the stage dominates the field; a finding that it does not would shrink this matrix rather than fill it, and writing 25 blocks before that answer arrives would be the expensive order to do it in.
+
+**Note on the completeness rule**: [content-architecture.md](content-architecture.md) §5 requires every stage to have all five lenses or none. The empty state in the panel — "Nothing specific to this field at this stage yet" — is what that rule looks like from the reader's side at the five unauthored stages, and it goes away as each stage is completed.
+
 ---
 
 ## Contradictions resolved
@@ -139,7 +237,7 @@ These were genuine conflicts between v1 documents. Each is now settled, with the
 
 Decisions deliberately left to the project owner, flagged where they appear:
 
-1. **Field-maturity constants.** The terrain's second marker needs a per-domain position for where each field now sits. v2 proposes values with reasoning, but these are editorial judgments about five professional fields and should be reviewed by someone with standing in each. See [grief-framework-context.md](grief-framework-context.md) §5.3.
+1. **Field-maturity constants.** The dial's second marker needs a per-domain position for where each field now sits. v2 proposes values with reasoning, but these are editorial judgments about five professional fields and should be reviewed by someone with standing in each. See [grief-framework-context.md](grief-framework-context.md) §5.3.
 2. **The remaining 25 domain lenses.** v2 authors all six stage cores, all seven threat responses, all five pace notes, and a complete five-domain lens set for Stage 3. The other 25 lenses are templated and ready to write — left open deliberately, because they should carry the project owner's voice and domain knowledge rather than a generated approximation. See [content-blocks.md](content-blocks.md) §6.
 3. **Facilitator view.** The framework's intervention strategy is organizational (tiered access, cohort diagnosis, shadow-AI governance) but the application diagnoses individuals. Whether an aggregate or facilitator mode is the real product remains undecided; it is not specified here.
 4. **Version control.** This folder is not a git repository. v1 survived only because it was copied to `archive/v1/` before this revision. Recommend `git init` before any further editing.

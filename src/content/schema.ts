@@ -36,6 +36,13 @@ export interface DomainLensBlock extends BaseBlock {
   domain: Domain;
   body: string;
   /**
+   * One sentence, shown in the panel beside the domain switcher — the whole
+   * of what this stage costs in this field. It is read before anyone opens a
+   * door, so it has to stand alone and it has to be specific: a generic line
+   * here is worse than none, because it makes the switcher look inert.
+   */
+  summary?: string;
+  /**
    * The one concrete thing to try. The highest-stakes field in the library -
    * at Discomfort this IS the intervention.
    *

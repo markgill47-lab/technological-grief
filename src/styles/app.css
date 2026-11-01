@@ -8,24 +8,38 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--surface);
+  color: var(--ink);
 }
 
 body {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
-  font-size: 18px;
-  line-height: 1.65;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3 {
-  line-height: 1.25;
+  font-family: var(--font-display);
+  line-height: 1.2;
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+h3 {
+  font-size: 20px;
+  line-height: 1.3;
 }
 
 p {
@@ -57,10 +71,13 @@ p:last-child {
   top: -48px;
   z-index: 20;
   padding: 8px 14px;
-  background: var(--accent);
-  color: #06212b;
+  background: var(--brand);
+  color: var(--on-brand);
   border-radius: var(--radius);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   text-decoration: none;
   transition: top 0.15s;
 }
@@ -71,122 +88,263 @@ p:last-child {
 
 :focus-visible {
   outline: var(--focus-ring);
-  outline-offset: 2px;
-  border-radius: 3px;
+  outline-offset: 3px;
+}
+
+/* ---------- masthead ---------- */
+
+/* Surface Inverse in both themes, with the Gateway Light rule under it. The
+   one place the mark appears, and the reason the brand requirement to carry
+   Spirit Red and Granite Black is met on every screen. */
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 32px;
+  background: var(--surface-inverse);
+  border-bottom: 3px solid var(--link-on-dark);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--on-brand);
+}
+
+.wordmark__ed {
+  color: var(--link-on-dark);
+}
+
+.masthead__right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.masthead__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a6b0b7;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--hit);
+  padding: 0 16px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--on-brand);
+  background: transparent;
+  border: 1px solid #6b757c;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: var(--on-brand);
+}
+
+/* The ring needs the surface colour to sit against, and on this band the
+   surface is always the inverse one. */
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--link-on-dark);
+  outline-offset: 3px;
+}
+
+/* ---------- colophon ---------- */
+
+.colophon {
+  border-top: 1px solid var(--border);
+  background: var(--surface-subtle);
+  padding: 24px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  font-size: 14px;
+  color: var(--ink-body);
+}
+
+.colophon p {
+  margin: 0;
 }
 
 /* ---------- layout ---------- */
 
 .app {
   min-height: 100vh;
+}
+
+/* Dial on the left, the stage on the right. The dial is the fixed point of
+   the interface — it stays put while the panel changes under it — so it is a
+   sticky column rather than a banner that scrolls away. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(420px, 44%) minmax(0, 1fr);
+  align-items: start;
+}
+
+.layout__dial {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  border-right: 1px solid var(--border);
+  background: var(--surface-subtle);
 }
 
-.main {
+.layout__panel {
   width: 100%;
   max-width: var(--measure);
-  margin: 0 auto;
-  padding: 40px 24px 96px;
+  padding: 56px 48px 96px;
 }
 
-/* ---------- terrain ---------- */
+/* ---------- dial ---------- */
 
-.terrain {
+/* The terrain was a full-bleed strip because it was a wide, short graphic.
+   A dial is near-square, so the banner is a centred block instead: stretching
+   a ring to 1920px would only make it a very large ring. */
+.dial {
   margin: 0;
   width: 100%;
-  background: linear-gradient(var(--sky-top), var(--sky-bottom));
-  border-bottom: 1px solid var(--hairline);
+  box-sizing: border-box;
+  padding: 20px 16px 4px;
   position: relative;
 }
 
-.terrain__svg {
+.dial__svg {
   display: block;
+  margin: 0 auto;
   width: 100%;
-  max-height: 360px;
+  max-width: 640px;
+  max-height: 460px;
 }
 
 /* Bottom-left: the right-hand side is where Integration's label sits. */
-.terrain figcaption {
+.dial figcaption {
   position: absolute;
   left: 16px;
   bottom: 8px;
   font-size: 13px;
 }
 
-.terrain__label {
-  font-size: 15px;
+/* These are viewBox units, not CSS pixels: the coordinate space scales to the
+   container, which at 560px wide is about 0.85, and on a phone about 0.57.
+   The compact sizes exist to survive that second number. */
+.dial__label {
+  font-size: 20px;
   letter-spacing: 0.01em;
 }
 
-.terrain__you-label {
-  font-size: 15px;
+.dial__num {
+  font-size: 21px;
   font-weight: 700;
 }
 
-.terrain__annotation {
-  font-size: 13px;
+.dial__num--compact {
+  font-size: 34px;
 }
 
-/* Phone width. These are viewBox units, not CSS pixels: the whole coordinate
-   space scales to the viewport, so at 375px a 30-unit glyph renders at ~11px. */
-.terrain__label--compact {
-  font-size: 30px;
-  letter-spacing: 0.01em;
+.dial__name {
+  font-size: 36px;
+  font-weight: 700;
 }
 
-.terrain__you-label--compact {
+.dial__name--compact {
+  font-size: 46px;
+}
+
+.dial__meta {
+  font-size: 19px;
+}
+
+.dial__meta--compact {
   font-size: 26px;
-  font-weight: 700;
 }
 
-.terrain__station {
+.dial__kicker {
+  font-size: 19px;
+  letter-spacing: 0.14em;
+}
+
+.dial__annotation {
+  font-size: 19px;
+}
+
+.dial__band {
+  /* Bold Orange is 2.6:1 on white, so the fills cannot carry the shape on
+     their own. The keyline does it, and it passes 3:1 in both themes. */
+  stroke: var(--border-strong);
+  stroke-width: 1;
   transition: opacity 0.25s;
 }
 
-.terrain__station[data-state='other'] {
-  opacity: 0.72;
+.dial__station[data-state='other'] .dial__band {
+  opacity: 0.62;
 }
 
-.terrain[data-mode='explore'] .terrain__station:hover .terrain__dot,
-.terrain__station:focus-visible .terrain__dot {
-  r: 7.5;
+.dial__station[data-state='adjacent'] .dial__band {
+  opacity: 0.85;
 }
 
-.terrain[data-mode='explore'] .terrain__station:hover .terrain__label {
-  fill: var(--text);
+.dial[data-mode='explore'] .dial__station:hover .dial__band,
+.dial__station:focus-visible .dial__band {
+  opacity: 1;
 }
 
-.terrain__station:focus {
+.dial[data-mode='explore'] .dial__station:hover .dial__label {
+  fill: var(--ink);
+}
+
+.dial__station:focus {
   outline: none;
 }
 
-.terrain__station:focus-visible {
+.dial__station:focus-visible {
   outline: var(--focus-ring);
   outline-offset: 3px;
 }
 
-.terrain__station[aria-current='step'] .terrain__dot {
-  stroke: var(--accent);
+.dial__station[aria-current='step'] .dial__band {
+  stroke: var(--ink);
   stroke-width: 2;
 }
 
-/* The saddle glow marks the Danger Zone without editorialising. */
-.terrain__saddle {
-  animation: saddle-pulse 2.4s ease-in-out infinite;
+/* The Danger Zone is the narrowest band whether or not anyone is standing in
+   it. The glow only says "and you are". */
+.dial__danger {
+  animation: danger-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes saddle-pulse {
+@keyframes danger-pulse {
   0%,
   100% {
-    opacity: 0.85;
+    opacity: 0.26;
   }
   50% {
-    opacity: 1;
+    opacity: 0.4;
   }
 }
 
-.terrain__you--reveal circle {
+/* transform-box is what makes the marker scale about itself rather than about
+   the SVG origin, which is halfway across the dial. */
+.dial__you--reveal circle {
+  transform-box: fill-box;
+  transform-origin: center;
   animation: marker-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -201,9 +359,9 @@ p:last-child {
   }
 }
 
-.terrain__gap,
-.terrain__field,
-.terrain__uncertainty {
+.dial__gap,
+.dial__field,
+.dial__uncertainty {
   animation: fade-in 0.45s ease-out both;
 }
 
@@ -231,7 +389,7 @@ p:last-child {
 .textview__table th,
 .textview__table td {
   padding: 8px 10px;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--border);
   font-weight: 400;
   vertical-align: top;
 }
@@ -239,7 +397,8 @@ p:last-child {
 .textview__table thead th {
   font-weight: 600;
   font-size: 13px;
-  color: var(--text-faint);
+  color: var(--ink-muted);
+  font-family: var(--font-display);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -249,15 +408,15 @@ p:last-child {
 }
 
 .textview__table tr[data-state='current'] {
-  background: var(--accent-dim);
+  background: var(--wash);
 }
 
 .textview__you {
-  color: var(--accent);
+  color: var(--link);
 }
 
 .textview__note {
-  color: var(--text-faint);
+  color: var(--ink-muted);
   font-weight: 400;
 }
 
@@ -269,7 +428,7 @@ p:last-child {
 }
 
 .textview__facts dt {
-  color: var(--text-faint);
+  color: var(--ink-muted);
 }
 
 .textview__facts dd {
@@ -277,9 +436,9 @@ p:last-child {
 }
 
 .textview__shape {
-  color: var(--text-dim);
+  color: var(--ink-body);
   font-size: 15px;
-  border-left: 2px solid var(--hairline);
+  border-left: 2px solid var(--border);
   padding-left: 14px;
 }
 
@@ -288,12 +447,10 @@ p:last-child {
 .controls {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
+  gap: 24px;
   flex-wrap: wrap;
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--hairline);
-  background: rgba(0, 0, 0, 0.14);
+  padding: 4px 24px 28px;
 }
 
 .controls__right {
@@ -303,68 +460,50 @@ p:last-child {
   font-size: 14px;
 }
 
-.toggle {
-  display: inline-flex;
-  background: var(--panel);
-  border-radius: 999px;
-  padding: 3px;
-}
-
-.toggle button {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: var(--text-dim);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 7px 22px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.toggle button[data-active='true'] {
-  background: var(--accent);
-  color: #06212b;
-}
-
+/* Ink Muted is 4.4:1 on Surface Subtle — the design system flags it and
+   asks for 18px or a move to Surface. These sit at 14px, so they take the
+   body ink instead. */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-faint);
+  color: var(--ink-body);
 }
 
 /* ---------- buttons ---------- */
 
+/* Secondary by default: black outline, square, uppercase condensed. */
 .button {
   appearance: none;
-  font: inherit;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 12px 22px;
-  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  min-height: var(--hit);
   border-radius: var(--radius);
-  border: 1px solid var(--hairline);
-  background: var(--panel-raised);
-  color: var(--text);
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
   cursor: pointer;
-  transition: background 0.18s, border-color 0.18s;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
 }
 
 .button:hover:not(:disabled) {
-  background: #424852;
+  background: var(--surface-sunken);
 }
 
+/* One per view. Spirit Red is the institution's, and this is where it lands. */
 .button--primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #06212b;
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
 }
 
 .button--primary:hover:not(:disabled) {
-  background: #4ee5ff;
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
 }
 
 .button:disabled {
@@ -378,7 +517,7 @@ p:last-child {
   background: none;
   font: inherit;
   font-size: inherit;
-  color: var(--accent);
+  color: var(--link);
   cursor: pointer;
   padding: 4px 2px;
   min-height: 32px;
@@ -389,7 +528,7 @@ p:last-child {
 }
 
 .link-button:disabled {
-  color: var(--text-faint);
+  color: var(--ink-muted);
   cursor: not-allowed;
 }
 
@@ -402,7 +541,7 @@ p:last-child {
 
 .intro__lead {
   font-size: 20px;
-  color: var(--text-dim);
+  color: var(--ink-body);
 }
 
 .intro__stages {
@@ -416,12 +555,12 @@ p:last-child {
   appearance: none;
   font: inherit;
   text-align: left;
-  background: var(--panel);
+  background: var(--surface-raised);
   border: 1px solid;
   border-left-width: 4px;
   border-radius: var(--radius);
   padding: 14px 16px;
-  color: var(--text);
+  color: var(--ink);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -431,12 +570,12 @@ p:last-child {
 }
 
 .intro__stage:hover {
-  background: var(--panel-raised);
+  background: var(--surface-sunken);
 }
 
 .intro__stage-n {
   font-size: 12px;
-  color: var(--text-faint);
+  color: var(--ink-muted);
 }
 
 .intro__stage-name {
@@ -446,136 +585,345 @@ p:last-child {
 
 .intro__stage-sub {
   font-size: 14px;
-  color: var(--text-dim);
+  color: var(--ink-body);
 }
 
 .intro__aside {
-  color: var(--text-dim);
+  color: var(--ink-body);
   font-size: 16px;
 }
 
-/* ---------- content ---------- */
+/* ---------- panel ---------- */
 
-.content__header {
-  margin-bottom: 36px;
+.panel__head {
+  margin-bottom: 32px;
+  border-top: var(--rule) solid var(--brand);
+  padding-top: 20px;
 }
 
-.content__title {
+.panel__title {
   font-size: 40px;
 }
 
-.content__title:focus {
+.panel__title:focus {
   outline: none;
 }
 
-.content__meta {
+.panel__meta {
   font-size: 14px;
-  color: var(--text-faint);
+  color: var(--ink-muted);
   margin: 4px 0 14px;
 }
 
-.content__flag {
-  color: var(--discomfort);
-  font-weight: 600;
+.panel__flag {
+  color: var(--warning-text);
+  font-weight: 700;
 }
 
-.content__crumbs {
+.panel__crumbs {
   display: flex;
   justify-content: space-between;
   gap: 16px;
   font-size: 15px;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--border);
   padding-top: 12px;
 }
 
-.content__crumb-end {
-  color: var(--text-faint);
+.panel__crumb-end {
+  color: var(--ink-muted);
   font-size: 14px;
   padding: 4px 2px;
 }
 
-.content__section {
+.panel__section {
   margin-bottom: 36px;
 }
 
-.content__section h2 {
-  font-size: 22px;
+.panel__h2 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
   margin-bottom: 14px;
 }
 
-.content__section--lens,
-.content__section--threat {
-  border-left: 3px solid var(--hairline);
+.panel__prose p {
+  margin-bottom: 1em;
+}
+
+.panel__prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Three across, stacking below 640px. Each value is a word or two, so the
+   row reads as a glance rather than as a table to work through. */
+.triad-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.triad-row__item {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.triad-row dt {
+  font-size: 13px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+
+.triad-row dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---------- doors ---------- */
+
+.doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  min-height: 44px;
+  padding: 18px 44px 18px 20px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.door:hover {
+  background: var(--surface-sunken);
+  border-color: var(--link);
+}
+
+.door:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.door__label {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.door__hint {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.door__chev {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--link);
+}
+
+/* ---------- modals ---------- */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(10, 12, 15, 0.72);
+  animation: fade-in 0.18s ease-out both;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-overlay);
+  animation: modal-in 0.2s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.modal--detail {
+  max-width: 1040px;
+}
+
+.modal--survey {
+  max-width: 720px;
+}
+
+.modal:focus {
+  outline: none;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+}
+
+.modal__head {
+  position: relative;
+  border-top: var(--rule) solid var(--brand);
+  padding: 28px 64px 20px 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal__eyebrow {
+  font-size: 13px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+
+.modal__title {
+  font-size: 28px;
+}
+
+.modal__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--ink-body);
+  cursor: pointer;
+}
+
+.modal__close:hover {
+  color: var(--ink);
+  border-color: var(--ink-muted);
+}
+
+.modal__close:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.modal__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  gap: 32px;
+  padding: 28px 32px 32px;
+  align-items: start;
+}
+
+.modal__body--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.modal__text > section {
+  margin-bottom: 28px;
+}
+
+.modal__text > section:last-child {
+  margin-bottom: 0;
+  font-family: var(--font-display);
+}
+
+.modal__text h3 {
+  font-size: 17px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+}
+
+.modal__text p {
+  margin-bottom: 1em;
+}
+
+.modal__text p:last-child {
+  margin-bottom: 0;
+}
+
+/* The personalized layers keep the treatment they had in the page, because
+   the distinction they draw is still worth drawing inside the modal. */
+.detail__section--lens,
+.detail__section--threat {
+  border-left: 3px solid var(--border);
   padding-left: 20px;
 }
 
-.content[data-stage='loss'] .content__section--lens {
-  border-left-color: var(--loss);
-}
-.content[data-stage='doubt'] .content__section--lens {
-  border-left-color: var(--doubt);
-}
-.content[data-stage='discomfort'] .content__section--lens {
-  border-left-color: var(--discomfort);
-}
-.content[data-stage='discovery'] .content__section--lens {
-  border-left-color: var(--discovery);
-}
-.content[data-stage='understanding'] .content__section--lens {
-  border-left-color: var(--understanding);
-}
-.content[data-stage='integration'] .content__section--lens {
-  border-left-color: var(--integration);
-}
-
-/* The most important element on the page for someone in Discomfort. */
-.content__section--experiment {
-  background: var(--panel);
-  border-left: 4px solid var(--accent);
+/* The most important element in the app for someone in Discomfort. */
+.detail__section--experiment {
+  background: var(--surface-raised);
+  border-left: 4px solid var(--link);
   border-radius: 0 var(--radius) var(--radius) 0;
   padding: 20px 24px;
 }
 
-.content__section--why {
-  background: rgba(0, 0, 0, 0.16);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius);
-  padding: 20px 24px;
-}
-
-.content__section--pace {
+.detail__section--pace {
   font-size: 16px;
-  color: var(--text-dim);
-  border-top: 1px solid var(--hairline);
+  color: var(--ink-body);
+  border-top: 1px solid var(--border);
   padding-top: 20px;
 }
 
-.content__section--pace h2 {
-  font-size: 15px;
+/* ---------- image placeholder ---------- */
+
+.shot {
+  margin: 0;
+  position: sticky;
+  top: 0;
+}
+
+.shot__frame {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  aspect-ratio: 4 / 5;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px dashed var(--ink-muted);
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  color: var(--ink-muted);
+}
+
+.shot__label {
+  font-size: 13px;
+  font-family: var(--font-display);
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: var(--text-faint);
 }
 
-.triad {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.triad th,
-.triad td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--hairline);
-}
-
-.triad th {
-  width: 34%;
+.shot__caption {
+  margin-top: 10px;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  line-height: 1.5;
+  color: var(--ink-body);
 }
 
 /* ---------- survey ---------- */
@@ -587,12 +935,12 @@ p:last-child {
 
 .welcome__sub {
   font-size: 20px;
-  color: var(--text-dim);
+  color: var(--ink-body);
 }
 
 .welcome__disclaimer {
   font-size: 14px;
-  color: var(--text-faint);
+  color: var(--ink-muted);
 }
 
 .welcome__begin {
@@ -603,8 +951,8 @@ p:last-child {
 
 .welcome__privacy {
   font-size: 15px;
-  color: var(--text-dim);
-  border-left: 3px solid var(--hairline);
+  color: var(--ink-body);
+  border-left: 3px solid var(--border);
   padding-left: 16px;
   max-width: 54ch;
 }
@@ -615,7 +963,7 @@ p:last-child {
 
 .survey__count {
   font-size: 14px;
-  color: var(--text-faint);
+  color: var(--ink-muted);
   margin-bottom: 8px;
 }
 
@@ -627,12 +975,12 @@ p:last-child {
 .survey__bar span {
   height: 4px;
   flex: 1;
-  border-radius: 2px;
-  background: var(--hairline);
+  border-radius: var(--radius-chip);
+  background: var(--border);
 }
 
 .survey__bar span[data-filled='true'] {
-  background: var(--accent);
+  background: var(--link);
 }
 
 .survey__question {
@@ -661,12 +1009,12 @@ p:last-child {
 .survey__help {
   display: block;
   font-size: 16px;
-  color: var(--text-dim);
+  color: var(--ink-body);
   margin-top: 8px;
 }
 
 .survey__question--secondary {
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--border);
   padding-top: 22px;
 }
 
@@ -682,8 +1030,8 @@ p:last-child {
   gap: 12px;
   min-height: 56px;
   padding: 15px 18px;
-  background: var(--panel);
-  border: 1px solid var(--hairline);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 17px;
@@ -691,12 +1039,12 @@ p:last-child {
 }
 
 .option:hover {
-  background: var(--panel-raised);
+  background: var(--surface-sunken);
 }
 
 .option[data-checked='true'] {
-  border-color: var(--accent);
-  background: var(--accent-dim);
+  border-color: var(--link);
+  background: var(--wash);
 }
 
 .option--compact {
@@ -707,7 +1055,7 @@ p:last-child {
 
 .option input {
   margin: 4px 0 0;
-  accent-color: var(--accent);
+  accent-color: var(--link);
   width: 18px;
   height: 18px;
   flex: none;
@@ -715,7 +1063,7 @@ p:last-child {
 
 .option:focus-within {
   outline: var(--focus-ring);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .survey__nav {
@@ -723,13 +1071,13 @@ p:last-child {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--border);
   padding-top: 20px;
 }
 
 .thinking {
   text-align: center;
-  color: var(--text-dim);
+  color: var(--ink-body);
   padding: 60px 0;
 }
 
@@ -737,8 +1085,8 @@ p:last-child {
 
 .result__conflict {
   font-size: 16px;
-  color: var(--text-dim);
-  border-left: 3px solid var(--discomfort);
+  color: var(--ink-body);
+  border-left: 3px solid var(--stage-discomfort);
   padding-left: 16px;
   margin-bottom: 24px;
 }
@@ -753,8 +1101,8 @@ p:last-child {
 }
 
 .result__gap {
-  background: var(--panel);
-  border-left: 4px solid var(--accent);
+  background: var(--surface-raised);
+  border-left: 4px solid var(--link);
   border-radius: 0 var(--radius) var(--radius) 0;
   padding: 18px 22px;
   margin: 24px 0;
@@ -762,7 +1110,7 @@ p:last-child {
 
 .result__note {
   font-size: 16px;
-  color: var(--text-dim);
+  color: var(--ink-body);
 }
 
 .result__actions {
@@ -778,26 +1126,55 @@ p:last-child {
   gap: 14px;
   flex-wrap: wrap;
   font-size: 15px;
-  color: var(--text-dim);
-  border-top: 1px solid var(--hairline);
+  color: var(--ink-body);
+  border-top: 1px solid var(--border);
   padding-top: 20px;
 }
 
 .result__thanks {
-  color: var(--text-faint);
+  color: var(--ink-muted);
 }
 
 .result__privacy {
   margin-top: 20px;
   font-size: 14px;
-  color: var(--text-faint);
+  color: var(--ink-muted);
 }
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 1199px) {
-  .terrain__svg {
-    max-height: 320px;
+/* Two columns need room for a dial and 60-odd characters beside it. Below
+   that the dial goes back on top, where it still sets the context before
+   anyone reads a word. */
+@media (max-width: 1099px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .layout__dial {
+    position: static;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .layout__panel {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 40px 32px 88px;
+  }
+
+  .dial__svg {
+    max-height: 420px;
+  }
+
+  .modal__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shot {
+    position: static;
+    max-width: 420px;
   }
 }
 
@@ -806,26 +1183,46 @@ p:last-child {
     font-size: 17px;
   }
 
-  .terrain__svg {
-    max-height: 240px;
+  .dial__svg {
+    max-height: 360px;
   }
 
-  .terrain__annotation {
-    font-size: 24px;
-  }
-
-  .main {
+  .layout__panel {
     padding: 28px 16px 72px;
     max-width: 100%;
   }
 
   .controls {
-    padding: 10px 16px;
+    padding: 4px 16px 20px;
+    gap: 16px;
   }
 
-  .content__title,
+  .panel__title,
   .intro h1 {
     font-size: 30px;
+  }
+
+  .doors {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scrim {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal {
+    max-height: 92vh;
+    border-radius: 0;
+    border-bottom: 0;
+  }
+
+  .modal__head {
+    padding: 20px 60px 16px 20px;
+  }
+
+  .modal__body {
+    padding: 20px 20px 28px;
   }
 
   .survey__prompt {
@@ -838,10 +1235,16 @@ p:last-child {
 
   /* No room to float it over the diagram once the station numbers are
      sized to be legible. */
-  .terrain figcaption {
+  .dial figcaption {
     position: static;
     text-align: right;
     padding: 0 16px 6px;
+  }
+}
+
+@media (max-width: 639px) {
+  .triad-row {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -856,9 +1259,9 @@ p:last-child {
     transition-duration: 0.01ms !important;
   }
 
-  .terrain__saddle {
+  .dial__danger {
     animation: none;
-    opacity: 0.9;
+    opacity: 0.3;
   }
 }
 
@@ -875,7 +1278,7 @@ p:last-child {
     --hairline: #ccc;
   }
 
-  .terrain,
+  .dial,
   .controls,
   .result__actions,
   .result__accuracy,
@@ -886,4 +1289,88 @@ p:last-child {
   body {
     font-size: 12pt;
   }
+}
+
+/* ---------- stage colour as a fill ---------- */
+
+/* The ramp never becomes type. Bold Orange is 2.59:1 on white and Glacier
+   Blue is 3.5:1, so neither clears AA as text; the swatch carries the stage's
+   colour and the words carry its name. */
+.panel__swatch {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  margin-right: 0.45em;
+  border: 1px solid var(--border-strong);
+  vertical-align: baseline;
+}
+
+.panel__title .panel__swatch {
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+  vertical-align: -1px;
+}
+
+.result__stage {
+  font-weight: 700;
+}
+
+.intro__stage {
+  border-top-width: var(--rule);
+  border-top-style: solid;
+}
+
+/* ---------- the field ---------- */
+
+.field__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.field__head .panel__h2 {
+  margin-bottom: 0;
+}
+
+.field__select {
+  min-height: var(--hit);
+  padding: 0 12px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.field__select:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* The one line that makes the switcher worth having. Lead size, because it
+   is the most specific sentence on the panel. */
+.field__summary {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.field__summary--empty {
+  font-size: 16px;
+  color: var(--ink-muted);
+}
+
+.field__borrowed {
+  margin: 12px 0 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--link);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-body);
 }

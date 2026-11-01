@@ -30,6 +30,7 @@ export const DOMAIN_LENSES: DomainLensBlock[] = [
     stage: 'discomfort',
     domain: 'teaching',
     meta,
+    summary: 'The essay has stopped telling you whether they learned it, and nobody can yet say what replaces it.',
     body: `In teaching, this stage usually arrives disguised as a policy question. You need a position on AI for your syllabus, your department wants guidance, and underneath the procedural question is a harder one you cannot answer yet: if the essay no longer tells you whether they learned it, what does?
 
 That is a real break, not a discipline problem. The relationship between student output and student learning was a proxy, and it was a good one for a long time, and it has stopped being reliable. Most of the exhaustion in this stage comes from being asked to write rules for a situation whose shape nobody has established — including the people asking you for the rules.
@@ -44,6 +45,7 @@ One thing worth knowing: of the five domains this tool recognizes, teaching is t
     stage: 'discomfort',
     domain: 'craft',
     meta,
+    summary: 'Execution got cheap, and it is not yet clear how you show that the judgment was yours.',
     body: `In craft work, the Discomfort stage has a particular sting, because the overwhelm is not really about which tool to use. It is about not knowing which part of your practice is still the valuable part.
 
 You have probably conceded that execution can be produced cheaply now. What you have not resolved is what that leaves. If the finished surface is no longer the evidence of skill, then taste, judgment, and intent are supposed to be the moat — but nobody commissions "taste" directly, and it is not clear how you demonstrate it. So you stall, which looks like indecision about software and is actually an unanswered question about what you are selling.
@@ -60,6 +62,7 @@ You are testing one narrow thing: whether the part you dislike is separable from
     stage: 'discomfort',
     domain: 'analysis',
     meta,
+    summary: 'The reading is cheap now and the accountability is not, which leaves you holding the hard half.',
     body: `In advisory work, Discomfort tends to show up as a verification problem rather than a capability problem. You can already see that synthesis is fast now. What you cannot see is how to stand behind it.
 
 Your value was built on having read the corpus — the precedent, the filings, the literature — and on being accountable for a judgment grounded in it. The reading is now cheap and the accountability is not, which leaves you holding the hard half. Worse, the time saved creates exactly the pressure to check less, at precisely the moment checking matters more. So the rational response is to not start, which is where you are.
@@ -76,6 +79,7 @@ Because you already know the material, you can grade the output precisely: what 
     stage: 'discomfort',
     domain: 'building',
     meta,
+    summary: 'The fluency that felt most like competence is the most delegable part of the job.',
     body: `In engineering, this stage is strange, because the overwhelm is rarely about whether the tools work. You have probably already used them. The discomfort is about what it does to the part of the job you liked.
 
 The fluency you built — knowing the API, knowing why the system behaves that way at three in the morning, knowing which abstraction will hurt in a year — is the most delegable part of your skill set and the part that felt most like competence. That is a real loss, and it is one your field is largely not discussing, because the field is busy being productive. Your domain is further along than any other this tool recognizes, which means you may be the only person in the room still sitting with this.
@@ -92,6 +96,7 @@ The output is not the point. Your review is. What you are looking for is which o
     stage: 'discomfort',
     domain: 'coordination',
     meta,
+    summary: 'You have been told you are the safe one, which leaves the unease nowhere legitimate to go.',
     body: `In coordination and care work, this stage comes with an extra difficulty: you have probably been told you have nothing to worry about.
 
 That reassurance is why this is hard to place. You watch adjacent roles get restructured, you hear that your work is the safe kind because it is relational, and you have no legitimate-sounding grievance — so the unease has nowhere to go. Meanwhile the parts of your job that *are* being touched, the documentation and the correspondence and the scheduling, are the parts you would gladly hand over. Relief and unease arrive together, which makes the whole thing hard to name.

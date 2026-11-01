@@ -25,6 +25,8 @@ export interface AssembledSection {
   body: string;
   /** Which authored block this came from. Useful in tests and the export. */
   blockId: string | null;
+  /** Lens sections only: the one-line version the panel shows. */
+  summary?: string;
 }
 
 export interface AssembledPage {
@@ -78,6 +80,7 @@ export function assemble(stage: Stage, diagnosis: Diagnosis | null): AssembledPa
       heading: 'In your work',
       body: lens.body,
       blockId: lens.id,
+      summary: lens.summary,
     });
 
     // Offering someone a fun experiment immediately after they have told you

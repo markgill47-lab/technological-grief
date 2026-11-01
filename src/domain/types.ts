@@ -64,6 +64,8 @@ export interface StageData {
   emotion: string;
   cognition: string;
   behavior: string;
+  /** A CSS colour, which is a theme token rather than a hex: the stage
+   * palette moved into src/theme when the app took the NextEd system (D-12). */
   color: string;
   isDangerZone: boolean;
   regressionTarget: Stage | null;

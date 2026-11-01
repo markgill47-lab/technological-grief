@@ -1,3 +1,6 @@
+
+The colour column holds a theme token rather than a hex: the stage palette moved into `src/theme` when the app took the NextEd design system, and each token resolves differently in light and dark ([README.md](README.md) D-12).
+| id | name | position | emotion | cognition | behavior | colour token | isDangerZone | regressionTarget |
 # The Architecture of Technological Grief: Framework Context
 
 **Version**: 2.0
@@ -112,16 +115,18 @@ Six sequential stages individuals traverse when confronting loss of the status q
 
 ### 2.1 Canonical stage table
 
-For implementation. `position` is the station index used by the terrain visualization (see [ui-specification.md](ui-specification.md)).
+For implementation. `position` is the station index used by the dial (see [ui-specification.md](ui-specification.md)).
 
-| id | name | position | emotion | cognition | behavior | color | isDangerZone | regressionTarget |
+| id | name | position | emotion | cognition | behavior | colour token | isDangerZone | regressionTarget |
 |---|---|---|---|---|---|---|---|---|
-| `loss` | Loss | 1 | Fear | Denial | Withdrawn | `#C83737` | false | — |
-| `doubt` | Doubt | 2 | Resentment | Skeptical | Defensive | `#B83A4B` | false | — |
-| `discomfort` | Discomfort | 3 | Anxiety | Confused | Unproductive | `#E8A547` | **true** | `doubt` |
-| `discovery` | Discovery | 4 | Anticipation | Resourceful | Experimental | `#F4C542` | false | — |
-| `understanding` | Understanding | 5 | Confidence | Pragmatic | Productive | `#4A9B8E` | false | — |
-| `integration` | Integration | 6 | Satisfaction | Flexible | Generous | `#2F6B5D` | false | — |
+| `loss` | Loss | 1 | Fear | Denial | Withdrawn | `var(--stage-loss)` | false | — |
+| `doubt` | Doubt | 2 | Resentment | Skeptical | Defensive | `var(--stage-doubt)` | false | — |
+| `discomfort` | Discomfort | 3 | Anxiety | Confused | Unproductive | `var(--stage-discomfort)` | **true** | `doubt` |
+| `discovery` | Discovery | 4 | Anticipation | Resourceful | Experimental | `var(--stage-discovery)` | false | — |
+| `understanding` | Understanding | 5 | Confidence | Pragmatic | Productive | `var(--stage-understanding)` | false | — |
+| `integration` | Integration | 6 | Satisfaction | Flexible | Generous | `var(--stage-integration)` | false | — |
+
+The colour column holds a theme token rather than a hex: the stage palette moved into `src/theme` when the app took the NextEd design system, and each token resolves to a different value in light and dark ([README.md](README.md) D-12).
 
 ---
 
@@ -163,7 +168,7 @@ The **Grief Gap** is the signed distance between where an individual sits in the
 gap = fieldPosition(domain) − userPosition
 ```
 
-Both terms are expressed on the same 1–6 station scale as §2.1, so the gap is directly renderable as horizontal distance on the terrain.
+Both terms are expressed on the same 1–6 station scale as §2.1, so the gap is directly renderable as an arc between two markers on the dial.
 
 ### 5.2 Interpreting the sign
 
@@ -180,7 +185,7 @@ The negative case is a genuine addition in v2. An Innovator inside a Laggard-dom
 
 ### 5.3 Field-maturity constants
 
-> **OPEN ITEM — requires owner review.** These five numbers position each field on the 1–6 station scale and directly drive the terrain's second marker. They are editorial judgments about professional fields, not measurements. The values below are proposed with reasoning so they can be argued with; they should be reviewed by someone with standing in each field, and re-reviewed on a fixed cadence because they move.
+> **OPEN ITEM — requires owner review.** These five numbers position each field on the 1–6 station scale and directly drive the dial's second marker. They are editorial judgments about professional fields, not measurements. The values below are proposed with reasoning so they can be argued with; they should be reviewed by someone with standing in each field, and re-reviewed on a fixed cadence because they move.
 
 | Domain | `fieldPosition` | Reasoning |
 |---|---|---|

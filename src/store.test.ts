@@ -10,8 +10,8 @@ describe('routing', () => {
     }
   });
 
-  it('parses the diagnose route and the root', () => {
-    expect(parseHash('#/diagnose')).toEqual({ mode: 'diagnose', stage: null });
+  it('parses the locate route and the root', () => {
+    expect(parseHash('#/locate')).toEqual({ mode: 'diagnose', stage: null });
     for (const empty of ['', '#', '#/']) {
       expect(parseHash(empty)).toEqual({ mode: 'explore', stage: null });
     }

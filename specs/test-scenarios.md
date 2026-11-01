@@ -18,7 +18,7 @@ Assert on **state and semantics**, not on rendered style:
 | `opacity === 0.85` | `station.getAttribute('data-state') === 'adjacent'` |
 | `transform` contains `8px` | `station.getAttribute('aria-current') === 'step'` |
 | transition is 400ms | the content region updates within 100ms |
-| color is `#E8A547` | the element carries `data-stage="discomfort"` |
+| color is `#f58220` | the element carries `data-stage="discomfort"` |
 
 Components expose `data-state` and `data-stage` attributes specifically so tests have a stable contract. Visual appearance is covered once, by screenshot comparison (§7), where a change is reviewed deliberately rather than failing a hundred assertions.
 
@@ -76,25 +76,87 @@ U-S-14 and U-S-15 are exhaustive rather than sampled. The input space is small e
 | U-C-12 | Ambiguous `stageScope` variants | **throws** at build time |
 | U-C-13 | No user text appears in any assembled block | no interpolation, ever |
 
----
 
-## 4. Unit: terrain geometry
+### 3.1 Panel grouping
+
+The page is split between the panel and the two modals in [panels.ts](../src/content/panels.ts) ([README.md](README.md) D-11).
 
 | ID | Test | Expect |
 |---|---|---|
-| U-T-01 | `pointAtPosition(n)` for integer n | returns exactly station n's coordinates |
-| U-T-02 | `pointAtPosition(3.5)` | lies on the rendered path, between stations 3 and 4 |
-| U-T-03 | `pointAtPosition(0)` and `(7)` | clamped to stations 1 and 6 |
-| U-T-04 | Ridge path generated from the station table | passes within 1px of all six stations |
-| U-T-05 | Trail band width at each station | matches the table; monotonic decrease 1→3, increase 3→6 |
-| U-T-06 | Moving a station in the table | path regenerates; no hard-coded `d` anywhere in the source |
-| U-T-07 | Uncertainty half-width | `high < moderate < low` |
-| U-T-08 | `transitionToward` set | band is asymmetric toward the named stage |
+| U-P-01 | Every stage × {no diagnosis, diagnosis, ethical diagnosis} | every section lands in exactly one group; none lost, none duplicated |
+| U-P-02 | Any stage | the panel always has a description and a triad |
+| U-P-03 | Grouped page | each modal leads with its invariant core section |
+| U-P-04 | Ethical diagnosis | threat response still precedes the domain lens inside the why group |
+| U-P-05 | No diagnosis | each modal holds exactly its core section |
+| U-P-06 | Full diagnosis | no section appears behind both doors |
 
-U-T-06 guards the thing most likely to decay: someone pasting a literal path string during a design tweak, after which the station table stops being the source of truth.
+U-P-01 is the one that matters. Moving text behind a button and dropping it look identical from the outside, so the grouping is asserted rather than eyeballed.
+
+### 3.2 Reading through another field
+
+In [view.test.ts](../src/domain/view.test.ts) ([README.md](README.md) D-13).
+
+| ID | Test | Expect |
+|---|---|---|
+| U-V-01 | Each of the five domains | the gap is recomputed for the field being read |
+| U-V-02 | Any switch | stage, threats, confidence, transition and Rogers position pass through untouched |
+| U-V-03 | Several switches in a row | the stored diagnosis is not mutated — the export must still match the survey |
+| U-V-04 | No override, or the same domain | the diagnosis itself is returned, not a copy |
+| U-V-05 | Borrowed-field check | true only when the field being read differs from the one answered |
+| U-V-06 | A field behind the reader | the gap goes negative, which means isolation rather than pressure |
+
+U-V-03 is the one worth keeping honest: the stored diagnosis is the record of what someone said, and five fields can be read through it without any of them rewriting it.
+
+
+### 3.3 Palette and themes
+
+In [palette.test.ts](../src/theme/palette.test.ts) ([README.md](README.md) D-12).
+
+| ID | Test | Expect |
+|---|---|---|
+| U-N-01 | tokens.css against the palette record | every token matches, both themes |
+| U-N-02 | The two dark rule blocks | the media query and `[data-theme=dark]` declare the same tokens and values |
+| U-N-03 | The stage ramp in CSS | matches the ramp record, both themes |
+| U-N-04 | Each station number on its band | ≥4.5:1, and the CSS ink is the one the luminance rule picks |
+| U-N-05 | Band keylines | ≥3:1 on surface and on surface-subtle |
+| U-N-05b | Dark fills on the dark surface | ≥2.5:1 — the reason dark takes the lighter token values |
+| U-N-06 | The light ramp in greyscale | adjacent bands differ by ≥0.05 luminance, peaking at stage 3 |
+| U-N-07 | Text pairs the app uses | ≥4.5:1, both themes |
+| U-N-08 | Focus ring on every surface | ≥3:1, both themes |
+| U-N-09 | Brand presence | Spirit Red and Granite Black in both themes |
+
+These check tokens, which is not the same as checking the page. The rendered app was walked separately in both themes, measuring each text node against its real background; that walk is what found the four failures recorded in D-12, and none of them were visible to U-N-07.
 
 ---
 
+## 4. Unit: dial geometry
+
+| ID | Test | Expect |
+|---|---|---|
+| U-D-01 | One band per stage | six bands, in `STAGE_IDS` order, positions 1–6 |
+| U-D-02 | Band layout | every `a2 > a1`; neighbours separated by exactly `SECTOR_GAP` |
+| U-D-03 | The ring does not close | total sweep < 360°, opening > 40° |
+| U-D-03b | Opening placement | its midpoint within 40° of six o'clock |
+| U-D-04 | Span encodes options | Discomfort is the minimum and Integration the maximum, monotone on both sides |
+| U-D-04b | Climb against descent | degrees before the narrow band < degrees after it |
+| U-D-05 | `angleAtPosition(n)` for integer n | returns band n's centre exactly |
+| U-D-05b | `angleAtPosition(3.5)` | midway between the centres of bands 3 and 4 |
+| U-D-05c | Monotonic and clamped | increases across [1, 6]; `(0)` → `(1)`, `(7)` → `(6)` |
+| U-D-06 | Angle convention | 0° is straight up, 90° is right, and `pointAt(r, θ)` is at radius r |
+| U-D-07 | Paths derived, not hard-coded | each band's `d` contains its own computed outer start point |
+| U-D-08 | Uncertainty half-width | `high < moderate < low`, and the wedge widens with it |
+| U-D-08b | `transitionToward` set | wedge is biased toward the named stage |
+| U-D-09 | The retreat runs backward | sweep flag 0, from Discomfort's angle to Doubt's |
+| U-D-10 | Gap sweep sign | clockwise when the field is ahead, anticlockwise when the user is |
+| U-D-11 | Nothing escapes the viewBox | ring and all six label points inside the bounds |
+| U-D-12 | Hit areas | ≥44 units radially and along the inner arc, Discomfort included |
+| — | viewBox aspect | between 0.9 and 1.6; the terrain's `> 3` is what a dial must not be |
+
+U-D-07 guards the thing most likely to decay: someone pasting a literal path string during a design tweak, after which the span table stops being the source of truth.
+
+U-D-04 is not a tautology test. It failed on the first span table, which was authored to put Discomfort at twelve o'clock and in doing so made Loss (60°) wider than Integration (56°) — breaking the encoding the whole graphic rests on. An invariant that only restates the data is worthless; this one restates the *claim*, which is why it caught a table that satisfied the eye and not the argument.
+
+---
 ## 5. Content validation (CI)
 
 All eight checks from [content-architecture.md](content-architecture.md) §5, run as tests so they fail the build.
@@ -118,24 +180,25 @@ U-V-05 is the check that makes the content library safe to extend. U-V-10 encode
 
 ## 6. Component
 
-### 6.1 Terrain
+
 
 | ID | Test |
 |---|---|
-| C-T-01 | Renders six stations with correct names and `data-stage` values |
-| C-T-02 | Explore mode: stations are focusable, one tab stop for the group |
-| C-T-03 | `←`/`→` move focus between stations; `Home`/`End` jump to the ends |
-| C-T-04 | `Enter` and `Space` both select; `onStageSelect` fires once |
-| C-T-05 | Diagnose mode: stations are not focusable and do not respond to clicks |
-| C-T-06 | `stage: 'discomfort'` renders the saddle glow; other stages do not |
-| C-T-07 | **No warning icon** anywhere in the DOM (v1 specified one; v2 removed it deliberately) |
-| C-T-08 | `|gap| < 0.25` suppresses the field marker and the gap span |
-| C-T-09 | Negative gap renders the span in the accent color, not the field color |
-| C-T-10 | `aria-describedby` text is generated from state and names the current stage |
-| C-T-11 | The hidden `<ol>` has six items with `aria-current` on the user's |
-| C-T-12 | `Text view` toggle swaps the SVG for a table with equivalent information |
-| C-T-13 | Station hit areas are ≥44×44px despite a 5–9px visual radius |
-| C-T-14 | Regression path renders from Discomfort to Doubt, with the `retreat` label |
+| C-D-01 | Renders six bands with correct names and `data-stage` values |
+| C-D-02 | Explore mode: bands are focusable, one tab stop for the group |
+| C-D-03 | `←`/`→` move focus between bands; `Home`/`End` jump to the ends |
+| C-D-04 | `Enter` and `Space` both select; `onStageSelect` fires once |
+| C-D-05 | Locate mode: bands are not focusable and do not respond to clicks |
+| C-D-06 | `stage: 'discomfort'` renders the danger wedge; other stages do not |
+| C-D-07 | **No warning icon** anywhere in the DOM (v1 specified one; v2 removed it deliberately) |
+| C-D-08 | `|gap| < 0.25` suppresses the field marker and the gap sweep |
+| C-D-09 | Negative gap renders the sweep in the accent color, not the field color |
+| C-D-10 | `aria-describedby` text is generated from state and names the current stage |
+| C-D-11 | The hidden `<ol>` has six items with `aria-current` on the user's |
+| C-D-12 | `Text view` toggle swaps the dial for a table with equivalent information |
+| C-D-13 | Band hit areas are ≥44×44px despite the 20° Danger Zone sliver |
+| C-D-14 | Retreat arc renders from Discomfort to Doubt, drawn anticlockwise |
+| C-D-15 | No `You` marker in Explore without a result; it appears once `confidence` is set |
 
 ### 6.2 Explore content
 
@@ -165,6 +228,22 @@ U-V-05 is the check that makes the content library safe to extend. U-V-10 encode
 
 C-Q-08 is asserted by failing the test if any `fetch` occurs. It is the claim the Quick path makes to users, so it is tested rather than trusted.
 
+### 6.4 Modals
+
+| ID | Test |
+|---|---|
+| C-M-01 | Opening a door renders a `role="dialog"` with `aria-modal` and a title |
+| C-M-02 | Focus moves to the dialog box, not to its close button |
+| C-M-03 | Tab cycles within the dialog and does not reach the page behind |
+| C-M-04 | Escape, the backdrop and the close button all dismiss it |
+| C-M-05 | On dismissal focus returns to the door that opened it |
+| C-M-06 | The app root carries `inert` while a dialog is open, and loses it after |
+| C-M-07 | Body scroll is locked while open and restored after |
+| C-M-08 | `#/locate` opens the survey overlay directly |
+| C-M-09 | Each modal renders its image placeholder with the brief caption |
+
+C-M-02 and C-M-05 were verified in a browser rather than in jsdom. Focus restoration and `inert` are precisely the behaviours a unit test will assert happily and a real browser will then not do.
+
 ---
 
 ## 7. Visual regression
@@ -173,11 +252,11 @@ One screenshot suite, reviewed deliberately rather than asserted numerically (§
 
 | ID | View |
 |---|---|
-| V-01 | Terrain, no diagnosis, Explore |
-| V-02 | Terrain, Discomfort diagnosed, aligned gap |
-| V-03 | Terrain, Loss diagnosed, large positive gap |
-| V-04 | Terrain, Understanding diagnosed, negative gap |
-| V-05 | Terrain, low confidence with `transitionToward` |
+| V-01 | Dial, no diagnosis, Explore |
+| V-02 | Dial, Discomfort diagnosed, aligned gap |
+| V-03 | Dial, Loss diagnosed, large positive gap |
+| V-04 | Dial, Understanding diagnosed, negative gap |
+| V-05 | Dial, low confidence with `transitionToward` |
 | V-06 | Full page, desktop (1440) |
 | V-07 | Full page, tablet (900) |
 | V-08 | Full page, phone (390) |
@@ -215,19 +294,19 @@ The nearest equivalents that remain are pure-function tests (§2, §3) and the s
 
 | ID | Journey | Key assertions |
 |---|---|---|
-| UJ-01 | **Explore only.** Land, click through all six stations, read each, never diagnose. | Content for every stage; zero network requests after load; breadcrumb does not wrap |
-| UJ-02 | **Quick path, faculty in Discomfort.** Six questions → diagnosis → read the stage → export. | Diagnosis is Discomfort; the terrain shows both markers near the saddle; the teaching first experiment is present; the download produces a non-empty file |
+| UJ-01 | **Explore only.** Land, click through all six stations, read each, never open Locate. | Content for every stage; zero network requests after load; breadcrumb does not wrap |
+| UJ-02 | **Quick path, faculty in Discomfort.** Six questions → diagnosis → read the stage → export. | Diagnosis is Discomfort; the dial shows both markers, one band apart; the teaching first experiment is present; the download produces a non-empty file |
 | UJ-03 | **Doubt journey.** Skeptical answers: consumed content, resentment, ethical threat. | Diagnosis is Doubt; the ethical override fires — threat block above the lens, **no first experiment** |
-| UJ-04 | **Danger Zone journey.** Attended training, tried nothing, overwhelmed. | High-confidence Discomfort; saddle glow present; exactly **one** suggested action |
+| UJ-04 | **Danger Zone journey.** Attended training, tried nothing, overwhelmed. | High-confidence Discomfort; danger wedge present on band 3; exactly **one** suggested action |
 | UJ-05 | **Discovery journey.** Experimenting, curious, skills threat. | Discovery; encouraging register; no "you should be further along" language |
 | UJ-06 | **Integration journey.** Teaching others, satisfied. | Integration; breadcrumb offers no "next"; content is outward-facing |
 | UJ-07 | **Negative gap.** Coordination domain, Understanding stage. | Gap is negative; span rendered in the accent color; pace note uses the `userAhead` framing |
-| UJ-10 | **Diagnose then explore.** Diagnose, then browse all six stages. | Personalization persists across every stage; the diagnosed stage is marked on the terrain throughout |
-| UJ-11 | **Start fresh.** Diagnose, then reset. | All state cleared; terrain returns to undiagnosed; sessionStorage key removed |
+| UJ-10 | **Locate then explore.** Locate, then browse all six stages. | Personalization persists across every stage; the diagnosed stage is marked on the dial throughout |
+| UJ-11 | **Start fresh.** Locate, then reset. | All state cleared; the dial returns to undiagnosed, with no You marker; sessionStorage key removed |
 | UJ-12 | **Refresh mid-survey.** Reload at question 4. | Answers so far restored from sessionStorage |
-| UJ-13 | **Two tabs.** Diagnose in tab A, open tab B. | Independent sessions; no bleed (sessionStorage is per-tab) |
+| UJ-13 | **Two tabs.** Locate in tab A, open tab B. | Independent sessions; no bleed (sessionStorage is per-tab) |
 | UJ-14 | **Deep link.** Open `#/explore/discomfort` directly. | Loads that stage without a diagnosis; content is complete |
-| UJ-15 | **Phone.** Entire Quick path at 390×844. | No horizontal scroll; all targets tappable; terrain legible |
+| UJ-15 | **Phone.** Entire Quick path at 390×844. | No horizontal scroll; all targets tappable; dial legible, outer labels dropped for numbers |
 | UJ-16 | **Offline.** Load, disconnect, then use the whole app. | Explore and the full survey complete normally. Nothing degrades, because nothing was reaching the network to begin with |
 
 UJ-16 is the clearest single statement of what v2 changed. Under v1 the application was unusable offline in both modes.
@@ -242,7 +321,7 @@ UJ-16 is the clearest single statement of what v2 changed. Under v1 the applicat
 | A-02 | All text meets 4.5:1 against its **local** background | automated, sampled under each label across the gradient |
 | A-03 | Amber stage colors never used for text | automated source check |
 | A-04 | Full app operable with keyboard only | manual |
-| A-05 | Terrain is a single tab stop with arrow navigation | automated |
+| A-05 | Dial is a single tab stop with arrow navigation | automated |
 | A-06 | Focus ring visible on every focusable element | automated + manual |
 | A-07 | Screen reader announces the current stage and the path shape | manual: NVDA, VoiceOver |
 | A-08 | Text view conveys everything the graphic does | manual |
@@ -252,7 +331,7 @@ UJ-16 is the clearest single statement of what v2 changed. Under v1 the applicat
 | A-12 | All targets ≥44×44px | automated |
 | A-13 | Zoom to 200% without loss of content or function | manual |
 
-A-02 is more demanding than a standard contrast check: the terrain is a gradient, so a label passing against `--bg` can still fail against the ground beneath it. Sample at the darkest and lightest points under each label.
+A-02 is more demanding than a standard contrast check: the station numbers sit on the bands, so no single ink passes against all six stage colors. Check each number against its own band, not against `--bg`, and check the annotations against the banner gradient at its darkest and lightest.
 
 ---
 

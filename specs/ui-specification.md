@@ -1,7 +1,7 @@
 # UI Specification: Technological Grief Interactive
 
-**Version**: 2.0
-**Last updated**: 2026-10-31
+**Version**: 2.4
+**Last updated**: 2026-11-01
 
 ---
 
@@ -17,162 +17,176 @@ v2 replaces it with a **terrain cross-section**: a wide, short side-elevation pa
 4. **Three stacked attributes per wedge is illegible.** At v1's own stated mobile size of 360px, each segment is roughly 180px of arc carrying four text elements at varying rotations. v2 moves the emotion/cognition/behavior triad out of the graphic entirely and into the content panel, where it reads as a table.
 5. **A pie of rotated text is a poor screen-reader target.** A path with ordered stations has an obvious linear equivalent.
 
+The terrain shipped and then went, in turn. The current graphic is the **open dial** described below: a ring that answers all five of those objections without giving up the radial shape v1 was right to want. See [README.md](README.md) D-10, and §2 for what was traded away with the elevation.
+
 ---
 
 ## 2. The metaphor
 
-**A mountain pass.**
+**An open dial.**
 
-The path climbs from Loss through Doubt to a narrow saddle at Discomfort, then descends on the far side into a widening valley through Discovery, Understanding, and Integration.
+Six bands around a ring that deliberately does not close. The path begins at Loss at the lower left, tightens to a sliver at Discomfort, and opens out through Discovery and Understanding to Integration at the lower right. The blank wedge at the bottom is the point of the shape.
 
-This fits the framework more closely than a wheel does, in four ways that fell out of the geometry rather than being imposed on it:
+This keeps what the terrain was carrying while getting back the thing v1 was right about — that a radial arrangement is a more engaging object than a landscape. Four claims fall out of the geometry rather than being imposed on it:
 
-- **The hardest point is the highest, narrowest point.** The Danger Zone does not need a red overlay and an explanatory legend. It is where the trail is a knife edge.
-- **You cannot stand on a saddle.** The framework says Discomfort is unstable — a fork, not a waiting room. A summit with downhill on both sides says that without words.
-- **Both exits are easier than staying.** Retreat to Doubt is downhill. Progress to Discovery is downhill. This is exactly the framework's claim, and it is why people cycle: the backward exit is as available as the forward one.
-- **The far side is wider.** Trail width encodes available options, so Integration's "regained flexibility" is visible as open ground.
+- **The ring does not close.** v1's wheel asserted endless cycling by closing; the framework describes a progression with one regression path and a genuine endpoint. The opening is where the claim lives: there is a first stage and a last one.
+- **Band width is available options.** Discomfort is 20° against Integration's 74°. The Danger Zone needs no red overlay and no legend — it is visibly the narrowest place to stand, and the far side is visibly open ground.
+- **The climb is shorter than the descent.** Two bands and 88° before the narrow point, three bands and 194° after it. The early stages arrive faster than they can be processed; the later ones take the time they take.
+- **The hole is a readout.** A ring has a centre, and horizontal text at a legible size fits in it. This is where v1 went wrong: it spent that space on a gear icon and pushed three rotated attributes per wedge out onto the arcs, which is the worst available shape for text. The attributes live in the panel beside it, as three cards.
+
+What the terrain had and this does not: a literal up and down. Elevation said "hard" more immediately than width says "few options". That is the trade, and the Danger Zone's 20° sliver carries enough of it.
 
 ---
 
 ## 3. Layout
 
-v1's two-panel split is dropped. The terrain is a wide, short shape, so it reads best as a full-width banner with content beneath — which also makes the desktop and mobile layouts the same structure at different scales, rather than two layouts.
+Two columns: the dial on the left, the stage on the right. The dial is the fixed point of the interface — it is what the reader orients by — so it is a sticky column that stays put while the panel changes under it, not a banner that scrolls away.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│                     T E R R A I N                           │
-│              (full width, max-height 380px)                 │
-│                                                             │
-├─────────────────────────────────────────────────────────────┤
-│  [Explore ·  Diagnose]        Start fresh   🔒 Ephemeral     │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│              ┌───────────────────────────────┐              │
-│              │                               │              │
-│              │    C O N T E N T  (72ch)      │              │
-│              │                               │              │
-│              └───────────────────────────────┘              │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────┬─────────────────────────────────┐
+│                           │  Discomfort                     │
+│        ___________        │  Stage 3 of 6 · the Danger Zone  │
+│       /   D I A L   \     │  ← Doubt        Discovery →     │
+│       \             /     │                                 │
+│         ‾‾‾‾‾‾‾‾‾‾‾       │  Description                    │
+│                           │                                 │
+│   [Find your station]     │  WHAT YOU MIGHT BE FEELING      │
+│   Start fresh  🔒 Ephemeral│  ┌──────┬──────┬──────┐        │
+│                           │  │Feel  │Think │Behave│        │
+│      (sticky, 44%)        │  └──────┴──────┴──────┘        │
+│                           │                                 │
+│                           │  ┌─────────────┬─────────────┐ │
+│                           │  │ Why this    │ What to do  │ │
+│                           │  │ happens   › │ about it  › │ │
+│                           │  └─────────────┴─────────────┘ │
+└───────────────────────────┴─────────────────────────────────┘
 ```
 
-| Breakpoint | Terrain | Content |
+| Breakpoint | Dial | Panel |
 |---|---|---|
-| ≥1200px | Full width, max-height 380px | 72ch, centered |
-| 768–1199px | Full width, max-height 300px | 68ch, centered, 32px gutters |
-| <768px | Full width, max-height 220px | Full width, 16px gutters |
+| ≥1100px | Sticky left column, 44% (min 420px), max-height 460px | Right column, capped at 72ch, 48px gutters |
+| <1100px | Full width on top, static, max-height 420px | Below, centred, capped at 72ch, 32px gutters |
+| <768px | Full width, max-height 360px | Full width, 16px gutters |
 
 Content is capped at 72ch regardless of viewport. A full-width prose column on a 1920px display is unreadable, and the whole point of this content is that someone reads it.
 
+> **Corrected during implementation.** v2.0 put the graphic in a full-bleed banner with everything beneath it, which was right for a wide, short terrain and wrong for a ring: a dial stretched edge to edge is just a very large dial, and the stage text below it started a scroll that never came back to the graphic. The two-column layout also removed the reason the dial had a maximum height at desktop in the first place — it now has a column of its own to fill.
+
 ---
 
-## 4. Terrain geometry
+## 4. Dial geometry
 
 ### 4.1 Coordinate system
 
-`viewBox="0 0 1000 310"`, `preserveAspectRatio="xMidYMid meet"`. Ground baseline at `y=310`. Lower `y` is higher elevation.
+`viewBox="0 0 660 520"`, `preserveAspectRatio="xMidYMid meet"`. Centre at `(330, 258)`. Angles are **degrees clockwise from twelve o'clock**, so 0 is straight up and negative is anticlockwise.
 
-> **Corrected during implementation.** This was specified as `1000 420`. Against a banner capped at 300px tall, `meet` scales to the height and letterboxes — which threw away a third of the available width and rendered the terrain at 714px inside a 1009px container. A wide, short graphic needs a wide, short coordinate space: the viewBox aspect must stay near the banner's own, which `geometry.test.ts` now asserts (`VIEW_W / VIEW_H > 3`).
+Radii, outermost first:
 
-### 4.2 Stations
+| Name | Value | What sits there |
+|---|---|---|
+| `R_LABEL` | 212 | Stage names, outside the ring |
+| `R_OUTER` | 196 | Band outer edge |
+| `R_MID` | 167 | Station numbers |
+| `R_INNER` | 138 | Band inner edge; the hole starts here |
+| `R_RETREAT` | 130 | The retreat arc, hugging the band it leaves |
+| `R_MARKER` | 114 | You, and your field |
+| `R_GAP` | 102 | The gap sweep between them |
 
-| Stage | `position` | x | y | Trail width | Label anchor |
-|---|---|---|---|---|---|
-| `loss` | 1 | 90 | 216 | 26 | below |
-| `doubt` | 2 | 235 | 148 | 18 | below |
-| `discomfort` | 3 | 370 | 55 | **8** | above |
-| `discovery` | 4 | 545 | 143 | 20 | below |
-| `understanding` | 5 | 740 | 206 | 34 | below |
-| `integration` | 6 | 930 | 231 | 48 | below |
+Everything inside `R_GAP` belongs to the readout.
 
-Virtual endpoints at `(0, 255)` and `(1000, 239)` extend the terrain to the viewport edges so the ground fill spans full width. They carry no station.
+> **Inverted from the terrain.** That graphic asserted `VIEW_W / VIEW_H > 3` in `geometry.test.ts`, because a wide, short coordinate space against a wide, short banner is what stops `meet` letterboxing away a third of the width. A dial needs the opposite, and the test now asserts the aspect stays between 0.9 and 1.6. The height below the ring is not slack: the field annotation sits there, inside the opening, where no band can reach.
 
-Two deliberate asymmetries:
+### 4.2 Bands
 
-**X-spacing tightens on the climb** (145, 135 px) and widens on the descent (175, 195, 190 px). This renders the framework's "compressed grief cycles" claim — the early stages arrive faster than they can be processed, while the later ones take the time they take.
+Angular span encodes available options. Spans are the source of truth; every path, label, number, hit area and marker angle is derived from them.
 
-**Trail width is narrowest at Discomfort** (8px against 26px at Loss and 48px at Integration). Width is the visual encoding of available options, so the pinch at the saddle is the paralysis.
+| Stage | `position` | Span | a1 | a2 | Centre | Label anchor |
+|---|---|---|---|---|---|---|
+| `loss` | 1 | 44° | −128 | −84 | −106 | end |
+| `doubt` | 2 | 34° | −81 | −47 | −64 | end |
+| `discomfort` | 3 | **20°** | −44 | −24 | −34 | end |
+| `discovery` | 4 | 46° | −21 | 25 | 2 | middle |
+| `understanding` | 5 | 64° | 28 | 92 | 60 | start |
+| `integration` | 6 | 74° | 95 | 169 | 132 | start |
+
+`START_ANGLE = -128`, `SECTOR_GAP = 3°` between neighbours. Total sweep **297°**, leaving a **63° opening** centred at 200.5° — just left of six o'clock, because the path is not symmetric and pretending otherwise would be a lie about the content.
+
+Label anchors are computed from `sin(centre)`, not authored: past ±0.25 the label is anchored to the side it is on, and within that it is centred.
+
+> **Corrected during implementation.** The first spans were 60/52/20/44/50/56, chosen so that Discomfort sat at twelve o'clock. That put Loss (60°) wider than Integration (56°) and broke the encoding the shape is built on — if width is options, Loss cannot offer more of them than Integration. `U-D-04` caught it. Centring the narrow band at the top and ordering the widths correctly are mutually exclusive here; the ordering is load-bearing and the clock position is not, so Discomfort sits at −34° and the summit reading is gone. The 20° sliver still reads as the pinch.
 
 ### 4.3 Path construction
 
-The ridge is a single smooth path through all six stations using Catmull-Rom interpolation converted to cubic Béziers, with **tension 0.32**. Do not hand-author the `d` attribute — generate it, so that moving a station in the table above moves the path.
+Each band is an annulus sector: an arc along `R_OUTER` from `a1` to `a2`, a line in to `R_INNER`, an arc back, closed. No `d` attribute is hand-authored — change a span and the band, its label, its number, its hit path and both arcs follow.
 
-```typescript
-const RIDGE_D = catmullRomToBezier(CURVE_POINTS, 0.32);
-```
+Each band also carries an invisible **hit path**, padded 16 units past both radii and half a gap past both edges. The drawn Danger Zone band is a 20° sliver; its hit area is 90 units radially and 49 along the inner arc, which clears 44px at every breakpoint. `U-D-12` asserts it.
 
-> **Corrected during implementation.** Specified as tension 0.5, which broadened the summit enough that the whole thing read as a rounded hill rather than a pass — the shape stopped making its point. Lower tension keeps the curve tighter to the station polyline and restores the saddle.
+### 4.4 The retreat
 
-The trail band is the ridge stroked with a variable width. Since SVG has no native variable-width stroke, render it as a filled shape: offset the ridge polyline perpendicular by ±`width/2` interpolated between stations, then close the two offset curves.
+From Discomfort back to Doubt, drawn **inside the ring** at `R_RETREAT`, anticlockwise, dashed, with the arrowhead at the Doubt end.
 
-Ground fill is the ridge path closed down to `y=420` across the full width, filled with the ground gradient. Sky is the remainder.
+- `stroke-dasharray="7 6"`, `stroke-width="2.5"`, `stroke="var(--regress)"`
+- Generated by `arcPath(R_RETREAT, angleAtPosition(3), angleAtPosition(2))`
+- Sweep flag 0 — the direction *is* the claim, and `U-D-09` asserts it
+- Legend text sits in the opening: `dashed arc: the retreat to Doubt`
 
-### 4.4 The regression path
+> **Corrected during implementation.** First drawn at `R_RETREAT = 86`, where it floated in the middle of the hole, read as a scratch near the centre, and connected nothing to nothing. At 130 it hugs the inner edge of the two bands it runs between, which is the whole of its job. The markers and the gap sweep moved inward to 114 and 102 to make room.
 
-From Discomfort back to Doubt, as an arc **through the sky above the ridge**.
-
-```
-M 342 50  C 316 20, 258 32, 232 136
-```
-
-- `stroke-dasharray="6 7"`, `stroke-width="2.5"`, `stroke="var(--regress)"`, `opacity="0.7"`
-- Arrowhead at the Doubt end, pointing backward
-- Rendered **over** the trail band
-- Label `retreat` at `(276, 70)`, in the sky clear of the ridge
-
-> **Corrected during implementation.** Specified as a line down the near face. In a cross-section the near face *is* the ridge, so a second path inside the hill reads as a tunnel through the mountain rather than as a route. An arc above the surface reads as what it actually is: a direction of travel available from the summit. The arc also had to start at `x=342` rather than at the summit itself, or it crossed the "Discomfort" label.
-
-This is the only element in the graphic that exists purely to make a theoretical claim visible. It earns its place: "most people cycle between Doubt and Discomfort several times before moving forward" is a central assertion of the framework and v1's wheel had no way to show it.
+This is the only element in the graphic that exists purely to make a theoretical claim visible. It earns its place: "most people cycle between Doubt and Discomfort several times before moving forward" is a central assertion of the framework, and v1's closed wheel had no way to show it.
 
 ### 4.5 Fractional positions
 
 Field positions are fractional (`teaching: 3.1`, `craft: 4.2`), so markers must sit between stations.
 
-Curve segment `j` runs from `CURVE_POINTS[j]` to `CURVE_POINTS[j+1]`. Because the virtual left endpoint is index 0, **segments 1–5 are exactly the station-to-station spans**, so the Bézier parameter `t` within segment `j` maps linearly to position `j + t`. Evaluating the Bézier directly is therefore exact:
+`angleAtPosition` interpolates linearly between band centres and clamps to `[1, 6]`:
 
 ```typescript
-function pointAtPosition(position: number): Point {
+function angleAtPosition(position: number): number {
   const p = clamp(position, 1, 6);
-  let j = Math.floor(p);
-  let t = p - j;
-  if (j === 6) { j = 5; t = 1; }       // the right endpoint
-  return bezierPoint(SEGMENTS[j], t);
+  const low = Math.floor(p);
+  const high = Math.ceil(p);
+  const a = SECTORS[low - 1].center;
+  const b = SECTORS[high - 1].center;
+  return a + (b - a) * (p - low);
 }
 ```
 
-> **Corrected during implementation.** Specified as walking the rendered path with `getPointAtLength` against a precomputed length table. Two problems. First, **jsdom implements no SVG layout**, so `getPointAtLength` does not exist there — the geometry unit tests the test plan calls for (U-T-01 to U-T-06) could not have run. Second, it was unnecessary: the parameter mapping above is exact arithmetic, needs no DOM, no mount-time measurement, and no memoization. Position is not an arc-length measure — it is "which station, and how far between" — which is precisely what the Bézier parameter already is.
+Exact arithmetic, no DOM, no `getPointAtLength`, no mount-time measurement — which is what makes `U-D-05` runnable in jsdom at all. Position is not an arc-length measure; it is "which station, and how far between", and that is exactly what the interpolation parameter is.
+
+Because spans differ, equal position distances are **not** equal angular distances: a gap of 1.0 stage from Doubt to Discomfort is 30°, while the same 1.0 from Understanding to Integration is 72°. The gap sweep is therefore a direction and a span to compare against the bands it crosses, not a protractor reading. The number is always written out next to it.
 
 ---
-
 ## 5. Markers
+
+Both markers sit inside the ring at `R_MARKER` (114), each on the angle of its position.
 
 ### 5.1 You
 
-- Filled circle, r=9, fill = current stage color
-- Ring: 2.5px stroke in `--accent` (#00D9FF), plus a 1px dark inner stroke for contrast against light terrain
-- Drop shadow: `0 2px 4px rgba(0,0,0,0.4)`
-- Label above (or below if the station anchor is `above`): **"You"**, 13px, 600 weight
-- Sits **on** the trail band, vertically centered on the ridge
+- Filled circle, r=9, fill = current stage color, 2.5px ring in `--accent`, plus a 1px dark inner ring so it holds against the lighter bands
+- No "You" label. The hole names the stage directly beneath the marker, and a second label 100 units from the first would compete with it for the same glance.
+- Drawn **only when there is a reading behind it** (`confidence !== null`)
+
+> **Corrected during implementation.** The terrain drew the "You" marker for whatever stage was selected, which said *you are here* about a stage someone had merely clicked in order to read about it. On the dial the selected band already carries a keyline and the hole already names it, so the marker now waits for a Locate result and means what it says.
 
 ### 5.2 Your field
 
-- Hollow diamond, 14px across, 2px stroke in `--field` (#8A93A5), no fill
-- Label: the domain's display name, 12px, 400 weight, `--field`
-- Rendered at 70% opacity — present but clearly secondary to the user's own marker
-- Suppressed entirely when `|gap| < 0.25`, where the two markers would overlap illegibly. The gap sentence in the content panel still states the alignment; the graphic just does not draw two shapes on top of each other.
+- Hollow diamond, 16 units across, 2.5px stroke in `--field`, filled with `--bg` so the gap sweep does not run visibly through it
+- Named in the opening below the dial rather than beside the marker: `Craft & Composition — your field is 1.2 stages ahead`. Inside the hole there is no room for a second 19-unit label that does not collide with the readout.
+- Suppressed entirely when `|gap| < 0.25`, where the two markers would overlap illegibly. The gap sentence in the result still states the alignment; the graphic just does not draw two shapes on top of each other.
 
-### 5.3 The gap span
+### 5.3 The gap sweep
 
 Drawn only when `|gap| ≥ 0.25`.
 
-- A horizontal line at `y=280`, from the user marker's x to the field marker's x
-- 1.5px, `--field`, with 4px end ticks
-- Centered label, 12px: `"your field is 2.6 stations ahead"` / `"you are 2.6 ahead of your field"`
-- When the gap is negative, the line is drawn in `--accent` rather than `--field` — the negative case is a different condition, not a lesser amount of the same one ([grief-framework-context.md](grief-framework-context.md) §5.2), and it should not read as a deficit
+- An arc at `R_GAP` (102) from the user's angle to the field's angle, 4px wide, arrowhead at the field end
+- `--field` when the field is ahead; `--accent` when the user is ahead — the negative case is a different condition, not a lesser amount of the same one ([grief-framework-context.md](grief-framework-context.md) §5.2), and it must not read as a deficit
+- **The sweep direction carries the sign.** Clockwise means the field is ahead, anticlockwise means the user is. `U-D-10` asserts both.
+- The field it measures against is the one being **read**, not necessarily the one answered: the panel's selector changes it, and the annotation under the dial always names the field it is talking about.
+- The magnitude is always written out next to it, because spans are unequal: 1.0 stage from Doubt to Discomfort is 30°, and 1.0 from Understanding to Integration is 72° (§4.5). The arc shows direction and relative distance; the words carry the number.
 
-### 5.4 Uncertainty band
+### 5.4 Uncertainty wedge
 
-Diagnostic confidence is rendered as horizontal extent, not as a hard point.
+Diagnostic confidence is rendered as angular extent, not as a hard point.
 
 | `stageConfidence` | Half-width |
 |---|---|
@@ -180,143 +194,202 @@ Diagnostic confidence is rendered as horizontal extent, not as a hard point.
 | `moderate` | ±0.35 stations |
 | `low` | ±0.60 stations |
 
-A soft radial gradient ellipse centered on the user marker, horizontal radius from the table, vertical radius 16px, in the stage color at 28% peak opacity fading to 0. Rendered under the marker and over the trail band.
+A wedge over the ring from `angleAtPosition(p − half)` to `angleAtPosition(p + half)`, extending 14 units past both band radii, in `--accent` at 22% opacity.
 
-When `transitionToward` is set, the band is asymmetric: it extends 1.5× further toward the named stage. This is how "transitioning from Doubt to Discomfort" is drawn, and it is better than either picking one station or drawing two markers.
+When `transitionToward` is set, the wedge is biased a quarter of its half-width toward the named stage. This is how "transitioning from Doubt to Discomfort" is drawn, and it is better than either picking one station or drawing two markers.
 
 ---
 
 ## 6. Color
 
-v1's stage palette is retained unchanged. Terrain-specific tokens are added.
+The app is in the **NextEd design system** ([README.md](README.md) D-12). Tokens live in [tokens.css](../src/styles/tokens.css), mirrored in [palette.ts](../src/theme/palette.ts) so the contrast rules can be asserted; `palette.test.ts` fails if the two drift.
+
+Two themes, light by default. Dark comes from `prefers-color-scheme` until the reader uses the toggle, after which their choice wins (§7.4).
 
 ```css
-:root {
-  /* Surface */
-  --bg:            #2A2D34;   /* deep charcoal */
-  --text:          #F5F5F0;   /* off-white */
-  --text-dim:      rgba(245, 245, 240, 0.68);
-  --text-faint:    rgba(245, 245, 240, 0.42);
-  --accent:        #00D9FF;   /* bright cyan — interactive */
+:root {                         /* light */
+  --brand:          #cd1041;    /* Spirit Red — primary buttons, the 4px card rule */
+  --brand-hover:    #a70d34;
+  --brand-text:     #cd1041;    /* red as text: 16px and up only */
+  --granite:        #000000;
 
-  /* Stages (unchanged from v1) */
-  --loss:          #C83737;
-  --doubt:         #B83A4B;
-  --discomfort:    #E8A547;
-  --discovery:     #F4C542;
-  --understanding: #4A9B8E;
-  --integration:   #2F6B5D;
+  --surface:        #ffffff;
+  --surface-subtle: #f7f8f9;    /* the dial column */
+  --surface-raised: #ffffff;    /* cards, tiles, fields */
+  --surface-sunken: #f4f5f6;
+  --surface-inverse:#101010;    /* the masthead, in both themes */
 
-  /* Terrain */
-  --sky-top:       #1E2128;
-  --sky-bottom:    #2A2D34;
-  --ground-top:    #343842;
-  --ground-bottom: #22252B;
-  --trail:         rgba(245, 245, 240, 0.14);
-  --trail-edge:    rgba(245, 245, 240, 0.30);
-  --field:         #8A93A5;   /* field marker, gap span */
-  --regress:       #B83A4B;   /* regression path — Doubt's color, deliberately */
-  --saddle-warn:   rgba(232, 165, 71, 0.22);
+  --ink:            #101010;
+  --ink-body:       #2a2e31;
+  --ink-muted:      #6b757c;    /* 4.4:1 on surface-subtle — see §6.2 */
+  --on-brand:       #ffffff;
+
+  --border:         #e4e7e9;
+  --border-strong:  #6b757c;    /* band keylines, field marker */
+
+  --link:           #0563f7;    /* Gateway Blue: forward motion only */
+  --link-strong:    #0a47b8;
+  --link-on-dark:   #4d8bff;
+  --wash:           #e8f0fe;    /* selected rows, info fills. Never a red tint. */
+  --focus:          #0563f7;
+
+  --warning-text:   #8a4a05;    /* the Danger Zone, in words */
+  --warning-wash:   #fff4e8;
 }
 ```
 
-The regression path uses Doubt's color because that is where it leads. This is a small thing that makes the diagram self-documenting.
+Dark swaps the surfaces and inks for the system's dark values and takes Spirit Red Light (`#ff4d70`) and Gateway Light for anything carrying meaning. The dark values appear in two rule blocks — one under `prefers-color-scheme`, one under `[data-theme='dark']` — and `U-N-02` asserts the two never drift.
 
-### 6.1 Trail segment coloring
+### 6.1 The stage ramp
 
-The trail band is a neutral translucent fill by default. The segment containing the user's position is tinted with that stage's color at 35% opacity, feathered over ±0.4 stations so it does not read as a hard boundary where none exists.
+v1's red → amber → teal ramp is gone. NextEd reserves red for the institution and for errors, Bold Orange for warnings, and blue for forward motion, so the six stages are rebuilt from design system tokens:
 
-In Explore mode, hovering a station tints its segment at 20%.
+| Stage | Token | Light | Dark |
+|---|---|---|---|
+| 1 Loss | Steel → Border Strong | `#3f464b` | `#6b757c` |
+| 2 Doubt | Border Strong → Silver Gray | `#6b757c` | `#a6b0b7` |
+| 3 Discomfort | **Bold Orange** | `#f58220` | `#f58220` |
+| 4 Discovery | Glacier Blue | `#718c9a` | `#718c9a` |
+| 5 Understanding | Gateway Blue | `#0563f7` | `#4d8bff` |
+| 6 Integration | Gateway Deep | `#0a47b8` | `#9ec0ff` |
 
-### 6.2 Contrast
+Each stage is **one token**, and the token carries its own light and dark value — so this is one ramp rendered twice, not two palettes to keep in step. The Danger Zone being the system's warning colour is the one place where the brand's own semantics and the framework's agree exactly.
 
-Light text on dark terrain throughout. Every text element must reach 4.5:1 against its actual local background, which varies across the gradient — verify against the darkest and lightest points under each label, not against `--bg`. The amber stages (`--discomfort`, `--discovery`) do not reach 4.5:1 as text on the dark ground and are therefore **never used for text**; they appear only as fills, strokes, and tints, with labels rendered in `--text`.
+Dark takes the lighter value of each token because the darker ones vanish: Steel is 1.9:1 and Gateway Deep 2.2:1 against the dark surface (`U-N-05b`).
+
+**Known limitation.** In light the ramp also reads in greyscale and peaks at stage 3 (`U-N-06`). In dark it does not: Discovery and Understanding sit within 0.03 relative luminance of each other and are told apart by hue, by their numbers, and by their labels. Colour is never the only carrier, so this is a loss of elegance rather than of information.
+
+### 6.2 Colour is a fill, never type
+
+The ramp does not become text anywhere. Bold Orange is **2.59:1** on white and Glacier Blue 3.5:1 — neither clears AA, and the design system says so outright. So:
+
+- Stage colour appears as band fills, as a 22px swatch beside the stage name, and as the 4px top rule on the intro cards.
+- Headings and values are `--ink`; the Danger Zone flag is `--warning-text`.
+- Station numbers sit **on** their band and take `--stage-<id>-ink`, chosen per band by luminance (threshold 0.21, because Border Strong at 0.18 needs white and Glacier at 0.25 needs ink). `U-N-04` asserts every one clears 4.5:1.
+
+### 6.3 Contrast
+
+AA, asserted two ways. `palette.test.ts` checks the token pairs the app actually uses (`U-N-07`), the focus ring against every surface it can land on (`U-N-08`), and the band inks (`U-N-04`). The rendered page was then walked in both themes, measuring every text node's computed colour against its real background — which is how four failures were found that the token-level tests could not see: the skip link's leftover v1 colour, the Danger Zone flag in Bold Orange, the triad values in Bold Orange, and `--ink-muted` at 14px on `--surface-subtle`, which is the 4.4:1 case the design system warns about. Muted ink at 14px now takes `--ink-body`.
+
+Band fills are exempt from 3:1 against the surface because every band carries a `--border-strong` keyline, which passes in both themes (`U-N-05`).
 
 ---
-
 ## 7. Interaction
 
 ### 7.1 Explore mode
 
 | Element | Behavior |
 |---|---|
-| Station marker | Click or Enter selects that stage. Hit area ≥44×44px regardless of visual size. |
-| Station label | Same hit target as the marker; they are one control. |
-| Trail segment | Clicking a segment selects the nearer station. |
-| Hover | Station grows to r=7 (from r=5), label brightens from `--text-dim` to `--text`, segment tints 20%. |
-| Keyboard | Stations are a single roving-tabindex group. `←`/`→` move between stations, `Home`/`End` jump to Loss/Integration, `Enter`/`Space` select. One tab stop for the whole graphic. |
-| Selected | Station r=8, 2px `--accent` ring, label at 600 weight. |
+| Band | The band **is** the control. Click or Enter selects that stage. |
+| Stage label | Part of the same group as its band; one control, not two. |
+| Hit area | An invisible path padded 16 units past both radii and half a gap past both edges, so even the 20° Danger Zone band clears 44×44px (§4.3). |
+| Hover | The band holds full opacity while the others drop to 62%; the label brightens from `--text-dim` to `--text`. Nothing moves — a ring that grows on hover makes the whole composition twitch. |
+| Keyboard | The six bands are a single roving-tabindex group. `←`/`→` move between them, `Home`/`End` jump to Loss/Integration, `Enter`/`Space` select. One tab stop for the whole graphic. |
+| Selected | 2px `--text` keyline on the band, label at 700 weight, and the hole names the stage. |
 
-Selecting a station updates the content panel and the URL hash (`#/explore/discomfort`), so stages are linkable and the back button works.
+Selecting a band updates the panel and the URL hash (`#/explore/discomfort`), so stages are linkable and the back button works.
 
-### 7.2 Diagnose mode
+### 7.2 Locate mode
 
-The terrain is **not interactive** during a diagnostic. Stations lose their tab stops and pointer cursors.
+The dial is **not interactive** during a locate. Bands lose their tab stops and pointer cursors.
 
-On diagnosis, the reveal sequence:
+On a result, the reveal sequence:
 
 | t | Event |
 |---|---|
 | 0ms | Sweep stops |
-| 0–400ms | Uncertainty band fades in at the diagnosed position (ease-out) |
+| 0–400ms | Uncertainty wedge fades in over the band at the result position (ease-out) |
 | 300–700ms | "You" marker scales from 0 to r=9 with a slight overshoot (`cubic-bezier(0.34, 1.56, 0.64, 1)`) |
-| 700–1000ms | Trail segment tint fades in |
-| 900–1300ms | Field marker fades in at 70% |
-| 1100–1500ms | Gap span draws from the user marker toward the field marker |
-| 1500ms | Content panel fades in |
+| 700–1000ms | Readout resolves in the hole: kicker, stage name, position |
+| 900–1300ms | Field marker fades in |
+| 1100–1500ms | Gap sweep draws from the user marker toward the field marker |
+| 1500ms | Panel and result fade in |
 
-The order matters: the user sees themselves placed, then the trail colored, then — last — the comparison to their field. Leading with the gap would make the tool's first statement a judgment about how far behind they are.
+The order matters: the user sees themselves placed, then the stage named, then — last — the comparison to their field. Leading with the gap would make the tool's first statement a judgment about how far behind they are.
 
-### 7.3 The saddle
+The marker scale needs `transform-box: fill-box` and `transform-origin: center`; without them an SVG circle scales about the viewBox origin, which is half a dial away, and the marker flies in from the corner.
 
-When the diagnosed stage is `discomfort`, the saddle region gets a `--saddle-warn` glow — a soft ellipse behind the ridge at the summit, 2.4s pulse, 10% opacity variation.
+### 7.3 The Danger Zone
+
+The Danger Zone is the narrowest band whether or not anyone is standing in it — that is structural, and it is labelled `danger zone` outside the ring at all times above 768px.
+
+When the **diagnosed** stage is `discomfort`, the band additionally gets a `--discomfort` wedge behind it, 12 units proud of both radii, pulsing between 26% and 40% over 2.4s. The glow says "and you are in it", which is the only part that is about the reader.
 
 No warning icon. v1 specified an orbiting ⚠️; that is alarming in a context where the framework's entire position is that this stage is normal, common, and not a failure. The glow marks the place without editorializing.
 
-Under `prefers-reduced-motion`, the glow renders static at its mid value.
+Under `prefers-reduced-motion`, the glow renders static at 30%.
+
+### 7.4 The theme toggle
+
+Top right of the masthead, a 44px control that says which theme it will switch to and shows a sun or a moon with it — a two-state control that is only an icon is a guess about what it does. `aria-pressed` carries the state.
+
+Light is the default. Before the toggle is used the app follows `prefers-color-scheme` and keeps following it, including a change made while the page is open. Once the reader chooses, the choice wins and is kept in `localStorage` under `grief.theme`: one word, in a key that holds nothing else. That is the only thing the app keeps across tabs, and it is a display preference rather than session content — no answer, stage or gap goes near it, and the session still dies with the tab. The privacy line says "nothing you enter", and a theme is not something you enter.
+
+An inline script in `index.html` settles the attribute before first paint, so a reader who chose dark does not get a white flash on load. It duplicates the key name and the fallback from [useTheme.ts](../src/theme/useTheme.ts), which owns the behaviour from mount onwards.
 
 ---
+## 8. The panel and the two modals
 
-## 8. Content panel
+The assembled page is between two and eight sections of real prose ([content-architecture.md](content-architecture.md) §4.6). All of it is worth reading and none of it is worth reading first. The panel holds what describes the stage; the two modals hold what explains it and what asks something of you.
 
-### 8.1 Explore mode
+The split is made in [panels.ts](../src/content/panels.ts), not in the component, and `U-P-01` asserts that every section of the page lands in exactly one group. "Moved behind a button" and "lost" look identical from the outside, so the grouping is tested rather than trusted.
 
-Sections render in the order given by [content-architecture.md](content-architecture.md) §4.6. Sections with no resolved block are omitted — never a heading above nothing.
+### 8.1 The panel
 
-| Section | Treatment |
+| Element | Treatment |
 |---|---|
-| Stage header | Name 40px / 600 in stage color; "Stage 3 of 6" 14px `--text-faint` |
-| Breadcrumb | `← Doubt` / `Discovery →`, 14px `--accent`. **Does not wrap** at the ends — Integration has no "next". v1 specified wrapping, which asserts a cycle the framework denies. |
-| Overview | 18px / 1.65 line-height, max 72ch |
-| What you might experience | Three-row table: Feelings / Thoughts / Behavior. A table, not three hover-expanding columns — hover-to-reveal hides content from touch and from screen readers. |
-| In your work | Left border 3px in stage color, 20px padding-left |
-| **Try this** | Boxed callout, `--accent` left border 4px, slightly raised background. The most important element on the page for a Stage 3 user. |
-| About what you said | Same treatment as "In your work" |
-| Why this happens | Inset box, 1px border in stage color at 40% |
-| Moving forward | Bulleted, `--accent` markers |
-| Your pace | 16px, `--text-dim`, no border — a closing aside, not a section |
+| Stage header | Name 40px / 600 in stage color; "Stage 3 of 6" 14px `--text-faint`; the Danger Zone flag in `--discomfort` |
+| Breadcrumb | `← Doubt` / `Discovery →`, 15px `--accent`. **Does not wrap** at the ends — Integration has no "next". v1 specified wrapping, which asserts a cycle the framework denies. |
+| Description | The stage core's opening section (`kind: 'overview'`). 18px / 1.65, max 72ch. |
+| What you might be feeling | Three cards across: Feelings / Thoughts / Behaviour, value 20px / 600 in the stage color. Stacks below 640px. A row rather than the v2.0 table, because each value is one word and this is a glance, not a lookup. |
+| In your work | A field selector and the lens's one-line `summary`. Always present once a domain is known; the empty state says so rather than vanishing. Switching recomputes the gap (§5.3) — see [README.md](README.md) D-13. |
+| Two doors | `Why this happens` and `What to do about it` (`What to do with it` at Integration), side by side, each with a one-line hint. |
 
-### 8.2 Diagnose mode
+Each door's hint names what is behind it, and says how much: with a result, "what is driving it, **and 2 more for your situation**". A button that hides an unknown quantity of text gets opened once.
 
-**Welcome.** Headline: "Where are you in the change cycle?" Sub: "A few questions to find your current stage." Disclaimer, 14px: "This is a reflection tool, not a judgment."
+### 8.2 Behind the doors
 
-Then a single **Begin** button, and one short paragraph stating plainly that everything happens in the browser and nothing is sent anywhere.
+| Door | Holds |
+|---|---|
+| Why this happens | The stage core's `why` section, then `In your work` (domain lens) and `About what you said` (threat response) |
+| What to do about it | The stage core's `forward` section, then `Try this` (first experiment) and `Your pace` |
 
-> **Simplified by D-8.** v2.0 showed two path cards here so the user could weigh an accuracy/privacy tradeoff. With one path there is no tradeoff to present, and a choice of one is not a choice — so the cards became a button. The privacy line that was a bullet on the Quick card is now the page's closing statement, because it applies to everything and carries no qualifier.
+The invariant core leads each modal, because the modal is named after it. The personalized layers follow in page order, which preserves the ethical override — a threat response to an ethical objection comes before the domain lens, and `U-P-04` asserts it. `Try this` keeps its `--accent` callout treatment inside the modal: it is still the most important element in the app for someone at Discomfort.
+
+Each modal is two sections side by side: the text, and one image (§12). Below 1100px the image moves under the text.
+
+### 8.3 Modal behaviour
+
+Every dialog in the app — both doors and the Locate flow — uses the same component, which does the four things a dialog has to do:
+
+- moves focus to the dialog box on open, not to its first control, so a screen reader does not read "Close" before the content
+- keeps Tab inside while it is open
+- closes on Escape, on the backdrop, and on its own close button
+- **returns focus to the control that opened it**
+
+The app root is marked `inert` behind an open dialog, and body scroll is locked. Verified in the browser rather than in jsdom: focus restoration and `inert` are exactly the behaviours a unit test will happily assert and a browser will then not do.
+
+### 8.4 Locate
+
+The whole flow is in one overlay, opened by `Find your station` under the dial and by `#/locate`. It is a single task with a beginning and an end, which is what a modal is for; in the page it competed with the stage being read. The dial stays visible behind it, so the result lands on something the reader has already been looking at.
+
+**Welcome.** Headline: "Where are you in the change cycle?" Sub: six questions, about two minutes, nothing leaves the browser. Disclaimer, 14px: "This is a reflection tool, not a judgment." Then a single `Find your station` button.
+
+> **Simplified by D-8.** v2.0 showed two path cards here so the user could weigh an accuracy/privacy tradeoff. With one path there is no tradeoff to present, and a choice of one is not a choice — so the cards became a button.
 
 **Survey questions.** One per screen. Progress as "3 of 6" plus a six-segment bar. Options as large tap targets (min-height 56px), radio semantics, full keyboard support. `Back` revises; answers persist so revising does not clear later answers. `Next` activates on selection.
 
 **Thinking.** There is nothing to wait for — scoring is a pure function that returns in under a millisecond. The only pause is the reveal sequence itself (§7.2), which exists to let the user watch themselves being placed rather than to cover latency. v1 specified a dedicated 2-3 second screen "to build anticipation"; an artificial delay is a cost paid by every user forever.
 
-**Diagnosis.** Format per [survey-methodology.md](survey-methodology.md) §6. Then:
+**Result.** Format per [survey-methodology.md](survey-methodology.md) §6, in the overlay, with the dial behind it already updated. Then:
 
-- `Read more about this stage` → Explore mode at the diagnosed stage
-- `See the whole path` → Explore overview
+- `Read more about this stage` → closes the overlay at the diagnosed stage
+- `See the whole path` → closes it at Loss
 - `Download a copy` → §9
+
 There is deliberately no "does this feel accurate?" prompt. Nothing collects the answer and nothing will, so asking would be theatre — and it would sit directly below a claim that nothing leaves the browser. See [survey-methodology.md](survey-methodology.md) §7.
 
 ---
-
 ## 9. Export
 
 New in Phase 1. See [README.md](README.md) D-7.
@@ -338,39 +411,50 @@ Filename: `change-cycle-<stage>-<YYYY-MM-DD>.md`.
 
 ## 10. Typography
 
-Inter, or the system sans fallback stack.
+NextEd's two faces: **Roboto Condensed** for headings, eyebrows, buttons, labels and data callouts; **Roboto** for body copy, form fields and help text.
 
-| Element | Size | Weight | Line height |
+```css
+--font-display: 'Roboto Condensed', 'Arial Narrow', Helvetica, Arial, sans-serif;
+--font-body:    Roboto, Helvetica, Arial, sans-serif;
+```
+
+| Element | Face | Size | Weight |
 |---|---|---|---|
-| Stage name | 40px | 600 | 1.1 |
-| Section heading | 22px | 600 | 1.3 |
-| Body | 18px | 400 | 1.65 |
-| Station label | 13px | 600 | 1.2 |
-| Small / meta | 14px | 400 | 1.5 |
-| Graphic annotation | 12px | 400 | 1.2 |
+| Stage name | display | 40px | 700 |
+| Section heading | display | 28px | 700 |
+| Card / panel title | display | 20px | 700 |
+| Eyebrow, flag, label | display | 13–15px, 0.18em tracked, uppercase | 700 |
+| Button | display | 15px, 0.1em tracked, uppercase | 700 |
+| Triad value | display | 22px | 700 |
+| Lead | body | 19px | 400 |
+| Body | body | 16px | 400 |
+| Small / meta | body | 14px | 400 |
 
-Body at 18px/1.65 capped at 72ch. Never rely on color alone to convey state — every colored element carries a shape, label, or position difference as well.
+Body at 16px/1.6 capped at **68ch** — the design system's prose measure, down from v2.0's 72ch. Never rely on colour alone: every coloured element carries a shape, label or position difference as well.
+
+> **The fonts are not loaded from Google.** NextEd says to pull Roboto and Roboto Condensed from Google Fonts. Doing that would put a request to `fonts.googleapis.com` on every page load, which breaks D-8 — the app makes **no** network requests, and that claim is printed on the screen next to the survey. The stacks above are the design system's own, fallbacks included, so a machine with Roboto installed gets Roboto and everything else gets Helvetica or Arial. Self-hosting the two woff2 files would satisfy both the brand and D-8, and is the right fix when someone wants the real condensed face; it is a small, separate piece of work and nothing in the current build depends on it.
 
 ---
-
 ## 11. Accessibility
 
-WCAG 2.1 AA. The terrain is the hard part, and it is substantially easier than v1's wheel was.
+WCAG 2.1 AA. The dial is the hard part, and it is substantially easier than v1's wheel was.
 
 ### 11.1 The graphic
 
 ```html
 <figure>
-  <svg role="img" aria-labelledby="terrain-title terrain-desc"> … </svg>
-  <h2 id="terrain-title" class="visually-hidden">
-    The change cycle as a mountain pass
+  <svg role="img" aria-labelledby="dial-title dial-desc"> … </svg>
+  <h2 id="dial-title" class="visually-hidden">
+    The change cycle as an open dial
   </h2>
-  <p id="terrain-desc" class="visually-hidden">
-    Six stages along a path. It climbs from Loss through Doubt to a narrow
-    summit at Discomfort, where the path forks — forward and down into
-    Discovery, or back down to Doubt. Beyond the summit it widens through
-    Understanding to Integration. You are at Discomfort, stage 3 of 6.
-    Your field is at roughly the same point.
+  <p id="dial-desc" class="visually-hidden">
+    Six stages around an open dial, read clockwise. It begins at Loss at
+    the lower left, climbs through Doubt to a narrow band at Discomfort,
+    then widens through Discovery and Understanding to Integration at the
+    lower right. Each band is as wide as the options available there. The
+    dial does not close, and the one route backward runs from Discomfort
+    to Doubt. You are at Discomfort, stage 3 of 6. Your field, Craft and
+    Composition, is positioned such that your field is 1.2 stages ahead.
   </p>
   <figcaption class="visually-hidden">
     <ol><!-- one li per station, aria-current on the user's --></ol>
@@ -385,7 +469,7 @@ The description is **generated from state**, not static, so it always says where
 
 ### 11.2 Keyboard
 
-- One tab stop for the terrain; `←`/`→` move between stations (roving tabindex)
+- One tab stop for the dial; `←`/`→` move between bands (roving tabindex)
 - Mode toggle, Start fresh, and every control reachable in document order
 - Survey: full keyboard support on all inputs; `Enter` advances when an option is selected
 - Focus ring: 2px `--accent` with a 2px offset, on every focusable element, never removed
@@ -396,22 +480,23 @@ The description is **generated from state**, not static, so it always says where
 Under `prefers-reduced-motion: reduce`:
 
 - Reveal sequence (§7.2) collapses to a single 150ms cross-fade
-- Saddle glow renders static
-- Trail sweep is replaced by a static "Thinking…" label
+- Danger Zone glow renders static
+- The sweep is replaced by a static "Thinking…" label
 - Marker overshoot easing becomes linear
 - Survey transitions become instant
-
 ### 11.4 Compact labels below 768px
 
-The terrain scales its entire coordinate space to the viewport, so a 15-unit label renders at about 6px on a 375px screen. Six stage names cannot be made legible at that width — enlarging them enough to read makes them overlap, since "Understanding" at a readable size is wider than the gap between stations.
+The dial scales its entire coordinate space to the viewport, so at 375px a 20-unit label renders at about 11px. Six stage names will not fit around a ring at that width anyway — "Understanding" at a readable size is wider than the arc its band occupies. Below 768px the outer labels are dropped entirely and the numbers on the bands carry the identification, with the current stage named in the hole at 46 units (26px) and the full table one tap away behind **Text view** — which on mobile sits below the figure rather than floating over it, because the dial now occupies that space.
 
-Below 768px the graphic therefore shows the **station number** for each stage and the **full name only for the current one**, at 30 and 26 viewBox units respectively (≈11px and ≈10px at 375px). The content heading states "Stage 3 of 6", so the numbering is anchored, and the full table is one tap away behind **Text view** — which on mobile sits below the figure rather than floating over it, because the station numbers now occupy that space.
+The panel heading states "Stage 3 of 6", so the numbering on the bands is anchored by text that is always present.
 
 This was found by looking at the rendered page at 375px, not by reasoning about it; the original spec said only "the segments remain clickable."
 
 ### 11.5 Touch
 
-All interactive targets ≥44×44px, including station markers whose visual radius is 5–9px. No hover-only content anywhere — this is the reason §8.1 specifies the experience triad as a table rather than v1's hover-expanding columns.
+All interactive targets ≥44×44px, including the 20° Danger Zone band, whose hit path is padded past the ring on both sides to reach it (§4.3). No hover-only content anywhere — which is why the experience triad is three cards rather than v1's hover-expanding columns, and why both doors open real dialogs rather than tooltips.
+
+Below 768px the modals become bottom sheets: full width, anchored to the bottom edge, 92vh maximum. The close button stays a 44px target in the top right, and Escape still works for anyone with a keyboard attached.
 
 ---
 
@@ -419,10 +504,26 @@ All interactive targets ≥44×44px, including station markers whose visual radi
 
 | Asset | Notes |
 |---|---|
-| Terrain SVG | Generated from the station table at build time, not hand-drawn |
-| Arrowhead marker | One `<marker>` def, reused |
-| Gradients | Four `<linearGradient>` (sky, ground, trail tint, sweep) + one `<radialGradient>` (uncertainty band) |
+| Dial SVG | Generated from the span table, not hand-drawn |
+| Arrowhead markers | Two `<marker>` defs — retreat and gap — reused |
+| Gradients | One `<linearGradient>` for the column behind the dial. The ring is flat fills: a gradient across a band would fight the opacity that carries state. |
 | Lock glyph | Inline SVG, 14px |
+| Close glyph | Inline SVG, 16px, in a 44px target |
+| **Modal images** | Twelve photographs, one per stage per door. Not generated yet: each modal currently shows a dashed placeholder with that image's caption under it. |
 | Print stylesheet | For export (§9) |
 
-No icon font, no illustration set, no animation library. v1 called for stage icons, attribute icons, and a loading animation; none survive, because the triad moved to a table and the loading state moved onto the trail.
+No icon font, no illustration set, no animation library. v1 called for stage icons, attribute icons, and a loading animation; none survive, because the triad moved into the panel and the loading state moved into the hole.
+
+### 12.1 The twelve images
+
+Briefs live in [imageBriefs.ts](../src/content/imageBriefs.ts) — one `alt` line and one prompt each — to be generated in Krea2 and dropped in where the placeholders sit. The house rules are in that file, and they are derived from the content rather than from a style preference:
+
+- **Real people doing real work**, mid-action, hands visible. The framework's claim is that this is an ordinary human response to an ordinary professional loss, and the pictures have to agree with it.
+- **No technology as subject.** No screens dominating the frame, no circuitry, no glowing brains, no robot hands. A laptop may appear the way a stapler appears — the Doubt image has one, closed, being ignored by both people arguing over it.
+- **No metaphor for the emotion.** No head in hands, no silhouette on a summit, no light at the end of a tunnel. The image shows a moment; the text does the naming.
+- **Quiet, specific, documentary.** Natural light, muted palette, one warm source. They sit on a near-black ground, so an evenly-lit studio frame will glare.
+- **Faces optional, dignity mandatory.** Nobody is shown as pitiable, foolish, or behind.
+
+The pairing is deliberate and worth keeping if the briefs are rewritten: each `why` image is **a state**, and each `forward` image is **an object within reach**. Discomfort gets a desk of unsorted printouts above an empty chair, then a kitchen timer wound to twenty minutes beside one blank sheet of paper — which is that stage's entire intervention, drawn.
+
+When the images land, replace the placeholder block in [DetailModal.tsx](../src/components/DetailModal.tsx) with an `<img>` carrying the brief's `alt` verbatim. The caption is a build artifact and goes with the placeholder.

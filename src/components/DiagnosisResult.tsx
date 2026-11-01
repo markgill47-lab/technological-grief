@@ -29,18 +29,18 @@ export function DiagnosisResult({ diagnosis: d, rationale }: Props) {
         {d.transitionToward ? (
           <>
             You look like you’re in{' '}
-            <span style={{ color: stage.color }}>{stage.name}</span>, with some signs
+            <span className="result__stage">{stage.name}</span>, with some signs
             of {STAGES[d.transitionToward].name}
           </>
         ) : d.stageConfidence === 'low' ? (
           <>
             I’m seeing signs of both{' '}
-            <span style={{ color: stage.color }}>{stage.name}</span> and the stage
+            <span className="result__stage">{stage.name}</span> and the stage
             next to it
           </>
         ) : (
           <>
-            You’re in <span style={{ color: stage.color }}>{stage.name}</span>
+            You’re in <span className="result__stage">{stage.name}</span>
           </>
         )}
       </h1>

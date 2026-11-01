@@ -8,6 +8,20 @@
       content="Locate yourself in the Change Grief Cycle relative to AI adoption. A reflection tool. Nothing is stored."
     />
     <title>Where are you in the change cycle?</title>
+    <script>
+      // Settle the theme before first paint, so a reader who chose dark does
+      // not get a white flash on every load. The key and the fallback match
+      // src/theme/useTheme.ts, which owns this from mount onwards.
+      try {
+        var t = localStorage.getItem('grief.theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = t;
+      } catch (e) {
+        /* private mode: the stylesheet's media query covers it */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

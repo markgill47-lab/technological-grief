@@ -17,7 +17,7 @@ interface Props {
  * who simply prefers the numbers. A visible toggle rather than a hidden
  * fallback, because the second and third groups are real.
  */
-export function TerrainTextView({ stage, domain, gap, confidence }: Props) {
+export function DialTextView({ stage, domain, gap, confidence }: Props) {
   const fieldPos = domain ? FIELD_POSITION[domain] : null;
 
   return (
@@ -33,7 +33,7 @@ export function TerrainTextView({ stage, domain, gap, confidence }: Props) {
             <th scope="col">Feeling</th>
             <th scope="col">Thinking</th>
             <th scope="col">Behaviour</th>
-            <th scope="col">Terrain</th>
+            <th scope="col">Band</th>
           </tr>
         </thead>
         <tbody>
@@ -58,7 +58,7 @@ export function TerrainTextView({ stage, domain, gap, confidence }: Props) {
                 <td>{s.emotion}</td>
                 <td>{s.cognition}</td>
                 <td>{s.behavior}</td>
-                <td>{terrainNote(s.position)}</td>
+                <td>{bandNote(s.position)}</td>
               </tr>
             );
           })}
@@ -89,29 +89,32 @@ export function TerrainTextView({ stage, domain, gap, confidence }: Props) {
       </dl>
 
       <p className="textview__shape">
-        The path climbs from stage 1 to a narrow summit at stage 3, where it
-        forks: forward and down into stage 4, or back down to stage 2. Beyond
-        the summit it widens through stages 5 and 6. Both exits from the summit
-        are downhill, which is why people cycle.
+        The six stages sit as bands around an open dial, read clockwise from the
+        lower left. Each band is as wide as the options available at that stage,
+        so stage 3 is the narrowest and stage 6 the widest. The dial does not
+        close: stage 1 begins the path and stage 6 ends it. The one route
+        backward runs from stage 3 to stage 2, and it is the easier of the two
+        ways out of stage 3, which is why people cycle.
       </p>
     </div>
   );
 }
 
-function terrainNote(position: number): string {
+/** How wide the band is, in words, for anyone reading instead of looking. */
+function bandNote(position: number): string {
   switch (position) {
     case 1:
-      return 'Lower slope, near side';
+      return 'Narrow — the path starts here';
     case 2:
-      return 'Climbing';
+      return 'Narrower';
     case 3:
-      return 'Narrow summit — path forks';
+      return 'Narrowest — the path forks';
     case 4:
-      return 'Descending, far side';
+      return 'Widening again';
     case 5:
-      return 'Widening valley';
+      return 'Wide';
     case 6:
-      return 'Broad, level ground';
+      return 'Widest — the path ends here';
     default:
       return '';
   }

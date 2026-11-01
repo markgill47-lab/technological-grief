@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Diagnosis, Mode, Stage } from './domain/types';
+import type { Diagnosis, Domain, Mode, Stage } from './domain/types';
 import { isStage } from './domain/types';
 import { scoreQuick, quickRationale } from './diagnostic/score';
 import type { BehaviorKey, QuickAnswers } from './diagnostic/quickQuestions';
@@ -16,6 +16,7 @@ interface Persisted {
   selectedStage: Stage | null;
   diagnosis: Diagnosis | null;
   rationale: string | null;
+  viewDomain: Domain | null;
   quickAnswers: Partial<QuickAnswers>;
   quickIndex: number;
   status: SurveyStatus;
@@ -26,6 +27,8 @@ export interface AppState {
   selectedStage: Stage | null;
   diagnosis: Diagnosis | null;
   rationale: string | null;
+  /** The field being read, which can differ from the one Q2 recorded. */
+  viewDomain: Domain | null;
 
   quickAnswers: Partial<QuickAnswers>;
   quickIndex: number;
@@ -33,6 +36,7 @@ export interface AppState {
 
   setMode(m: Mode): void;
   selectStage(s: Stage): void;
+  setViewDomain(d: Domain | null): void;
   startQuick(): void;
   answer<K extends keyof QuickAnswers>(key: K, value: QuickAnswers[K]): void;
   toggleBehavior(key: BehaviorKey): void;
@@ -65,6 +69,7 @@ function persist(s: AppState): void {
       selectedStage: s.selectedStage,
       diagnosis: s.diagnosis,
       rationale: s.rationale,
+      viewDomain: s.viewDomain,
       quickAnswers: s.quickAnswers,
       quickIndex: s.quickIndex,
       status: s.status,
@@ -82,7 +87,7 @@ export interface Route {
 
 /** Pure, so it can be tested without a document. */
 export function parseHash(hash: string): Route | null {
-  if (hash === '#/diagnose') return { mode: 'diagnose', stage: null };
+  if (hash === '#/locate') return { mode: 'diagnose', stage: null };
   const m = /^#\/explore\/([a-z]+)$/.exec(hash);
   if (m && isStage(m[1])) return { mode: 'explore', stage: m[1] };
   if (hash === '' || hash === '#' || hash === '#/') {
@@ -92,7 +97,7 @@ export function parseHash(hash: string): Route | null {
 }
 
 export function hashFor(mode: Mode, stage: Stage | null): string {
-  if (mode === 'diagnose') return '#/diagnose';
+  if (mode === 'diagnose') return '#/locate';
   return stage ? `#/explore/${stage}` : '#/';
 }
 
@@ -124,6 +129,7 @@ export const useStore = create<AppState>((set, get) => {
     selectedStage: initialRoute?.stage ?? saved.selectedStage ?? null,
     diagnosis: saved.diagnosis ?? null,
     rationale: saved.rationale ?? null,
+    viewDomain: saved.viewDomain ?? null,
     quickAnswers: saved.quickAnswers ?? {},
     quickIndex: saved.quickIndex ?? 0,
     status: saved.status ?? 'idle',
@@ -135,6 +141,16 @@ export const useStore = create<AppState>((set, get) => {
 
     selectStage(selectedStage) {
       set({ selectedStage, mode: 'explore' });
+      after();
+    },
+
+    /**
+     * Read the stage through another field. Q2 records what someone said they
+     * do; this is what they are looking at now, and plenty of people sit
+     * between two answers. The diagnosis itself is never rewritten.
+     */
+    setViewDomain(viewDomain) {
+      set({ viewDomain });
       after();
     },
 
@@ -184,6 +200,8 @@ export const useStore = create<AppState>((set, get) => {
         rationale: quickRationale(a, diagnosis),
         status: 'revealing',
         selectedStage: diagnosis.stage,
+        // A fresh result resets the lens to the field they just named.
+        viewDomain: diagnosis.domain,
       });
       after();
     },
@@ -204,6 +222,7 @@ export const useStore = create<AppState>((set, get) => {
         selectedStage: null,
         diagnosis: null,
         rationale: null,
+        viewDomain: null,
         quickAnswers: {},
         quickIndex: 0,
         status: 'idle',

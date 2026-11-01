@@ -1,45 +1,156 @@
 /*
- * Design tokens. See specs/ui-specification.md section 6.
+ * NextEd design tokens. See specs/ui-specification.md section 6 and
+ * specs/README.md D-12.
  *
- * The stage palette is unchanged from v1. The terrain tokens are new.
+ * Values come from the NextEd design system's tokens.json and are mirrored in
+ * src/theme/palette.ts, which is what the contrast rules are asserted
+ * against. palette.test.ts parses this file and fails if the two drift, and
+ * if the two dark blocks below ever stop agreeing.
+ *
+ * The v1 palette (charcoal, cyan, and the red-to-teal stage ramp) is gone.
+ * Red is the institution's and belongs to errors; Bold Orange is a warning;
+ * blue marks forward motion. The stage ramp is rebuilt from those rules.
  */
+
 :root {
-  /* Surface */
-  --bg: #2a2d34;
-  --text: #f5f5f0;
-  --text-dim: rgba(245, 245, 240, 0.72);
-  --text-faint: rgba(245, 245, 240, 0.46);
-  --accent: #00d9ff;
-  --accent-dim: rgba(0, 217, 255, 0.18);
+  color-scheme: light;
 
-  /* Stages */
-  --loss: #c83737;
-  --doubt: #b83a4b;
-  --discomfort: #e8a547;
-  --discovery: #f4c542;
-  --understanding: #4a9b8e;
-  --integration: #2f6b5d;
-
-  /* Terrain */
-  /* Sky and ground need real separation or the lower half of the graphic
-     reads as empty space rather than as terrain. */
-  --sky-top: #15181e;
-  --sky-bottom: #232832;
-  --ground-top: #3d4654;
-  --ground-bottom: #2b313c;
-  --trail: rgba(245, 245, 240, 0.14);
-  --trail-edge: rgba(245, 245, 240, 0.3);
-  --field: #8a93a5;
-  /* The regression path uses Doubt's colour because that is where it leads. */
-  --regress: #b83a4b;
+  /* Brand. Required on every piece. */
+  --brand: #cd1041;
+  --brand-hover: #a70d34;
+  --brand-text: #cd1041;
+  --granite: #000000;
 
   /* Surfaces */
-  --panel: #31353d;
-  --panel-raised: #383d46;
-  --hairline: rgba(245, 245, 240, 0.12);
+  --surface: #ffffff;
+  --surface-subtle: #f7f8f9;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f4f5f6;
+  --surface-inverse: #101010;
+
+  /* Ink */
+  --ink: #101010;
+  --ink-body: #2a2e31;
+  --ink-muted: #6b757c;
+  --on-brand: #ffffff;
+
+  /* Line */
+  --border: #e4e7e9;
+  --border-strong: #6b757c;
+
+  /* Forward motion */
+  --link: #0563f7;
+  --link-strong: #0a47b8;
+  --link-on-dark: #4d8bff;
+  --wash: #e8f0fe;
+  --focus: #0563f7;
+
+  /* Functional */
+  --warning-text: #8a4a05;
+  --warning-wash: #fff4e8;
+
+  /* Stages. Each is a design system token; `-ink` is what passes 4.5:1 on it. */
+  --stage-loss: #3f464b;
+  --stage-loss-ink: #ffffff;
+  --stage-doubt: #6b757c;
+  --stage-doubt-ink: #ffffff;
+  --stage-discomfort: #f58220;
+  --stage-discomfort-ink: #101010;
+  --stage-discovery: #718c9a;
+  --stage-discovery-ink: #101010;
+  --stage-understanding: #0563f7;
+  --stage-understanding-ink: #ffffff;
+  --stage-integration: #0a47b8;
+  --stage-integration-ink: #ffffff;
+
+  /* Type */
+  --font-display: 'Roboto Condensed', 'Arial Narrow', Helvetica, Arial, sans-serif;
+  --font-body: Roboto, Helvetica, Arial, sans-serif;
 
   /* Metrics */
-  --measure: 72ch;
-  --radius: 8px;
-  --focus-ring: 2px solid var(--accent);
+  --measure: 68ch;
+  --radius: 0;
+  --radius-chip: 2px;
+  --hit: 44px;
+  --focus-ring: 3px solid var(--focus);
+  --shadow-overlay: 0 8px 24px rgba(16, 16, 16, 0.16);
+  --rule: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --brand: #cd1041;
+    --brand-hover: #a70d34;
+    --brand-text: #ff4d70;
+    --granite: #000000;
+    --surface: #151719;
+    --surface-subtle: #1f2225;
+    --surface-raised: #1f2225;
+    --surface-sunken: #2a2e31;
+    --surface-inverse: #101010;
+    --ink: #f7f8f9;
+    --ink-body: #c9cfd3;
+    --ink-muted: #a6b0b7;
+    --on-brand: #ffffff;
+    --border: #3f464b;
+    --border-strong: #6b757c;
+    --link: #4d8bff;
+    --link-strong: #9ec0ff;
+    --link-on-dark: #4d8bff;
+    --wash: #0a2a6b;
+    --focus: #4d8bff;
+    --warning-text: #f0dfae;
+    --warning-wash: #1f2225;
+    --stage-loss: #6b757c;
+    --stage-loss-ink: #ffffff;
+    --stage-doubt: #a6b0b7;
+    --stage-doubt-ink: #101010;
+    --stage-discomfort: #f58220;
+    --stage-discomfort-ink: #101010;
+    --stage-discovery: #718c9a;
+    --stage-discovery-ink: #101010;
+    --stage-understanding: #4d8bff;
+    --stage-understanding-ink: #101010;
+    --stage-integration: #9ec0ff;
+    --stage-integration-ink: #101010;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --brand: #cd1041;
+  --brand-hover: #a70d34;
+  --brand-text: #ff4d70;
+  --granite: #000000;
+  --surface: #151719;
+  --surface-subtle: #1f2225;
+  --surface-raised: #1f2225;
+  --surface-sunken: #2a2e31;
+  --surface-inverse: #101010;
+  --ink: #f7f8f9;
+  --ink-body: #c9cfd3;
+  --ink-muted: #a6b0b7;
+  --on-brand: #ffffff;
+  --border: #3f464b;
+  --border-strong: #6b757c;
+  --link: #4d8bff;
+  --link-strong: #9ec0ff;
+  --link-on-dark: #4d8bff;
+  --wash: #0a2a6b;
+  --focus: #4d8bff;
+  --warning-text: #f0dfae;
+  --warning-wash: #1f2225;
+  --stage-loss: #6b757c;
+  --stage-loss-ink: #ffffff;
+  --stage-doubt: #a6b0b7;
+  --stage-doubt-ink: #101010;
+  --stage-discomfort: #f58220;
+  --stage-discomfort-ink: #101010;
+  --stage-discovery: #718c9a;
+  --stage-discovery-ink: #101010;
+  --stage-understanding: #4d8bff;
+  --stage-understanding-ink: #101010;
+  --stage-integration: #9ec0ff;
+  --stage-integration-ink: #101010;
 }

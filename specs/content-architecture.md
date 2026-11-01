@@ -178,6 +178,7 @@ The assembled page, in order:
 | Stage header | stage table | Name, station number, color |
 | Overview | `stage_core.body` | 2–3 paragraphs |
 | What you might experience | stage table | Emotion / cognition / behavior triad |
+| In your work (panel) | `domain_lens.summary` | One sentence, beside the field selector. The empty state says so plainly. |
 | In your work | `domain_lens.body` | Omitted entirely with no domain |
 | **Try this** | `domain_lens.firstExperiment` | Callout treatment. Suppressed per §4.4 |
 | About what you said | threat response(s) | Promoted above "In your work" per §4.4 |
@@ -196,6 +197,7 @@ Composition without validation produces silent holes. These checks run in CI and
 | Check | Rule |
 |---|---|
 | **Completeness** | All 6 stage cores and all 5 pace notes exist. Every stage has either all 5 domain lenses or none. |
+| **Summaries** | Every authored `domain_lens` carries a `summary`: one sentence, shown in the panel. A lens without one leaves the panel looking inert. |
 | **Uniqueness** | No two blocks share an `id`. |
 | **Variant sanity** | No stage resolves to more than one variant of the same block (§4.2). |
 | **Coverage** | For every (stage, domain, threat, rogers) combination, assembly produces a page with no empty section and no duplicate paragraph. 6 × 5 × 7 × 5 = 1,050 combinations; exhaustively enumerable and fast. |
