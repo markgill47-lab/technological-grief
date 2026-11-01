@@ -1,31 +1,32 @@
-# Survey Methodology: Two Diagnostic Paths
+# Survey Methodology
 
-**Version**: 2.0
-**Last updated**: 2026-10-31
+**Version**: 2.2
+**Last updated**: 2026-11-01
 
 ---
 
-## 1. Why there are two paths
+## 1. One path
 
-v1 specified the diagnostic as one thing and described it as another. The UI specification laid out a wizard — "Question 2 of 6," radio buttons, a Likert slider, a Back button, a fixed progress indicator. The survey methodology described an adaptive conversation that branches on answers, rephrases when the user stalls, terminates early for a clear Stage 1, and challenges self-contradiction.
+**Six multiple-choice questions, scored deterministically in the browser. No network requests.**
 
-A fixed-widget wizard structurally cannot do any of the adaptive behaviors. A conversation cannot have a progress bar. These were two designs sharing a document.
+v1 specified the diagnostic as one thing and described it as another. The UI specification laid out a wizard — "Question 2 of 6," radio buttons, a Likert slider, a Back button, a fixed progress indicator. The survey methodology described an adaptive conversation that branches on answers, rephrases when the user stalls, terminates early for a clear Stage 1, and challenges self-contradiction. A fixed-widget wizard structurally cannot do any of the adaptive behaviours, and a conversation cannot have a progress bar. Those were two designs sharing a document.
 
-v2 ships both, named, with one shared output shape:
+v2.0 resolved it by building both as named paths with one shared output shape. **D-8 kept the wizard and removed the conversation** — the tool is shared as a public link, and a per-visitor model cost makes that a different product. §4 records what that lost.
 
-| | **Quick** | **Conversation** |
-|---|---|---|
-| Interaction | 6 multiple-choice questions | Adaptive dialogue, 5–8 turns |
-| Scoring | Deterministic, client-side | Model-assessed, one structured call |
-| API calls | **0** | ~6 |
-| Latency | Instant | ~2s per turn |
-| Cost | Free | See [software-design-document.md](software-design-document.md) §5.4 |
-| Works offline | Yes | No |
-| Catches contradiction | Partially (§3.5) | Yes |
-| Captures nuance | No | Yes |
-| Output | `Diagnosis` | `Diagnosis` |
+What the remaining path is:
 
-Quick is the **default** and the **fallback**. It is offered first, and it is what runs when no proxy is configured, when the API is unreachable, when the user declines to type, and when a Conversation session fails partway through. The application is fully functional with no Anthropic dependency at all.
+| | |
+|---|---|
+| Interaction | 6 multiple-choice questions, about two minutes |
+| Scoring | Deterministic pure function, client-side |
+| Network requests | **0** |
+| Latency | Instant |
+| Cost per use | £0 |
+| Works offline | Yes, completely |
+| Catches contradiction | Detects and names it (§3.5); cannot ask about it |
+| Captures nuance | Only what the seven threats and six options express |
+
+The deterministic scoring is also the part of the product that is most thoroughly checkable: being a pure function, it is tested exhaustively over every answer combination rather than sampled. See [test-scenarios.md](test-scenarios.md) §2.
 
 ---
 
@@ -45,7 +46,7 @@ And one added in v2:
 
 ---
 
-## 3. The Quick path
+## 3. The survey
 
 Six questions. Deterministic scoring. No model involved.
 
@@ -258,7 +259,7 @@ Strongly negative. This person is well ahead of a field that has barely engaged,
 | `moderate` | "You look like you're in **[stage]**, with some signs of **[runner-up]**." |
 | `low` | "Based on this, I'm seeing signs of both **[stage]** and **[runner-up]** — which often means you're in transition between them." |
 
-A `low`-confidence Quick result also offers the Conversation path explicitly: *"A few questions back and forth would place this more accurately, if you'd like."* This is the one place the application upsells the API path, and it does so only when the deterministic instrument has genuinely run out of signal.
+A `low`-confidence result says so and stops there. v2.0 used this moment to offer the Conversation path; with that gone, the honest move is to report the uncertainty rather than imply a better answer exists somewhere. Being told "this reading is on the uncertain side, which often means you are between stages" is itself useful information about where someone is.
 
 ### 3.5 Signal conflict
 
@@ -291,96 +292,24 @@ Stage scoring is **not** altered. Someone with an ethical objection still occupi
 
 ---
 
-## 4. The Conversation path
+## 4. The removed Conversation path
 
-Live, adaptive dialogue. 5–8 turns. This is the only place in the application where live model calls are made, because adaptive questioning is the one capability static logic genuinely cannot approximate.
+v2.0 specified, and v2.1 built, a second diagnostic path: adaptive dialogue through a serverless proxy, 5-8 turns, ending in one structured-output classification, with every failure falling back to the Quick path.
 
-### 4.1 What it adds over Quick
+It was removed on 2026-11-01. See [README.md](README.md) **D-8** — the tool is shared as a public link, and a per-visitor model cost makes that a different product.
 
-- **Branching.** The third question depends on the first two.
-- **Rephrasing.** "I don't know" gets a differently-framed question, not the same one again.
-- **Early termination.** A clear Stage 1 does not get interrogated through question seven.
-- **Contradiction handling.** Not just detecting conflict but asking about it.
-- **Open-ended threat capture.** People describe losses that do not map cleanly onto seven options.
+What was genuinely lost, stated plainly rather than minimised:
 
-### 4.2 Flow
-
-```
-Welcome ──▶ Q1 (fixed opener) ──▶ adaptive turns 2..n ──▶ classify ──▶ Diagnosis
-                                         │
-                                         ├── early exit on clear Stage 1 (n≥4)
-                                         └── on any failure ──▶ Quick path
-```
-
-The opening question is fixed and phrased identically to Quick's Q1.
-
-> **Corrected during implementation.** This went on to say that a user who abandons Conversation "can be handed to Quick without losing their place." They cannot, and should not be. The conversation's opening takes **free text**; Quick's Q1 is **multiple choice**. Transferring the answer would mean classifying that text onto one of six options — and on the fallback path, classification is precisely the thing that has just failed. A keyword guess that lands on the wrong option corrupts the diagnosis silently and invisibly.
->
-> The fallback therefore carries nothing across and asks the six questions cleanly. The transcript is retained in session state, so nothing the person wrote is discarded; it simply is not used to pre-fill an answer.
-
-### 4.3 Question progression
-
-Phases from v1, retained — the structure was sound.
-
-| Phase | Turns | Goal |
-|---|---|---|
-| Opening | 1–2 | Baseline relationship; domain and institutional pressure |
-| Emotional & behavioral | 3–4 | Feelings, and what they have actually done |
-| Depth | 5–6 | The specific loss being grieved; obstacles |
-| Forward | 7 | Near-term intent and readiness |
-
-Phase templates vary by what has been established. Examples:
-
-**Turn 3, if avoidant (hypothesis Loss/Doubt):**
-> When you think about AI affecting your field, what comes up? Fear, frustration, indifference, something else?
-
-**Turn 3, if engaged (hypothesis Discovery+):**
-> As you've been working with it, what's the main feeling? Excited, confident, still uncertain, some mix?
-
-**Turn 5, varying by hypothesis:**
-
-| Hypothesis | Question |
+| Capability | Status now |
 |---|---|
-| Loss / Doubt | What concerns you most about how this might change your work? |
-| Discomfort / Discovery | What's been the hardest part of working out how it fits? |
-| Understanding / Integration | What did you have to let go of or change about how you used to work? |
+| Branching on an answer | Gone. Question order is fixed. |
+| Rephrasing a non-answer | Gone. Every question has an option that fits, which is the static substitute. |
+| Stopping early for a clear Stage 1 | Gone. Six questions for everyone. |
+| Asking about a self-contradiction | Partly kept — §3.5 detects it and names it, but cannot ask. |
+| Open-ended capture of a loss that fits no option | Gone. Q5's seven threats are the vocabulary. |
 
-### 4.4 Termination
+The adaptive behaviours are **not** approximated with heuristics. Faking branching with keyword matching would make the instrument worse than an honest fixed one, because the failures would be invisible. Where the conversation would have asked, the Quick path either covers it with an option or does without.
 
-The model ends the conversation and classifies when **any** holds:
-
-- Three or more strong indicators align on one stage
-- Eight turns have elapsed (hard cap)
-- Clear Stage 1 established by turn 4 — further questioning of someone in denial reads as interrogation
-- Two consecutive non-answers after a rephrase
-
-### 4.5 Classification call
-
-One call at the end, using **structured outputs**. Not a tool call.
-
-> **v1 would now fail outright.** v1 specified forcing a diagnosis via `tool_choice`. On current models `tool_choice: {type: "any"}` and `{type: "tool", name: ...}` return **HTTP 400** — forced tool choice has been removed. The correct mechanism is `output_config: {format: {...}}`, which also gives schema-validated output without the tool round trip. See [software-design-document.md](software-design-document.md) §5.3.
-
-The classifier receives the full transcript and returns a `Diagnosis` with `path: 'conversation'`. It must additionally return:
-
-- `rationale`: 2–3 sentences citing **specific things the user said**. This is what makes the diagnosis feel earned rather than assigned, and it is the one place the user's own words legitimately appear (see [content-architecture.md](content-architecture.md) §7 — they are never spliced into authored content).
-- `threats`: ordered, mapped onto the seven canonical ids, even where the user's phrasing did not match an option.
-
-### 4.6 Validation of model output
-
-The returned `Diagnosis` is **not trusted**. Before use:
-
-| Check | On failure |
-|---|---|
-| `stage` is one of six ids | Fall back to Quick scoring over whatever was gathered |
-| `domain` is one of five ids | Prompt the user with Q2 directly |
-| `threats` are canonical ids, length 1–2 | Drop unrecognized entries |
-| `rogers` is one of five ids | Omit the pace note |
-| `gap` **ignored entirely** | Always recomputed client-side from `FIELD_POSITION[domain] − POSITION[stage]` |
-| `rationale` length ≤ 600 chars, no markup | Truncate; strip |
-
-The gap is never taken from the model. It is a deterministic function of two values the application owns, and letting a model return it would introduce drift in the one number the visualization depends on.
-
----
 
 ## 5. Edge cases
 
@@ -389,10 +318,7 @@ Both paths unless noted.
 ### Multiple contexts
 *Faculty member who uses AI personally but not in teaching.*
 
-Conversation path:
-> It sounds like you're in different places depending on context — further along personally than professionally. Let's focus on the professional side, since that's probably where you want the guidance.
-
-Quick path: Q2 forces a single domain, which resolves this implicitly. The diagnosis adds: *"This reflects your work context specifically."*
+Q2 forces a single domain, which resolves this implicitly: the person picks the context they want advice about. The diagnosis adds: *"This reflects your work context specifically."*
 
 ### Rejection on principle
 Handled as `ethicalPosition: 'primary'` — see §3.6 and [grief-framework-context.md](grief-framework-context.md) §7.1. The only question worth asking is whether the position is unconditional or conditional, and that question is put to the user rather than inferred.
@@ -400,17 +326,17 @@ Handled as `ethicalPosition: 'primary'` — see §3.6 and [grief-framework-conte
 ### Overclaiming
 *Reports Integration, exhibits Doubt indicators.*
 
-The weighting handles it without special-casing: self-report is ×1.0 and behavior is ×2.0, so a confident self-assessment unsupported by action does not survive. `signalConflict` surfaces it (§3.5). The Conversation path may ask directly.
+The weighting handles it without special-casing: self-report is ×1.0 and behaviour is ×2.0, so a confident self-assessment unsupported by action does not survive. `signalConflict` surfaces it (§3.5), which is as far as a fixed instrument can go — it can name the discrepancy, but it cannot ask about it.
 
 ### Repeated non-answers
-After two rephrases, diagnose on available evidence with `confidence: 'low'` and say so:
+Not applicable: every question has an option that fits, including indifference (Q4 option g) and "nothing at all" (Q3). Where v1 would have rephrased, the option list is the substitute. Diagnose on available evidence with `confidence: 'low'` and say so:
 > Based on what you've shared, you might be in [stage] — though I'm working from limited information. Does that feel close?
 
 ### Distress
 If the user describes distress beyond work frustration, both paths surface, verbatim:
 > I want to be clear about what I am — a reflection tool built on a change-management framework, not a mental health professional. If what's going on is heavier than work frustration, someone who specializes in career transitions or workplace stress would be a better place to take it.
 
-This text is fixed, not generated. The Conversation path's system prompt includes it as a quoted string to be reproduced exactly.
+This text is fixed and authored. Nothing generates it, and nothing varies it.
 
 ---
 
@@ -421,10 +347,9 @@ This text is fixed, not generated. The Conversation path's system prompt include
 
 You're in the [STAGE NAME] stage.
 
-[rationale — 2-3 sentences. Conversation: cites what they said.
- Quick: cites their answers, e.g. "You've been to a session but
- haven't tried anything yet, and that pattern is the clearest
- marker of this stage."]
+[rationale — 2-3 sentences citing their own answers back, e.g.
+ "You've been to a session but haven't tried anything yet, and
+ that pattern is the clearest marker of this stage."]
 
 [One line on what the stage feels like from inside.]
 
@@ -449,30 +374,14 @@ Would you like to read more about this stage, or see the whole path?
 
 ## 7. Measurement
 
-> **Resolves a v1 contradiction.** v1 asked for diagnostic-accuracy tracking, stage distribution, and transition patterns, while the design document forbade all persistence and server-side logging. Those could not both hold.
+**None.** The application collects nothing and sends nothing.
 
-Opt-in, aggregate-only, and absent entirely unless an endpoint is configured.
+v1 asked for diagnostic-accuracy tracking, stage distribution and transition patterns while the design document forbade all persistence — a contradiction v2.0 resolved with an opt-in, aggregate-only endpoint, off unless configured.
 
-After a diagnosis, one optional question: *"Does this feel accurate?"* — Yes / Not really / Skip.
+D-8 resolves it the other way: the endpoint is gone, and so is the "does this feel accurate?" prompt that fed it. Any endpoint at all forfeits the zero-network property that lets the tool be shared freely, and an accuracy rate is not worth that trade. A prompt whose answer is discarded is worse than no prompt, so it was removed rather than left as decoration.
 
-If and only if the user answers, and only if `VITE_METRICS_ENDPOINT` is set, one fire-and-forget POST:
+If accuracy ever needs measuring, the honest routes do not involve the product phoning home: watch someone use it, or ask a cohort directly.
 
-```json
-{ "stage": "discomfort", "domain": "teaching", "path": "quick",
-  "confidence": "high", "accurate": true, "gapSign": "aligned" }
-```
-
-Explicitly **not** sent: free text, survey answers, threats, Rogers position, session identifier, timestamp finer than the day, IP (stripped at the proxy). The payload is deliberately too coarse to re-identify anyone and too thin to reconstruct a response set.
-
-What this buys: accuracy rate by stage, stage distribution by domain, and whether Conversation meaningfully beats Quick. What it cannot answer: transition patterns over time, which require longitudinal identity the privacy model rules out. v1 listed that as a metric; it is not achievable and has been dropped rather than quietly compromised for.
-
-**Iteration priorities**, retained from v1:
-
-1. Months 1–2 — Stage 3 detection accuracy
-2. Months 3–4 — distinguishing the ends of the spectrum (1–2 vs 5–6)
-3. Months 5–6 — whether Quick can reach five questions reliably
-
----
 
 ## 8. Ethics
 
@@ -484,7 +393,9 @@ What this buys: accuracy rate by stage, stage distribution by domain, and whethe
 
 **Privacy, stated plainly.** Before the diagnosis is shown:
 
-> This conversation only exists in your browser. Nothing is stored and nothing is sent anywhere except the questions themselves, if you chose the conversational path.
+> Everything happens in your browser. Nothing you enter is sent anywhere, stored, or seen by anyone — including us. Close the tab and it is gone.
+
+The claim has no qualifier now, which is the point of D-8: it is enforced in CI rather than promised (see [software-design-document.md](software-design-document.md) §7.1).
 
 And at the end — replacing v1's suggestion that the user make their own note:
 

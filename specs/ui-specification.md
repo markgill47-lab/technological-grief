@@ -253,8 +253,6 @@ Selecting a station updates the content panel and the URL hash (`#/explore/disco
 
 The terrain is **not interactive** during a diagnostic. Stations lose their tab stops and pointer cursors.
 
-During the Conversation path, between turns, the trail shows a slow travelling highlight — a 120px-wide gradient sweeping left to right along the band, 2.4s per pass. This is the thinking indicator. It is on the trail rather than a separate spinner because the trail is what is about to change.
-
 On diagnosis, the reveal sequence:
 
 | t | Event |
@@ -302,27 +300,20 @@ Sections render in the order given by [content-architecture.md](content-architec
 
 **Welcome.** Headline: "Where are you in the change cycle?" Sub: "A few questions to find your current stage." Disclaimer, 14px: "This is a reflection tool, not a judgment."
 
-Then the path choice — two cards, not a dropdown, because the tradeoff is worth seeing:
+Then a single **Begin** button, and one short paragraph stating plainly that everything happens in the browser and nothing is sent anywhere.
 
-| | **Six quick questions** | **Talk it through** |
-|---|---|---|
-| | Multiple choice. About two minutes. Nothing leaves your browser. | A short back-and-forth. More accurate, and it can follow what you actually say. |
-| | *(primary button)* | *(secondary)* |
+> **Simplified by D-8.** v2.0 showed two path cards here so the user could weigh an accuracy/privacy tradeoff. With one path there is no tradeoff to present, and a choice of one is not a choice — so the cards became a button. The privacy line that was a bullet on the Quick card is now the page's closing statement, because it applies to everything and carries no qualifier.
 
-Quick is primary. It is free, instant, private, and good enough for most users. The Conversation card is shown with its tradeoff stated plainly, and it is hidden entirely when no proxy is configured.
+**Survey questions.** One per screen. Progress as "3 of 6" plus a six-segment bar. Options as large tap targets (min-height 56px), radio semantics, full keyboard support. `Back` revises; answers persist so revising does not clear later answers. `Next` activates on selection.
 
-**Quick path questions.** One per screen. Progress as "3 of 6" plus a six-segment bar. Options as large tap targets (min-height 56px), radio semantics, full keyboard support. `Back` revises; answers persist so revising does not clear later answers. `Next` activates on selection.
-
-**Conversation path.** A transcript, newest at the bottom. User turns right-aligned, assistant left. A text area with `Enter` to send and `Shift+Enter` for a newline. No progress indicator — there is no fixed count, and faking one would be a lie about what the path is. Instead, a quiet line: "Usually five or six questions."
-
-**Thinking.** No separate screen. The trail sweep (§7.2) is the indicator, and the transcript shows a three-dot pulse. v1 specified a dedicated 2–3 second screen "to build anticipation"; an artificial delay is a cost paid by every user forever, and the reveal sequence already provides the beat.
+**Thinking.** There is nothing to wait for — scoring is a pure function that returns in under a millisecond. The only pause is the reveal sequence itself (§7.2), which exists to let the user watch themselves being placed rather than to cover latency. v1 specified a dedicated 2-3 second screen "to build anticipation"; an artificial delay is a cost paid by every user forever.
 
 **Diagnosis.** Format per [survey-methodology.md](survey-methodology.md) §6. Then:
 
 - `Read more about this stage` → Explore mode at the diagnosed stage
 - `See the whole path` → Explore overview
 - `Download a copy` → §9
-- Then, quietly: "Does this feel accurate?" Yes / Not really / Skip (§7 of the survey doc)
+There is deliberately no "does this feel accurate?" prompt. Nothing collects the answer and nothing will, so asking would be theatre — and it would sit directly below a claim that nothing leaves the browser. See [survey-methodology.md](survey-methodology.md) §7.
 
 ---
 

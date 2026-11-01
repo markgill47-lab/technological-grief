@@ -7,7 +7,9 @@
 
 ## 1. Scope
 
-This document is the **style guide**. It governs every word the application shows a user, whether authored into a content block or generated on the Conversation path.
+This document is the **style guide**. It governs every word the application shows a user.
+
+Since D-8 that is a complete statement: nothing is generated at runtime, so every word a user reads was written by a person and passed through the review checklist in §7. There is no second register to keep consistent with.
 
 ### What moved out of this document in v2
 

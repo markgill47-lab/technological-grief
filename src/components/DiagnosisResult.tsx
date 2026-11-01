@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { STAGES } from '../domain/stages';
 import { gapSentence } from '../domain/gap';
 import type { Diagnosis } from '../domain/types';
@@ -14,7 +13,6 @@ interface Props {
 export function DiagnosisResult({ diagnosis: d, rationale }: Props) {
   const selectStage = useStore((s) => s.selectStage);
   const setMode = useStore((s) => s.setMode);
-  const [accuracy, setAccuracy] = useState<'yes' | 'no' | 'skip' | null>(null);
   const stage = STAGES[d.stage];
 
   return (
@@ -88,27 +86,11 @@ export function DiagnosisResult({ diagnosis: d, rationale }: Props) {
         </button>
       </div>
 
-      <div className="result__accuracy">
-        {accuracy === null ? (
-          <>
-            <span>Does this feel accurate?</span>
-            <button type="button" className="link-button" onClick={() => setAccuracy('yes')}>
-              Yes
-            </button>
-            <button type="button" className="link-button" onClick={() => setAccuracy('no')}>
-              Not really
-            </button>
-            <button type="button" className="link-button" onClick={() => setAccuracy('skip')}>
-              Skip
-            </button>
-          </>
-        ) : (
-          <span className="result__thanks">
-            {accuracy === 'skip' ? 'No problem.' : 'Noted — thank you.'}
-          </span>
-        )}
-      </div>
-
+      {/* No "does this feel accurate?" prompt. There is no endpoint to
+          collect it and there will not be one: the app makes no network
+          requests at all, and an accuracy rate is not worth giving that up.
+          Asking a question whose answer is discarded is theatre, and here it
+          would also undercut the claim directly above it. */}
       <p className="result__privacy">
         This stayed entirely in your browser. Nothing was stored and nothing was sent
         anywhere. Close the tab and it’s gone.

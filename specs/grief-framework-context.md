@@ -10,7 +10,7 @@
 
 This document is the theoretical source of truth for the Technological Grief Interactive. It defines the six stages, the two segmentation taxonomies, the Grief Gap construct, and the diagnostic indicators that the survey scores against.
 
-In v1 this document was described as system-prompt context. It is no longer primarily that. Because explore-mode content is now static (see [README.md](README.md) D-1), this document's main job is to govern **authored content** — it is the reference every content block is written against, and the standard a reviewer checks blocks for. It is still loaded as system context for the Conversation diagnostic path, where it is cached as a stable prompt prefix.
+In v1 this document was described as system-prompt context. It is no longer that at all. The application calls no model ([README.md](README.md) D-1 and D-8), so this document's whole job is to govern **authored content**: it is the reference every content block is written against, the source the diagnostic's scoring weights encode, and the standard a reviewer checks blocks for.
 
 ---
 
@@ -398,7 +398,7 @@ This domain's distinctive grief is subtler than displacement: the work remains, 
 
 ---
 
-## 13. Guidelines for authored content and for the Conversation path
+## 13. Guidelines for authored content
 
 1. **Listen for grief indicators** in the person's own language.
 2. **Diagnose before prescribing** — identify the stage before offering guidance.

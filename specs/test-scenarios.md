@@ -26,9 +26,9 @@ Components expose `data-state` and `data-stage` attributes specifically so tests
 
 v2's diagnostic logic is a pure function ([software-design-document.md](software-design-document.md) §9.1). That is where the product's correctness actually lives and where tests are cheapest, fastest, and most meaningful. Under v1 this logic was inside a model call and could only be evaluated statistically.
 
-### 1.3 Every API failure has an assertion
+### 1.3 Guarantees are checks, not comments
 
-The Conversation path has exactly one correct failure behavior: fall back to Quick, carrying over what was gathered. Each failure mode gets a test that asserts the fallback, not just that an error was handled.
+The application has no network boundary and therefore no transport failure modes. What it does have are guarantees that are easy to erode silently — it makes no network requests, it never writes `localStorage`, it never puts a diagnosis in the URL — and each of those is a CI check (§9) rather than a comment. Two of them are themselves verified against deliberately planted violations, because a check that has never failed is a check nobody knows works.
 
 ---
 
@@ -186,53 +186,22 @@ One screenshot suite, reviewed deliberately rather than asserted numerically (§
 
 ---
 
-## 8. Integration: Conversation path
+## 8. Integration
 
-Mocked proxy. Every test asserts the fallback behavior, not merely that an error was caught.
+**None required.** There is no network boundary to integrate across.
 
-| ID | Scenario | Expect |
-|---|---|---|
-| I-01 | Happy path, 6 turns, valid structured output | diagnosis rendered, `path: 'conversation'` |
-| I-02 | Proxy returns 429 twice, then succeeds | retried with backoff, user sees no error |
-| I-03 | Proxy returns 429 three times | **falls back to Quick**, answers carried over |
-| I-04 | Proxy returns 529 | retried, then falls back |
-| I-05 | Proxy returns 500 | **immediate** fallback, no retry |
-| I-06 | Request times out at 30s | one retry, then fallback |
-| I-07 | Malformed JSON response | fallback; nothing thrown to the user |
-| I-08 | Schema-invalid `stage` value | fallback to Quick scoring over the transcript |
-| I-09 | Invalid `domain` | user is shown Q2 directly, conversation result otherwise kept |
-| I-10 | Unrecognized threat id | entry dropped, remaining threats kept |
-| I-11 | Invalid `rogers` | pace note omitted, rest renders |
-| I-12 | Model returns a `gap` value | **ignored**; gap recomputed locally |
-| I-13 | `rationale` over 600 chars | truncated |
-| I-14 | `rationale` contains markup | rendered as text, not parsed |
-| I-15 | No proxy configured (`HEAD` 404) | Conversation card hidden; Quick is the only path offered |
-| I-16 | Proxy becomes unavailable mid-conversation | fallback, transcript preserved |
-| I-17 | User abandons after turn 1 and switches to Quick | Quick starts clean; the transcript is retained but **not** used to pre-fill ([survey-methodology.md](survey-methodology.md) §4.2) |
+v2.0's §8 held 17 transport tests and 8 proxy tests, every one asserting that some failure mode fell back cleanly to the Quick path. All of it went with the Conversation path ([README.md](README.md) D-8). What is notable is that nothing replaced it: the failure modes it tested — rate limits, upstream errors, timeouts, malformed responses, schema-invalid output, a misconfigured proxy — do not have successors, because the surface that produced them is gone.
 
-### 8.1 Proxy tests
+The nearest equivalents that remain are pure-function tests (§2, §3) and the storage behaviours in §6.3, none of which can fail intermittently.
 
-| ID | Test |
-|---|---|
-| I-P-01 | Rate limit enforced at 20 requests / 10 min per IP |
-| I-P-02 | Transcript over 12 turns rejected with 400 |
-| I-P-03 | Transcript over 8,000 chars rejected with 400 |
-| I-P-04 | Client-supplied `model` in the body is ignored |
-| I-P-05 | Client-supplied `system` in the body is ignored |
-| I-P-06 | Client-supplied `max_tokens` is ignored |
-| I-P-07 | No request body content appears in logs, including on the error path |
-| I-P-08 | No CORS headers present |
-
-I-P-04 through I-P-06 are the substance of §5.7's claim that the proxy owns the request. I-P-07 must be tested on the **error** path specifically, because capturing bodies on error is the default behavior of most platform loggers.
-
----
 
 ## 9. Security (CI)
 
 | ID | Check |
 |---|---|
-| S-01 | No file under `src/` imports `@anthropic-ai/sdk` (the dependency list cannot be the guarantee — see [software-design-document.md](software-design-document.md) §7.1) |
-| S-01b | The S-01 check is itself verified against a deliberate violation, so it is known to be able to fail |
+| S-00 | **No source file makes a network request** — no `fetch`, `XMLHttpRequest`, `sendBeacon`, `WebSocket`, `EventSource`, or remote dynamic import. The product's defining property, so it is checked rather than trusted |
+| S-01 | `@anthropic-ai/sdk` absent from both dependency lists **and** from every import |
+| S-00b / S-01b | Both checks verified against a deliberately planted violation, so each is known to be able to fail |
 | S-02 | Built bundle contains no `sk-ant-` |
 | S-03 | Built bundle contains no reference to `api.anthropic.com` |
 | S-04 | No `VITE_`-prefixed variable name contains `KEY`, `SECRET`, or `TOKEN` |
@@ -253,15 +222,13 @@ I-P-04 through I-P-06 are the substance of §5.7's claim that the proxy owns the
 | UJ-05 | **Discovery journey.** Experimenting, curious, skills threat. | Discovery; encouraging register; no "you should be further along" language |
 | UJ-06 | **Integration journey.** Teaching others, satisfied. | Integration; breadcrumb offers no "next"; content is outward-facing |
 | UJ-07 | **Negative gap.** Coordination domain, Understanding stage. | Gap is negative; span rendered in the accent color; pace note uses the `userAhead` framing |
-| UJ-08 | **Conversation path, happy.** Full dialogue to diagnosis. | ~6 turns; reveal sequence completes; rationale cites something the user said |
-| UJ-09 | **Conversation fails mid-way.** Proxy dies at turn 3. | Graceful fallback message; Quick path starts at question 1; transcript retained in session state |
 | UJ-10 | **Diagnose then explore.** Diagnose, then browse all six stages. | Personalization persists across every stage; the diagnosed stage is marked on the terrain throughout |
 | UJ-11 | **Start fresh.** Diagnose, then reset. | All state cleared; terrain returns to undiagnosed; sessionStorage key removed |
-| UJ-12 | **Refresh mid-conversation.** Reload at turn 3. | Transcript restored from sessionStorage |
+| UJ-12 | **Refresh mid-survey.** Reload at question 4. | Answers so far restored from sessionStorage |
 | UJ-13 | **Two tabs.** Diagnose in tab A, open tab B. | Independent sessions; no bleed (sessionStorage is per-tab) |
 | UJ-14 | **Deep link.** Open `#/explore/discomfort` directly. | Loads that stage without a diagnosis; content is complete |
 | UJ-15 | **Phone.** Entire Quick path at 390×844. | No horizontal scroll; all targets tappable; terrain legible |
-| UJ-16 | **Offline.** Load, then disconnect, then run the Quick path. | Completes fully; Conversation card hidden or fails gracefully |
+| UJ-16 | **Offline.** Load, disconnect, then use the whole app. | Explore and the full survey complete normally. Nothing degrades, because nothing was reaching the network to begin with |
 
 UJ-16 is the clearest single statement of what v2 changed. Under v1 the application was unusable offline in both modes.
 
@@ -302,7 +269,6 @@ A-02 is more demanding than a standard contrast check: the terrain is a gradient
 | P-07 | JS bundle, gzipped | <180KB | `check:bundle` |
 | P-08 | Content blocks, gzipped | <40KB | same |
 | P-09 | Reveal sequence | no frame over 16ms | Playwright trace |
-| P-10 | Conversation turn | <3s p50 | staging, real API |
 
 ---
 
@@ -331,8 +297,7 @@ Net: the suite is roughly a third the size of v1's and covers substantially more
 | Pre-commit | Lint, typecheck, affected unit tests |
 | Every CI run | All unit, content validation (§5), security (§9), component, integration, axe (A-01) |
 | Pre-merge | Full E2E (§10), visual regression (§7), Lighthouse (§12) |
-| Pre-release | Manual accessibility pass (A-04, A-07–A-09, A-11, A-13), real-API conversation smoke test, manual read of every assembled page |
-| Post-release | Accuracy metrics per [survey-methodology.md](survey-methodology.md) §7, if enabled |
+| Pre-release | Manual accessibility pass (A-04, A-07–A-09, A-11, A-13), manual read of every assembled page |
 
 ### 14.1 Release gates
 
@@ -343,7 +308,6 @@ Ships only when:
 - Security checks (§9) pass
 - Zero axe violations
 - Manual screen-reader pass complete
-- Every Conversation failure mode verified to fall back (§8)
 - Someone has read all six assembled pages end to end and found them good
 
 The last gate is not automatable and is the most important one in the list.

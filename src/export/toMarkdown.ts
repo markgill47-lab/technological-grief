@@ -63,7 +63,7 @@ export function diagnosisToMarkdown(d: Diagnosis, rationale: string | null): str
   lines.push(
     `| What's at stake | ${d.threats.map((t) => THREATS[t].name).join(', ')} |`,
   );
-  if (d.rogers) lines.push(`| Your pace | ${ROGERS[d.rogers].name} |`);
+  lines.push(`| Your pace | ${ROGERS[d.rogers].name} |`);
   lines.push(`| Grief gap | ${d.gap > 0 ? '+' : ''}${d.gap} stages |`);
   lines.push('');
 

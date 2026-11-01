@@ -50,7 +50,12 @@ export type RogersPosition = (typeof ROGERS_IDS)[number];
 
 export type Confidence = 'high' | 'moderate' | 'low';
 export type Mode = 'explore' | 'diagnose';
-export type DiagnosticPath = 'quick' | 'conversation';
+/**
+ * Only one path exists. Kept as a named type rather than inlined because the
+ * metrics payload reports it, and a second path returning later should not
+ * silently change that field's meaning.
+ */
+export type DiagnosticPath = 'quick';
 
 export interface StageData {
   id: Stage;
@@ -72,15 +77,14 @@ export interface Diagnosis {
   domain: Domain;
   /** Ordered, primary first. Length 1-2. */
   threats: ThreatId[];
-  /** Null when unknown, which omits the pace note rather than guessing one. */
-  rogers: RogersPosition | null;
+  rogers: RogersPosition;
   /** Signed, in stations. fieldPosition(domain) - stagePosition. Always computed locally. */
   gap: number;
   /** True when behaviour and emotion point two or more stations apart. */
   signalConflict: boolean;
   /** Set when the primary threat is an ethical objection. Changes assembly. */
   ethicalPosition: 'primary' | null;
-  /** Conversation path only. */
+  /** Why this stage, in the user's own answers. */
   rationale?: string;
   path: DiagnosticPath;
 }

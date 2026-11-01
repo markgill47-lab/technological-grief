@@ -4,31 +4,11 @@ import { isStage } from './domain/types';
 import { scoreQuick, quickRationale } from './diagnostic/score';
 import type { BehaviorKey, QuickAnswers } from './diagnostic/quickQuestions';
 import { QUICK_QUESTION_COUNT } from './diagnostic/quickQuestions';
-import {
-  OPENING_QUESTION,
-  atTurnCap,
-  classify,
-  nextTurn,
-  probeProxy,
-  type Turn,
-} from './diagnostic/conversation';
 
 const STORAGE_KEY = 'tgi.session.v2';
 const SCHEMA_VERSION = 2;
 
-export type SurveyStatus =
-  | 'idle'
-  | 'asking'
-  | 'talking'
-  | 'thinking'
-  | 'revealing'
-  | 'done';
-
-export type SurveyPath = 'quick' | 'conversation' | null;
-
-/** Shown once when a conversation drops the user into the Quick path. */
-export const FALLBACK_NOTICE =
-  'Something went wrong on my end. Rather than make you start over — here are six quick questions instead. They stay entirely in your browser.';
+export type SurveyStatus = 'idle' | 'asking' | 'revealing' | 'done';
 
 interface Persisted {
   v: number;
@@ -39,9 +19,6 @@ interface Persisted {
   quickAnswers: Partial<QuickAnswers>;
   quickIndex: number;
   status: SurveyStatus;
-  path: SurveyPath;
-  transcript: Turn[];
-  fallbackNotice: string | null;
 }
 
 export interface AppState {
@@ -53,24 +30,10 @@ export interface AppState {
   quickAnswers: Partial<QuickAnswers>;
   quickIndex: number;
   status: SurveyStatus;
-  path: SurveyPath;
-
-  /** The conversation so far. Persisted, so a refresh mid-talk is survivable. */
-  transcript: Turn[];
-  /** Set when a conversation failed and handed over to Quick. */
-  fallbackNotice: string | null;
-
-  /** Set once at mount. False hides the Conversation path entirely. */
-  conversationAvailable: boolean;
 
   setMode(m: Mode): void;
   selectStage(s: Stage): void;
   startQuick(): void;
-  startConversation(): void;
-  sendTurn(text: string): Promise<void>;
-  classifyNow(): Promise<void>;
-  fallBackToQuick(): void;
-  probeConversation(): Promise<void>;
   answer<K extends keyof QuickAnswers>(key: K, value: QuickAnswers[K]): void;
   toggleBehavior(key: BehaviorKey): void;
   nextQuestion(): void;
@@ -105,9 +68,6 @@ function persist(s: AppState): void {
       quickAnswers: s.quickAnswers,
       quickIndex: s.quickIndex,
       status: s.status,
-      path: s.path,
-      transcript: s.transcript,
-      fallbackNotice: s.fallbackNotice,
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch {
@@ -158,22 +118,6 @@ export const useStore = create<AppState>((set, get) => {
     writeHash(s.mode, s.selectedStage);
   };
 
-  const runClassify = async (transcript: Turn[]) => {
-    set({ status: 'thinking' });
-    try {
-      const diagnosis = await classify(transcript);
-      set({
-        diagnosis,
-        rationale: diagnosis.rationale ?? null,
-        status: 'revealing',
-        selectedStage: diagnosis.stage,
-      });
-      after();
-    } catch {
-      get().fallBackToQuick();
-    }
-  };
-
   return {
     // A deep link wins over the restored session: the user asked for that page.
     mode: initialRoute?.stage ? 'explore' : (initialRoute?.mode ?? saved.mode ?? 'explore'),
@@ -182,12 +126,7 @@ export const useStore = create<AppState>((set, get) => {
     rationale: saved.rationale ?? null,
     quickAnswers: saved.quickAnswers ?? {},
     quickIndex: saved.quickIndex ?? 0,
-    // 'thinking' is a transient state; a refresh mid-request resumes asking.
-    status: saved.status === 'thinking' ? 'talking' : (saved.status ?? 'idle'),
-    path: saved.path ?? null,
-    transcript: saved.transcript ?? [],
-    fallbackNotice: saved.fallbackNotice ?? null,
-    conversationAvailable: false,
+    status: saved.status ?? 'idle',
 
     setMode(mode) {
       set({ mode });
@@ -200,82 +139,7 @@ export const useStore = create<AppState>((set, get) => {
     },
 
     startQuick() {
-      set({ status: 'asking', quickIndex: 0, path: 'quick' });
-      after();
-    },
-
-    async probeConversation() {
-      const available = await probeProxy();
-      set({ conversationAvailable: available });
-    },
-
-    startConversation() {
-      set({
-        status: 'talking',
-        path: 'conversation',
-        fallbackNotice: null,
-        transcript: [{ role: 'assistant', content: OPENING_QUESTION }],
-      });
-      after();
-    },
-
-    /**
-     * Send one user turn.
-     *
-     * Every failure path lands in the same place: the Quick survey, carrying
-     * over whatever was already gathered. There is no state in which the user
-     * is simply stuck — which is the structural payoff of having a path with
-     * no network dependency at all.
-     */
-    async sendTurn(text) {
-      const trimmed = text.trim();
-      if (!trimmed || get().status === 'thinking') return;
-
-      const transcript: Turn[] = [
-        ...get().transcript,
-        { role: 'user', content: trimmed },
-      ];
-      set({ transcript, status: 'thinking' });
-      after();
-
-      try {
-        if (atTurnCap(transcript)) {
-          await runClassify(transcript);
-          return;
-        }
-
-        const reply = await nextTurn(transcript);
-        const withReply: Turn[] = [...transcript, { role: 'assistant', content: reply }];
-        set({ transcript: withReply, status: 'talking' });
-        after();
-      } catch {
-        get().fallBackToQuick();
-      }
-    },
-
-    async classifyNow() {
-      await runClassify(get().transcript);
-    },
-
-    /**
-     * Hand a failed conversation to the Quick path.
-     *
-     * Nothing is carried across, deliberately. The spec originally said the
-     * first answer would transfer because both paths open with the same
-     * question — but the conversation's opening takes free text and Quick's
-     * Q1 is multiple choice, so transferring would mean classifying that text
-     * onto an option. Classification is exactly what just failed, and a
-     * keyword guess that lands on the wrong option corrupts the diagnosis
-     * silently. Asking the six questions cleanly is the honest move; the
-     * transcript is kept so nothing the person wrote is thrown away.
-     */
-    fallBackToQuick() {
-      set({
-        status: 'asking',
-        path: 'quick',
-        quickIndex: 0,
-        fallbackNotice: FALLBACK_NOTICE,
-      });
+      set({ status: 'asking', quickIndex: 0 });
       after();
     },
 
@@ -343,9 +207,6 @@ export const useStore = create<AppState>((set, get) => {
         quickAnswers: {},
         quickIndex: 0,
         status: 'idle',
-        path: null,
-        transcript: [],
-        fallbackNotice: null,
       });
       writeHash('explore', null);
     },

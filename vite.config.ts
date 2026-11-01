@@ -1,9 +1,8 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import { apiDevServer } from './api/devServer';
 
 export default defineConfig({
-  plugins: [react(), apiDevServer()],
+  plugins: [react()],
   build: {
     target: 'es2022',
     sourcemap: false,
@@ -11,6 +10,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    include: ['src/**/*.test.{ts,tsx}', 'api/**/*.test.ts', 'scripts/**/*.test.mjs'],
+    include: ['src/**/*.test.{ts,tsx}'],
   },
 });

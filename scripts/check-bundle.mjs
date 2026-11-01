@@ -30,20 +30,39 @@ function walk(dir) {
   return out;
 }
 
-// --- S-01: no client source may import the Anthropic SDK ------------------
+const SOURCE = walk('src').filter((f) =>
+  ['.ts', '.tsx', '.js', '.jsx'].includes(extname(f)),
+);
+
+// --- S-00: the app makes no network requests at all -----------------------
 //
-// The SDK IS a root dependency: the serverless function under api/ needs it,
-// and Vercel's zero-config build resolves /api against the root package.
-// So the dependency list cannot be the guarantee — and never really could
-// be, since a workspace would hoist the package into root node_modules
-// anyway. What actually keeps the key out of the browser is that nothing
-// under src/ imports it, which is what this checks. S-02 and S-03 below then
-// verify the same thing from the other end, against the built output.
+// This is the product's defining property, not an implementation detail:
+// "nothing you enter leaves your browser" is the reason the tool can be
+// shared as a public link with no key, no proxy and no per-visitor cost.
+// A claim that load-bearing is worth enforcing rather than trusting.
+const NETWORK = /\bfetch\s*\(|XMLHttpRequest|navigator\.sendBeacon|new\s+WebSocket|EventSource\s*\(|import\s*\(\s*['"]https?:/;
+for (const file of SOURCE) {
+  if (file.endsWith('.test.ts') || file.endsWith('.test.tsx')) continue;
+  const text = readFileSync(file, 'utf8');
+  const hit = NETWORK.exec(text);
+  if (hit) {
+    failures.push(
+      `S-00 ${file} makes a network call (${hit[0].trim()}). The app is offline-only.`,
+    );
+  }
+}
+
+// --- S-01: no Anthropic SDK, as a dependency or an import -----------------
+const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+for (const field of ['dependencies', 'devDependencies']) {
+  if (pkg[field]?.['@anthropic-ai/sdk']) {
+    failures.push(`S-01 @anthropic-ai/sdk is in ${field}. The app calls no API.`);
+  }
+}
 const SDK_IMPORT = /\bfrom\s+['"]@anthropic-ai\/sdk|require\(\s*['"]@anthropic-ai\/sdk/;
-for (const file of walk('src')) {
-  if (!['.ts', '.tsx', '.js', '.jsx'].includes(extname(file))) continue;
+for (const file of SOURCE) {
   if (SDK_IMPORT.test(readFileSync(file, 'utf8'))) {
-    failures.push(`S-01 ${file} imports @anthropic-ai/sdk. It belongs on the proxy only.`);
+    failures.push(`S-01 ${file} imports @anthropic-ai/sdk.`);
   }
 }
 
