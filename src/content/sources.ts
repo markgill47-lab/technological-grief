@@ -127,7 +127,7 @@ export const HELP_SOURCES: Source[] = [
     title: 'Implementation intentions and goal achievement: A meta-analysis of effects and processes',
     venue: 'Advances in Experimental Social Psychology, 38, 69–119',
     url: 'https://cancercontrol.cancer.gov/sites/default/files/2020-06/goal_intent_attain.pdf',
-    note: 'Naming when and where you will do the thing roughly doubles the chance you do it. Free to read.',
+    note: 'Deciding in advance when and where you will do the thing reliably increases the chance you do it, across hundreds of studies. Free to read.',
   },
   {
     authors: 'Sheeran, P., Listrom, O. & Gollwitzer, P.M.',
@@ -227,7 +227,8 @@ export const DOMAIN_SOURCES: Record<Domain, Source[]> = {
       title: 'Survey of members on generative AI',
       venue: 'Society of Authors',
       note: '26% of illustrators had already lost work to generative AI; 78% expected income to fall. In this field the loss is frequently realised, not anticipated.',
-      caveat: 'n=787 of roughly 12,500 approached, so self-selection is likely.',
+      caveat:
+        'n=787 of roughly 12,500 approached, so self-selection is likely — and we have these figures via secondary coverage rather than from the Society of Authors report itself.',
     },
     {
       authors: 'Anonymous',
