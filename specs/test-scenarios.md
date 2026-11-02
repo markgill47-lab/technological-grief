@@ -300,7 +300,7 @@ The nearest equivalents that remain are pure-function tests (§2, §3) and the s
 | S-02 | Built bundle contains no `sk-ant-` |
 | S-03 | Built bundle contains no reference to `api.anthropic.com` |
 | S-04 | No `VITE_`-prefixed variable name contains `KEY`, `SECRET`, or `TOKEN` |
-| S-05 | No `localStorage` access anywhere in the source |
+| S-05 | `localStorage` only in the theme hook, only for the theme key, and the session key never within reach of it |
 | S-06 | CSP header present and matches [software-design-document.md](software-design-document.md) §7.3 |
 | S-07 | Diagnosis never appears in the URL or in `history` entries |
 

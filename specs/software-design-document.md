@@ -344,7 +344,7 @@ v1 contradicted itself here: §5.1 constructed an `Anthropic` client in the brow
 | **S-01** | `@anthropic-ai/sdk` is absent from both dependency lists **and** from every import | `package.json` + `src/`, CI |
 | **S-02** | Built bundle contains no `sk-ant-` | `dist/`, CI |
 | **S-03** | Built bundle contains no reference to `api.anthropic.com` | `dist/`, CI |
-| **S-05** | No `localStorage` anywhere — session state is `sessionStorage` only | `src/`, CI |
+| **S-05** | `localStorage` only in `src/theme/useTheme.ts`, only for `grief.theme`; session state is `sessionStorage` and the session key never comes near it | `src/`, CI |
 | **S-06** | CSP sets `connect-src 'self'`, so even reintroduced code could not reach a third party | headers |
 
 S-00 and S-01 are each **verified against a deliberately planted violation**, because a security check that has never failed is a check nobody knows works.

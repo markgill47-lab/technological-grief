@@ -17,6 +17,12 @@ const DIST = 'dist';
 const MAX_JS_GZIP = 180 * 1024;
 const MAX_CSS_GZIP = 40 * 1024;
 
+/** The one value allowed to outlive the tab, and the only file allowed to set it. */
+const THEME_KEY = 'grief.theme';
+const LOCAL_STORAGE_OK = ['src/theme/useTheme.ts'];
+/** Everything about the reading itself, which is sessionStorage and nothing else. */
+const SESSION_KEY = 'tgi.session.v2';
+
 const failures = [];
 const notes = [];
 
@@ -96,11 +102,43 @@ for (const file of files) {
     failures.push(`S-03 ${file} references api.anthropic.com directly.`);
   }
 
-  // --- S-05: sessionStorage only ----------------------------------------
+  // --- S-05, in the built output ----------------------------------------
+  //
+  // Only the theme bootstrap in index.html survives minification with its key
+  // readable, so that is the one place the rule can be checked here. The
+  // source-level half is below, where the key constants still have names.
+  if (ext === '.html' && /\blocalStorage\b/.test(text) && !text.includes(THEME_KEY)) {
+    failures.push(`S-05 ${file} uses localStorage for something other than ${THEME_KEY}.`);
+  }
+}
+
+// --- S-05: the session dies with the tab ----------------------------------
+//
+// This used to be "no localStorage anywhere in dist", which was correct until
+// D-12 gave the app a theme toggle and then failed every build from that
+// commit onward. Nobody saw it, because this script is not part of
+// `npm test`. The rule it was protecting is narrower than the mechanism it
+// banned: session state goes in sessionStorage and dies with the tab, and the
+// one value allowed to outlive it is a display preference that reveals
+// nothing about anyone. Minification renames the key constants, so the
+// allowlist is enforced against the source, where they can still be read.
+for (const file of SOURCE) {
+  if (file.endsWith('.test.ts') || file.endsWith('.test.tsx')) continue;
+  const text = readFileSync(file, 'utf8');
+  const rel = file.split('\\').join('/');
+
   if (/\blocalStorage\b/.test(text)) {
-    failures.push(
-      `S-05 ${file} uses localStorage. Session state is sessionStorage only.`,
-    );
+    if (!LOCAL_STORAGE_OK.includes(rel)) {
+      failures.push(
+        `S-05 ${rel} uses localStorage. Only ${LOCAL_STORAGE_OK.join(', ')} may, and only for ${THEME_KEY}.`,
+      );
+    } else if (!text.includes(THEME_KEY)) {
+      failures.push(`S-05 ${rel} uses localStorage for something other than ${THEME_KEY}.`);
+    }
+  }
+
+  if (text.includes(SESSION_KEY) && /\blocalStorage\b/.test(text)) {
+    failures.push(`S-05 ${rel} puts the session key within reach of localStorage.`);
   }
 }
 
