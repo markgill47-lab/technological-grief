@@ -171,7 +171,7 @@ Where each of D-4's claims now sits:
 
 The invariant core leads each modal because the modal is named after it; the personalized layers follow in page order, which is what preserves the ethical override from D-2 (`U-P-04`).
 
-**The images**: twelve, one per stage per door, not yet generated — the modals show a dashed placeholder with the brief's caption. Briefs and house rules are in [imageBriefs.ts](../src/content/imageBriefs.ts) and summarised in [ui-specification.md](ui-specification.md) §12.1. The rules exist because the obvious stock image for any of these stages — head in hands, glowing brain, robot hand — would contradict the writing on the same screen.
+**The images**: forty-two — twelve stage-level and thirty per-domain for the `why` door — not yet generated, so the modals show a dashed placeholder with the brief's caption. Briefs and house rules are in [imageBriefs.ts](../src/content/imageBriefs.ts) and summarised in [ui-specification.md](ui-specification.md) §12.1. Each frame holds a person in a situation, with no text anywhere in it. The rules exist because the obvious stock image for any of these stages — head in hands, glowing brain, robot hand — would contradict the writing on the same screen, and because generated writing on a prop is always subtly wrong and tells a screen reader nothing.
 
 **What it costs**: the explanation is now two clicks from the stage rather than zero, and someone who wants the whole page has to open both dialogs. Each door's hint says what is behind it and how much ("what is driving it, and 2 more for your situation"), because an unlabelled button that hides an unknown quantity of text gets opened exactly once. The export (§9) is unchanged and still contains everything in one file, which remains the way to read it all at once.
 
@@ -243,6 +243,36 @@ Above the groups sits a short answer to "how much of this is established?" — t
 
 **Still open**: the review is on an unmerged branch and proposes 15 edits to [grief-framework-context.md](grief-framework-context.md), including corrections to two of the five field-maturity constants that this tool displays. The sources modal cites the review's evidence; the framework document has not yet been changed by it.
 
+### D-15 — The domain matrix is authored
+
+**Before**: five domain lenses, all at Discomfort. The field changed the text at one stage out of six, which is what made the switcher in D-13 feel thinner than it should have.
+
+**Now**: all thirty. Every stage has its five fields, each with a one-line `summary` for the panel, and thirty matching image briefs — so `briefFor()` resolves a per-domain picture everywhere and the stage-level fallback is now only used by the forward door. `U-V-11` asserts no lens is ever left without its own image, and `U-V-12` that the fallback still holds.
+
+**Written from the evidence, not from the voice.** [research/evidence-review.md](research/evidence-review.md) §7.1 settles what each field actually reports losing, and it corrected two of the five framings this project had been working from — `craft`'s dominant loss is **consent**, not taste, with refusal held as a considered position; and `coordination` had the emphasis backwards, since the resistance there is specifically relational rather than general unease. Both corrections run through all six stages of those fields.
+
+**Numbers deliberately kept out.** No block states where a field sits on the 1–6 scale, even though the template invites it. Three of those five constants are disputed by the same review, and prose that hard-codes a contested number is the most expensive kind to revise. The figures the blocks do cite are the strongly-sourced ones: the 68%/2% faculty-student asymmetry, the 66% and 45% from the developer survey, the administrative finding on relational boundaries.
+
+**Loss and Doubt carry no first experiment**, because `validate.test.ts` U-V-10 forbids one and that is what fails a build. The move each of those ten blocks asks for sits in the body instead, where it reads as an observation rather than as homework. This remains an unresolved three-way disagreement, recorded in [content-blocks.md](content-blocks.md) §6: the template allows a *reflective* experiment there, the test allows none, and the evidence review's E1 says the restriction is unsupported and should be replaced by varying the size and privacy of the experiment instead. The test wins today because it is the one with teeth. **Resolving it would change twenty of the thirty blocks**, which is an argument for deciding it before the practitioner review rather than after.
+
+**What each stage's experiment does**, where there is one: Discomfort is one small task that cannot embarrass anyone; Discovery repeats something that already worked, or writes down what happened; Understanding is a depth move or a first outward one; Integration is outward only, and in every field it is some version of going back for one person who is still in Discomfort.
+
+**Not reviewed by anyone in these fields.** All thirty carry `domainVerified: false` and the build names every one on each run. These blocks make specific claims about what it is like to work in five professions. The evidence behind them is real and the voice is consistent; a practitioner recognising their own situation is a different test, and it has not been run. The review checklist in [content-blocks.md](content-blocks.md) §6 is what that review should use.
+
+**Still not generated**: the images themselves. Forty-two briefs now exist — twelve stage-level and thirty per-domain — and no picture has been made.
+
+### D-16 — The image briefs lose their paperwork
+
+**Before**: all forty-two briefs were built around a document. A syllabus with one paragraph circled, an index card holding three questions, a tally sheet, an appointment book, a printed diff, a licence agreement, a checklist taped to a monitor. The paper was carrying the meaning, which made every image depend on writing a generator cannot produce.
+
+**Why that fails, not just as a style choice.** Generated lettering is always subtly wrong, and wrong lettering in a frame about someone's professional competence reads as carelessness. It also dates the image, cannot be translated, and gives a screen reader nothing — the `alt` line would have to describe words that the sighted reader can see are gibberish. The props had a second cost: an object close enough to the lens to be read crowds out the person, and the stage is something a person is doing.
+
+**Now**: a person in a situation, with no text anywhere in the frame. The situation carries the stage — posture, the distance between two people, where the light falls, and what someone is conspicuously *not* doing. Discomfort is standing still while the office moves past in blur, then pulling the chair in at a cleared desk. Integration in `building` is a marker held out toward someone rather than used.
+
+**Two new build rules.** `U-V-13` keeps text-bearing props out of the briefs by name, word-bounded so that "texture" and "nothing legible" still pass while "text" and "printout" do not; it also asserts there are exactly forty-two. `U-V-14` asserts every prompt names a person, because the easiest way to drift back is a frame with nobody in it. The no-text instruction reaches the generator through an exported `PROMPT_RULES` appended to every prompt, rather than being repeated forty-two times where it could be edited out of one.
+
+**What this costs**: the briefs are less literal, so two of them no longer map onto their stage at a glance — `analysis` at Loss is a hand resting on a shelf, and whether that reads as loss depends on the caption beside it. The per-domain signal is now carried by the room and the role rather than by the artefact, which is a weaker distinction between, say, `analysis` and `coordination` than a shelf of volumes against a service counter was.
+
 ---
 
 ## Contradictions resolved
@@ -264,6 +294,6 @@ These were genuine conflicts between v1 documents. Each is now settled, with the
 Decisions deliberately left to the project owner, flagged where they appear:
 
 1. **Field-maturity constants.** The dial's second marker needs a per-domain position for where each field now sits. v2 proposes values with reasoning, but these are editorial judgments about five professional fields and should be reviewed by someone with standing in each. See [grief-framework-context.md](grief-framework-context.md) §5.3.
-2. **The remaining 25 domain lenses.** v2 authors all six stage cores, all seven threat responses, all five pace notes, and a complete five-domain lens set for Stage 3. The other 25 lenses are templated and ready to write — left open deliberately, because they should carry the project owner's voice and domain knowledge rather than a generated approximation. See [content-blocks.md](content-blocks.md) §6.
+2. **Practitioner review of the thirty domain lenses.** All thirty are now authored (D-15) and all thirty carry `domainVerified: false`. They make specific claims about what it is like to work in five professions; someone with standing in each field should read their own five. The checklist is in [content-blocks.md](content-blocks.md) §6. The same review should settle the Loss/Doubt first-experiment question, because resolving it afterwards would change twenty of the thirty blocks.
 3. **Facilitator view.** The framework's intervention strategy is organizational (tiered access, cohort diagnosis, shadow-AI governance) but the application diagnoses individuals. Whether an aggregate or facilitator mode is the real product remains undecided; it is not specified here.
-4. **Version control.** This folder is not a git repository. v1 survived only because it was copied to `archive/v1/` before this revision. Recommend `git init` before any further editing.
+4. **The forty-two images.** The briefs are final (D-16); no picture has been generated. Generation is set up as its own piece of work, since it needs a human eye on every frame and the briefs are deliberately not literal enough to accept unreviewed.

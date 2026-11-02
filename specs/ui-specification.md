@@ -517,21 +517,25 @@ Below 768px the modals become bottom sheets: full width, anchored to the bottom 
 | Gradients | One `<linearGradient>` for the column behind the dial. The ring is flat fills: a gradient across a band would fight the opacity that carries state. |
 | Lock glyph | Inline SVG, 14px |
 | Close glyph | Inline SVG, 16px, in a 44px target |
-| **Modal images** | Twelve photographs, one per stage per door. Not generated yet: each modal currently shows a dashed placeholder with that image's caption under it. |
+| **Modal images** | Forty-two photographs: twelve stage-level, one per stage per door, plus thirty per-domain pictures for the `why` door. Not generated yet: each modal currently shows a dashed placeholder with that image's caption under it. |
 | Print stylesheet | For export (§9) |
 
 No icon font, no illustration set, no animation library. v1 called for stage icons, attribute icons, and a loading animation; none survive, because the triad moved into the panel and the loading state moved into the hole.
 
-### 12.1 The twelve images
+### 12.1 The forty-two images
 
-Briefs live in [imageBriefs.ts](../src/content/imageBriefs.ts) — one `alt` line and one prompt each — to be generated in Krea2 and dropped in where the placeholders sit. The house rules are in that file, and they are derived from the content rather than from a style preference:
+Briefs live in [imageBriefs.ts](../src/content/imageBriefs.ts) — one `alt` line and one prompt each — to be generated in Krea2 and dropped in where the placeholders sit. Twelve are stage-level; thirty are per-domain and serve the `why` door, because what you are losing differs by field. The forward door stays stage-level: the first move out of a stage is the same move whoever you are. `briefFor()` resolves this and `U-V-11`/`U-V-12` assert both halves.
 
-- **Real people doing real work**, mid-action, hands visible. The framework's claim is that this is an ordinary human response to an ordinary professional loss, and the pictures have to agree with it.
+The house rules are in that file, and they are derived from the content rather than from a style preference:
+
+- **A person, in a situation.** Every frame has someone in it, doing or visibly not doing something that belongs to that stage. An empty desk is a still life; the person is what makes it a stage of anything. `U-V-14` asserts a person is named in every prompt.
+- **No text, anywhere.** Not on paper, not on a screen, not on a sign or a spine or a whiteboard. Generated writing is always subtly wrong, it dates the image, it cannot be translated, and a screen reader gets nothing from it. Where writing would naturally appear, the brief shoots it out of focus, from behind, or leaves it out. The rule reaches the generator through the exported `PROMPT_RULES`, appended to every prompt; `U-V-13` keeps text-bearing props — syllabus, checklist, printout, label — out of the briefs in the first place.
+- **Somewhat abstract.** The situation reads before the detail does: posture, the distance between two people, where the light is, what someone is not doing. These are not illustrations of the sentence beside them.
 - **No technology as subject.** No screens dominating the frame, no circuitry, no glowing brains, no robot hands. A laptop may appear the way a stapler appears — the Doubt image has one, closed, being ignored by both people arguing over it.
 - **No metaphor for the emotion.** No head in hands, no silhouette on a summit, no light at the end of a tunnel. The image shows a moment; the text does the naming.
-- **Quiet, specific, documentary.** Natural light, muted palette, one warm source. They sit on a near-black ground, so an evenly-lit studio frame will glare.
-- **Faces optional, dignity mandatory.** Nobody is shown as pitiable, foolish, or behind.
+- **Quiet, specific, documentary.** Natural light, muted palette, one warm source against cooler shadow. They sit on a near-black ground in dark mode, so an evenly-lit studio frame will glare.
+- **Faces optional, dignity mandatory.** Nobody is shown as pitiable, foolish, or behind. Several of these people are standing still, and standing still is not being stuck.
 
-The pairing is deliberate and worth keeping if the briefs are rewritten: each `why` image is **a state**, and each `forward` image is **an object within reach**. Discomfort gets a desk of unsorted printouts above an empty chair, then a kitchen timer wound to twenty minutes beside one blank sheet of paper — which is that stage's entire intervention, drawn.
+An earlier set paired each `why` image as *a state* with each `forward` image as *an object within reach* — a desk of unsorted printouts, then a timer wound to twenty minutes beside a blank sheet. That pairing is gone: it leaned on props that carry writing, and the objects crowded the person out of the frame. What replaced it is the person's posture and what they are not doing — in Discomfort, standing still while the office moves past, then pulling the chair in at a cleared desk.
 
 When the images land, replace the placeholder block in [DetailModal.tsx](../src/components/DetailModal.tsx) with an `<img>` carrying the brief's `alt` verbatim. The caption is a build artifact and goes with the placeholder.

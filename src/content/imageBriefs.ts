@@ -8,90 +8,113 @@ export interface ImageBrief {
 }
 
 /**
- * One image per modal: twelve in all, to be generated in Krea2 and dropped in
- * where the placeholders currently sit.
+ * Appended to every prompt before it reaches the generator.
  *
- * House rules, derived from the content itself rather than from a style
- * preference. Break them and the images will undercut the writing:
+ * Kept out of the prompts themselves so they stay readable, but it is not
+ * optional: text is the failure mode these images are most prone to. A
+ * generated page of writing is always subtly wrong, it dates the image, it
+ * cannot be translated, and a screen reader gets nothing from it.
+ */
+export const PROMPT_RULES =
+  'No text, lettering, signage, numerals or legible writing anywhere in frame. ' +
+  'No logos or brand marks. Documentary photograph, natural light, muted palette, ' +
+  'shallow depth of field. Not stock photography: no posed smiles, no eye contact ' +
+  'with the camera, no thumbs up.';
+
+/**
+ * One image per modal: forty-two in all, to be generated in Krea2 and dropped
+ * in where the placeholders currently sit.
  *
- *  - **Real people doing real work**, mid-action, hands visible. The whole
- *    framework is that this is an ordinary human response to an ordinary
- *    professional loss.
- *  - **No technology as subject.** No screens dominating the frame, no
- *    circuitry, no glowing brains, no robot hands, no blue holographic
- *    anything. A laptop may be present the way a stapler is present.
- *  - **No metaphor for the emotion.** No one with their head in their hands,
- *    no silhouette on a mountain, no light at the end of a tunnel. The image
- *    shows a moment; the text does the naming.
- *  - **Quiet, specific, documentary.** Natural light, muted palette, shallow
- *    depth of field. These sit on a near-black ground, so favour frames that
- *    carry one warm light source rather than a bright evenly-lit studio.
- *  - **Faces optional, dignity mandatory.** Nobody is to be shown as
- *    pitiable, foolish, or behind.
+ * House rules, derived from the content rather than from a style preference.
+ * Break them and the images will undercut the writing:
+ *
+ *  - **A person, in a situation.** Every frame has someone in it, doing or
+ *    not-doing something that belongs to that stage. An empty desk is a
+ *    still life; the person is what makes it a stage of anything.
+ *  - **No text, anywhere.** Not on paper, not on a screen, not on a sign or
+ *    a spine or a whiteboard. Where writing would naturally appear, shoot it
+ *    out of focus, from behind, or leave it out. `PROMPT_RULES` carries this
+ *    to the generator and `validate.test.ts` U-V-13 keeps text-bearing props
+ *    out of the briefs in the first place.
+ *  - **Somewhat abstract.** The situation should read before the detail does:
+ *    posture, distance between people, where the light is, what someone is
+ *    not doing. These are not illustrations of the sentence next to them.
+ *  - **No technology as subject.** No screens dominating, no circuitry, no
+ *    glowing brains, no robot hands. A laptop may appear the way a stapler
+ *    appears — closed, ignored, at the edge of frame.
+ *  - **No metaphor for the emotion.** No head in hands, no silhouette on a
+ *    mountain, no light at the end of a tunnel. The frame shows a moment;
+ *    the text beside it does the naming.
+ *  - **Faces optional, dignity mandatory.** Nobody is shown as pitiable,
+ *    foolish, or behind. Several of these people are standing still, and
+ *    standing still is not the same as being stuck.
+ *
+ * They sit on a near-black ground in dark mode and on white in light, so
+ * favour one warm source against cooler shadow over an evenly-lit room.
  */
 export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief }> = {
   loss: {
     why: {
-      alt: 'A woodworker’s hand resting on a hand plane they have just set down.',
+      alt: 'A woman standing at an office window at dusk with her coat still on.',
       prompt:
-        'Documentary photograph, workshop in late afternoon light. A woodworker’s hand resting flat on a wooden hand plane they have just set down on the bench. The bench is swept and tidy; the work is finished or has not started. Shallow depth of field, warm single-source window light, muted browns. No face. No screens. The hand is still, not gripping.',
+        'A woman in her fifties stands at a window in an emptied office at dusk, coat still on, one hand resting on the frame, looking out rather than at anything in particular. The room behind her is dark and the overhead lights are off. Low warm light from outside against deep interior shadow. Stillness, not collapse.',
     },
     forward: {
-      alt: 'Someone writing a short list on a single index card at a kitchen table.',
+      alt: 'A man sitting on the edge of a desk in a quiet room, thinking.',
       prompt:
-        'Documentary photograph, kitchen table, early morning. A person in their fifties writing a short list on a single index card, pen mid-word, three or four lines already written but illegible. One mug, a small lamp. Overhead three-quarter angle, hands and card sharp, face soft and partly out of frame. Warm, unhurried, private.',
+        'A man sits sideways on the edge of a desk in a quiet room, forearms on his knees, hands loosely together, looking at the middle distance. His chair is pushed away behind him. One warm lamp, everything else dim. He is working something out, not giving up.',
     },
   },
 
   doubt: {
     why: {
-      alt: 'Two colleagues mid-disagreement across a desk, neither looking at the laptop between them.',
+      alt: 'Two colleagues across a table mid-disagreement, a closed laptop ignored between them.',
       prompt:
-        'Documentary photograph, small office. Two colleagues across a desk mid-conversation: one leaning back with arms folded and chin slightly raised, the other mid-sentence with one hand open. A closed laptop sits between them, ignored. Neither is looking at it. Natural window light from the left, muted greys and warm skin tones. The posture is professional disagreement, not hostility.',
+        'Two colleagues either side of a table, one leaning back with arms folded and chin slightly raised, the other mid-sentence with one hand open. A closed laptop sits between them, ignored by both. Window light from the left, muted greys and warm skin tones. Professional disagreement, not hostility.',
     },
     forward: {
-      alt: 'A hand marking one line in a printed draft with a red pencil.',
+      alt: 'A person pausing in a meeting-room doorway, half turned back toward the room.',
       prompt:
-        'Documentary close-up, desk. A hand marking a single line in a printed draft with a red pencil, the rest of the page clean and unmarked. A short stack of other pages to the side. Raking light across the paper so the texture reads. The mark is precise and small — one specific objection, not a page covered in corrections.',
+        'A person pauses in the doorway of a meeting room, one hand still on the frame, half turned back toward the people talking inside, who are soft and out of focus. Cool corridor light against warm room light. The hesitation is deliberate rather than timid.',
     },
   },
 
   discomfort: {
     why: {
-      alt: 'A desk from above: overlapping piles of printouts, a cold coffee, an empty chair.',
+      alt: 'A person standing still in a busy open-plan office while colleagues move past in blur.',
       prompt:
-        'Documentary photograph shot from directly above a desk. Four or five overlapping piles of printed articles and conference handouts, sticky notes on some, none of them open. A cup of coffee gone cold with a ring on the desk beside it. The chair is empty and pushed back. Flat, slightly cool daylight. The feeling is accumulation without action — not mess, but too much material and no sorting.',
+        'A person stands completely still in the middle of a busy open-plan office, arms at their sides, looking at nothing in particular, while two or three colleagues pass as motion blur around them. Flat cool daylight, long-exposure feel. Stillness inside movement.',
     },
     forward: {
-      alt: 'A kitchen timer set to twenty minutes beside one blank sheet of paper.',
+      alt: 'A person pulling their chair in at a cleared desk, about to start one thing.',
       prompt:
-        'Documentary close-up on a plain desk. A mechanical kitchen timer wound to twenty minutes, beside one blank sheet of paper and a pen laid parallel to it. Nothing else on the surface. Warm side light, long soft shadow from the timer. Calm and small-scale: the frame contains exactly one task.',
+        'A person pulls their chair in at a completely cleared desk, sleeves pushed up, both hands flat on the empty surface, about to begin. Everything else has been moved to one side and out of frame. Warm side light, shallow depth of field. The emptiness of the desk is the subject.',
     },
   },
 
   discovery: {
     why: {
-      alt: 'A potter’s second attempt standing beside the first, visibly better.',
+      alt: 'A potter lifting a finished bowl from the wheel, an earlier lopsided attempt beside them.',
       prompt:
-        'Documentary photograph, pottery studio bench. Two thrown bowls side by side, clearly the same form attempted twice: the first lopsided, the second noticeably better. A pair of clay-dusted hands rests at the edge of frame, relaxed. Warm north light, earth tones, visible clay dust. The subject is the difference between the two, not either bowl.',
+        'A potter lifts a finished bowl away from the wheel with both hands while an earlier, visibly lopsided attempt sits on the bench beside them. Clay-dusted forearms, face soft or out of frame. Warm north light, earth tones. The difference between the two shapes is the subject.',
     },
     forward: {
-      alt: 'Two people at a café table comparing notes in a shared notebook, laughing.',
+      alt: 'Two people at a café table, one describing a shape in the air, both laughing.',
       prompt:
-        'Documentary photograph, café table by a window. Two people in their thirties leaning over one open notebook between them, both pointing at the same line, one laughing at something that evidently did not work. Two coffees, crumbs, a phone face-down and forgotten. Golden afternoon light, warm and candid. Peers comparing notes, not an expert instructing a novice.',
+        'Two people lean toward each other over a café table, one describing a shape in the air with both hands, the other laughing. Coffees pushed to the edge of the table. Golden afternoon light, candid. Two peers working something out, not an expert instructing a novice.',
     },
   },
 
   understanding: {
     why: {
-      alt: 'A chef plating calmly during service, tools in reach and unremarkable.',
+      alt: 'A chef plating during service, one hand steady, entirely calm.',
       prompt:
-        'Documentary photograph, professional kitchen during service. A chef plating with one steady hand, tweezers mid-placement, entirely calm. Tickets on the rail behind, slightly out of focus. Every tool is within reach and none of them is the subject. Warm practical lighting, steam, stainless steel. Competence that has stopped being remarkable to the person doing it.',
+        'A chef plates during service, one hand steady with tweezers, entirely calm. Steam, stainless steel and the warm blur of a working kitchen behind. Practical kitchen lighting. Competence that has stopped being remarkable to the person doing it.',
     },
     forward: {
-      alt: 'A senior colleague sitting beside a junior, pointing at the junior’s own notes.',
+      alt: 'A senior colleague turned away from their monitors, listening to a younger one.',
       prompt:
-        'Documentary photograph, open-plan workspace. A senior colleague has pulled a chair alongside a younger one and is pointing at the younger person’s handwritten notes on the desk, not at the monitor. Both are looking at the notebook. Relaxed posture, one coffee each. Soft daylight. The expertise is being handed over, not performed.',
+        'A senior colleague has turned their chair fully away from their monitors to face a younger colleague who is talking and gesturing. The senior listens with their hands still. Cool office light, screens dark and ignored behind them. The listening is the subject.',
     },
   },
 
@@ -99,29 +122,194 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     why: {
       alt: 'An older tradesperson watching an apprentice work, hands in pockets, not intervening.',
       prompt:
-        'Documentary photograph, workshop or garage. An older tradesperson stands a step back watching an apprentice work, hands in pockets, visibly choosing not to intervene. The apprentice is mid-task and absorbed, in focus; the older figure is slightly behind and softer. Warm overhead work light. The restraint is the subject.',
+        'An older tradesperson stands a step back in a workshop, hands in pockets, watching an apprentice work at the bench and visibly choosing not to intervene. The apprentice is absorbed and in focus; the older figure is slightly behind and softer. Warm overhead work light. The restraint is the subject.',
     },
     forward: {
-      alt: 'Two people walking out of a building mid-conversation, one carrying both coffees.',
+      alt: 'Two colleagues walking out of a building at dusk, one carrying both coffees.',
       prompt:
-        'Documentary photograph, exterior, end of the working day. Two colleagues walking out of a building mid-conversation, one carrying both coffees, the other talking with one hand. Low sun behind them, long shadows, campus or city street softly out of focus. Easy and companionable — someone going back for someone else.',
+        'Two colleagues walk out of a building at the end of the day, mid-conversation, one carrying both coffees. Low sun behind them, long shadows, the street soft and out of focus. Easy and companionable.',
     },
   },
 };
 
 /**
- * Per-domain images, where a stage's picture should change with the field.
+ * Per-domain images: thirty, one per stage per field, used on the "why" door.
  *
- * Empty for now by intention. The thirty of these — six stages by five
- * domains — are the other half of the domain matrix in
- * `specs/content-architecture.md` §3, and they are waiting on the evidence
- * review for what each field actually reports losing. The lookup below falls
- * back to the stage-level brief, so a half-filled table degrades to the
- * picture we already have rather than to a hole.
+ * What you are losing differs by field, so the picture does too. The first
+ * move out of a stage is more alike across fields, so the forward door stays
+ * stage-level — `briefFor()` handles that, and `U-V-12` asserts it.
  */
 export const DOMAIN_IMAGE_BRIEFS: Partial<
   Record<Stage, Partial<Record<Domain, ImageBrief>>>
-> = {};
+> = {
+  loss: {
+    teaching: {
+      alt: 'A lecturer alone at the front of an emptied classroom, looking at the rows of chairs.',
+      prompt:
+        'A lecturer sits on the front edge of their desk in an emptied classroom at the end of the day, looking out at rows of chairs left slightly out of line. Low late light through high windows, dust in the air, warm and quiet. Considering rather than sad.',
+    },
+    craft: {
+      alt: 'An illustrator sitting back from a clear drawing board at dusk, hands in their lap.',
+      prompt:
+        'An illustrator sits back from their drawing board in a studio at dusk, hands resting in their lap, the board clear in front of them. The task lamp is off and the only light is cool and blue from a window. The stillness of a workspace that is usually in use.',
+    },
+    analysis: {
+      alt: 'A lawyer standing before a wall of bound volumes, one hand resting on a shelf.',
+      prompt:
+        'A lawyer stands with their back to the camera before a wall of bound volumes, one hand resting at shoulder height on a shelf, taking nothing down. Warm library light, the spines reduced to colour and texture with nothing readable. Composed and still.',
+    },
+    building: {
+      alt: 'A developer with both hands resting flat and still either side of a keyboard.',
+      prompt:
+        'A developer sits at a desk with both hands resting flat and motionless either side of a keyboard, monitors entirely out of frame. Shot low from the side. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump.',
+    },
+    coordination: {
+      alt: 'A staff member behind an empty service counter, hands on the counter, looking toward the door.',
+      prompt:
+        'A staff member stands behind a service counter in a quiet office, both hands resting on the counter top, looking toward a door with nobody coming through it. Warm institutional light, worn surfaces, muted colour. The emptiness in front of them is the subject.',
+    },
+  },
+
+  doubt: {
+    teaching: {
+      alt: 'Two faculty disagreeing in a corridor, one with folded arms against the wall.',
+      prompt:
+        'Two faculty members stand in a departmental corridor mid-disagreement, one leaning against the wall with arms folded, the other turned toward them talking with one hand raised. Doors and boards behind them reduced to shapes. Cool corridor light. Neither is backing down.',
+    },
+    craft: {
+      alt: 'A designer standing arms folded in front of their own pinned-up work.',
+      prompt:
+        'A designer stands with arms folded in front of a board of their own pinned-up work, looking at the work rather than at whoever is speaking off-frame. The pieces are abstract shape and colour, nothing readable. High studio window light, muted. An unmoved, considered stance.',
+    },
+    analysis: {
+      alt: 'Two advisers across a conference table, one making a point with a single fingertip.',
+      prompt:
+        'Two advisers sit across a conference table, one pressing a single fingertip to the table surface to make a point, the other listening with their hands still. A glass partition and city light behind. Cool daylight. The gesture is precise rather than angry.',
+    },
+    building: {
+      alt: 'An engineer with folded arms beside a colleague gesturing at a whiteboard.',
+      prompt:
+        'An engineer stands with arms folded beside a colleague who is gesturing at a whiteboard, looking at the board rather than at them. Whatever is on the board is an out-of-focus blur of shapes with nothing legible. Cool overhead light, flat palette.',
+    },
+    coordination: {
+      alt: 'A staff member standing slightly apart at the edge of a group, listening and not speaking.',
+      prompt:
+        'A staff member stands slightly apart at the edge of a group of colleagues in a meeting room, arms loosely folded, listening and not speaking. The others are animated and softly out of focus. Cool overhead light. Present and not included.',
+    },
+  },
+
+  discomfort: {
+    teaching: {
+      alt: 'A lecturer alone at the front of a large empty lecture theatre, small in the frame.',
+      prompt:
+        'A lecturer stands at the front of a large empty lecture theatre facing the tiered seats, one hand resting on the back of a chair. The room is wide and the figure is small in the frame. Flat institutional light, muted greys and warm wood. The scale is the subject.',
+    },
+    craft: {
+      alt: 'A maker standing still in a studio full of materials, reaching for none of them.',
+      prompt:
+        'A maker stands in the middle of their studio surrounded by materials and half-finished pieces covering every surface, hands at their sides, reaching for none of them. Warm cluttered light, rich texture. Abundance without a next move.',
+    },
+    analysis: {
+      alt: 'An analyst sitting back at night, hands behind their head, looking at the ceiling.',
+      prompt:
+        'An analyst sits back in an office chair late at night, hands behind their head, looking up at the ceiling. The desk in front of them is covered with stacked material reduced to shapes and shadow. One desk lamp, deep shadow elsewhere.',
+    },
+    building: {
+      alt: 'An engineer alone in a server aisle, one hand on a rack, looking down the row.',
+      prompt:
+        'An engineer stands alone in a server aisle with one hand on a rack frame, looking down the length of the row. Hard parallel lines receding, cold blue light with a single warm fixture. The figure is small against the repetition.',
+    },
+    coordination: {
+      alt: 'A staff member caught mid-turn between a ringing phone and someone waiting.',
+      prompt:
+        'A staff member is caught mid-turn in a corridor between a telephone on a desk behind them and a person waiting ahead of them, body angled toward one and face toward the other. Everything but the figure is slight motion blur. Cool institutional light.',
+    },
+  },
+
+  discovery: {
+    teaching: {
+      alt: 'A teacher crouched at eye level beside a student’s desk, mid-question.',
+      prompt:
+        'A teacher crouches beside a student at their desk, down at eye level with them, mid-question with one hand open. Other students work on, out of focus behind. Warm window light. The posture is the shift: alongside rather than at the front.',
+    },
+    craft: {
+      alt: 'A potter’s hands setting a second bowl beside the first on the bench.',
+      prompt:
+        'A potter’s hands set a second bowl down beside a first on the bench, the two clearly the same attempt made twice and the second visibly better. Only hands and work in frame. Warm north light, clay dust, earth tones.',
+    },
+    analysis: {
+      alt: 'Two advisers at a window, turned toward each other, working something out.',
+      prompt:
+        'Two advisers stand at a tall office window turned slightly toward each other mid-conversation, one with an open hand, both relaxed. The office is soft behind them. Bright overcast daylight, cool and even. Working something out together rather than reporting.',
+    },
+    building: {
+      alt: 'A developer leaning back from the desk with both arms behind their head, mid-breath.',
+      prompt:
+        'A developer leans back from their desk with both arms raised briefly behind their head, a small unguarded moment of relief, monitors out of frame. Cool room, one warm lamp. Caught mid-breath rather than celebrating.',
+    },
+    coordination: {
+      alt: 'A staff member in unhurried conversation at a counter with an empty queue behind.',
+      prompt:
+        'A staff member leans on a counter in unhurried conversation with someone whose back is to the camera, giving them full attention, the space behind the visitor empty. Warm light, worn institutional surfaces. Time that has appeared from somewhere.',
+    },
+  },
+
+  understanding: {
+    teaching: {
+      alt: 'A lecturer perched on a desk talking with two students who stayed behind.',
+      prompt:
+        'A lecturer perches on the edge of a desk in an emptying classroom in relaxed conversation with two students who have stayed behind, bags half packed. Chairs askew. Warm late light through high windows. Unforced, ordinary competence.',
+    },
+    craft: {
+      alt: 'A designer sliding one of two mounted boards toward a client and resting a finger on it.',
+      prompt:
+        'A designer pushes one of two blank mounted boards across a table toward a client and rests a fingertip on it, mid-explanation; both are looking at the work. The boards are abstract shape and colour with nothing readable. Clean daylight, muted palette.',
+    },
+    analysis: {
+      alt: 'An adviser in profile mid-sentence on a call, one hand raised and still.',
+      prompt:
+        'An adviser sits in profile at a desk, mid-sentence on a call, one hand raised and held still. Composed and unhurried, jacket off. Afternoon light across the desk, warm with long shadow. The calm is the subject.',
+    },
+    building: {
+      alt: 'An engineer close to a whiteboard mid-draw, the shapes deliberately out of focus.',
+      prompt:
+        'An engineer stands close to a whiteboard mid-draw, marker in hand, the drawn shapes deliberately out of focus and illegible. No audience. Cool even light, clean board, plain clothing. Small and practical rather than a grand architecture.',
+    },
+    coordination: {
+      alt: 'Two colleagues side by side at a desk, one explaining with an open hand.',
+      prompt:
+        'Two colleagues sit side by side at a desk but turned toward each other, one explaining with an open hand while the other nods. The office is soft behind them. Warm overhead light. Comparing rather than reporting.',
+    },
+  },
+
+  integration: {
+    teaching: {
+      alt: 'Two academics stopped in a stairwell, one listening closely while the other talks.',
+      prompt:
+        'Two academics have stopped in a stairwell mid-conversation, one listening with full attention while the other talks, both holding coffees. Institutional concrete and glass, softened. Warm daylight from above. Unhurried, companionable.',
+    },
+    craft: {
+      alt: 'An older maker pointing at one small area of a younger maker’s piece.',
+      prompt:
+        'An older maker leans in to point at one small area of a piece held between them and a younger maker, who is following the finger. Both standing in a workshop, sleeves rolled. Warm side light, material texture. Attention on a detail, not on the whole.',
+    },
+    analysis: {
+      alt: 'A senior adviser turned toward a junior at the end of a long table, pointing between them.',
+      prompt:
+        'A senior adviser sits beside a junior at the end of a long table, turned fully toward them and pointing at something between them that is out of frame. Both are leaning in. Cool daylight, warm wood, glass partition behind. Handing something over.',
+    },
+    building: {
+      alt: 'A senior developer holding a marker out toward a junior at a whiteboard.',
+      prompt:
+        'At a whiteboard, a senior developer holds the marker out toward a junior rather than using it, both standing, the junior reaching to take it. The board behind them is blank or an out-of-focus blur. Cool office light. The handover is the subject.',
+    },
+    coordination: {
+      alt: 'A staff member walking a corridor alongside a manager who is turned toward them, listening.',
+      prompt:
+        'A staff member walks a corridor alongside a manager, mid-sentence, the manager turned toward them and listening rather than talking. Low warm light through a window at the end of the corridor. Someone being listened to.',
+    },
+  },
+};
 
 /**
  * The image for a door. Domain-specific where one has been authored, and only

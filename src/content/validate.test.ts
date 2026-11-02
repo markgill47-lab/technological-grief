@@ -6,6 +6,7 @@ import { splitStageCore } from './schema';
 import { DOMAIN_IDS, ROGERS_IDS, STAGE_IDS, THREAT_IDS } from '../domain/types';
 import type { Diagnosis, Domain, RogersPosition, Stage, ThreatId } from '../domain/types';
 import { computeGap } from '../domain/gap';
+import { DOMAIN_IMAGE_BRIEFS, IMAGE_BRIEFS, PROMPT_RULES, briefFor } from './imageBriefs';
 
 /**
  * Content validation. These run in CI and fail the build.
@@ -269,8 +270,113 @@ describe('content validation', () => {
     }
   });
 
+  it('U-V-11 gives every authored lens an image of its own', () => {
+    // A lens with no domain image falls back to the stage-level picture,
+    // which is correct behaviour and the wrong content: the point of the
+    // per-domain block is that the loss looks different in that field.
+    for (const lens of DOMAIN_LENSES) {
+      const brief = DOMAIN_IMAGE_BRIEFS[lens.stage]?.[lens.domain];
+      expect(brief, `${lens.id} has no domain image brief`).toBeDefined();
+      expect(brief!.alt.trim().length, lens.id).toBeGreaterThan(20);
+      expect(brief!.prompt.trim().length, lens.id).toBeGreaterThan(80);
+    }
+  });
+
+  it('U-V-12 resolves an image for every door at every stage', () => {
+    // The forward door stays stage-level by design — the first move out of a
+    // stage is the same move whoever you are — so the fallback has to hold.
+    for (const stage of STAGE_IDS) {
+      expect(briefFor(stage, 'why', null)).toBe(IMAGE_BRIEFS[stage].why);
+      expect(briefFor(stage, 'forward', null)).toBe(IMAGE_BRIEFS[stage].forward);
+      for (const domain of DOMAIN_IDS) {
+        expect(briefFor(stage, 'forward', domain)).toBe(IMAGE_BRIEFS[stage].forward);
+        expect(briefFor(stage, 'why', domain).alt.length, `${stage}/${domain}`).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('U-V-13 asks for no text-bearing prop in any image', () => {
+    // Generated writing is always subtly wrong, it dates the image, it cannot
+    // be translated, and a screen reader gets nothing from it. The rule is
+    // carried to the generator by PROMPT_RULES; this keeps the briefs from
+    // asking for the thing the rules then have to forbid. Word-bounded on
+    // purpose: "texture" and "illegible" are fine, "text" and "legible
+    // writing" are not.
+    const PROPS = [
+      /\btexts?\b/i,
+      /\bwriting\b/i,
+      /\bhandwritt(en|ing)\b/i,
+      /\blettering\b/i,
+      /\bwords?\b/i,
+      /\bnumerals?\b/i,
+      /\blabels?(led|ed)?\b/i,
+      /\bsignage\b/i,
+      /\bcaptions?\b/i,
+      /\bheadlines?\b/i,
+      /\btitles?\b/i,
+      /\bdocuments?\b/i,
+      /\bsyllabus\b/i,
+      /\bchecklists?\b/i,
+      /\bspreadsheets?\b/i,
+      /\bslides?\b/i,
+      /\bindex cards?\b/i,
+      /\bnote(s|book|pad)?\b/i,
+      /\btally\b/i,
+      /\bprint(ed|out|outs)\b/i,
+      /\bmemos?\b/i,
+      /\binvoices?\b/i,
+      /\breceipts?\b/i,
+      /\bcontracts?\b/i,
+      /\blicen[cs]es?\b/i,
+      /\bforms?\b/i,
+      /\bquestionnaires?\b/i,
+    ];
+
+    const every = [
+      ...Object.entries(IMAGE_BRIEFS).flatMap(([stage, doors]) =>
+        Object.entries(doors).map(([door, b]) => [`${stage}/${door}`, b] as const),
+      ),
+      ...Object.entries(DOMAIN_IMAGE_BRIEFS).flatMap(([stage, byDomain]) =>
+        Object.entries(byDomain!).map(([domain, b]) => [`${stage}/${domain}`, b] as const),
+      ),
+    ];
+
+    expect(every).toHaveLength(42);
+
+    for (const [id, brief] of every) {
+      for (const field of [brief.alt, brief.prompt]) {
+        for (const re of PROPS) {
+          expect(re.test(field), `image brief ${id} asks for ${re}`).toBe(false);
+        }
+      }
+    }
+
+    // And the rule itself still reaches the generator.
+    expect(PROMPT_RULES.toLowerCase()).toContain('no text');
+  });
+
+  it('U-V-14 puts a person in every image', () => {
+    // An empty desk is a still life. The stage is something someone is doing,
+    // or visibly not doing, so the frame needs them in it.
+    const PEOPLE =
+      /\b(person|people|man|men|woman|women|faculty|lecturers?|teachers?|students?|academics?|potters?|designers?|illustrators?|makers?|developers?|engineers?|advisers?|analysts?|lawyers?|chefs?|colleagues?|staff members?|apprentices?|tradespe(rson|ople)|managers?|clients?|juniors?|seniors?)\b/i;
+
+    for (const [stage, doors] of Object.entries(IMAGE_BRIEFS)) {
+      for (const [door, brief] of Object.entries(doors)) {
+        expect(PEOPLE.test(brief.prompt), `${stage}/${door} has nobody in it`).toBe(true);
+      }
+    }
+    for (const [stage, byDomain] of Object.entries(DOMAIN_IMAGE_BRIEFS)) {
+      for (const [domain, brief] of Object.entries(byDomain!)) {
+        expect(PEOPLE.test(brief.prompt), `${stage}/${domain} has nobody in it`).toBe(
+          true,
+        );
+      }
+    }
+  });
+
   it('counts 49 authored blocks', () => {
-    // 6 stage cores + 30 lenses (5 authored so far) + 8 threat + 5 pace.
+    // 6 stage cores + 30 lenses + 8 threat + 5 pace.
     expect(Object.keys(STAGE_CORES)).toHaveLength(6);
     expect(THREAT_RESPONSES).toHaveLength(8);
     expect(Object.keys(PACE_NOTES)).toHaveLength(5);
