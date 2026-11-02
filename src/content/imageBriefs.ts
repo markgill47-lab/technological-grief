@@ -136,12 +136,12 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     why: {
       alt: 'A potter’s hands lowering an even bowl onto a bench beside a lopsided earlier one.',
       prompt:
-        'A potter lifts a finished bowl away from the wheel with both hands while an earlier, visibly lopsided attempt sits on the bench beside them. Clay-dusted forearms, face soft or out of frame. Warm north light, earth tones. The difference between the two shapes is the subject.',
+        'A potter’s two clay-dusted hands lower one evenly round, upright bowl onto a bare wooden bench, where a single second bowl of the same size already stands upright and visibly lopsided, its rim uneven and sloping. Only those two bowls are on the bench; the forearms are in frame and the rest of the potter is above the top edge. Warm light from one side, earth tones. The difference between the two shapes is the subject.',
     },
     forward: {
       alt: 'Two people at a café table, one describing a size in the air, the other amused.',
       prompt:
-        'Two people lean toward each other over a café table, one describing a shape in the air with both hands, the other laughing. Coffees pushed to the edge of the table. Golden afternoon light. Two peers working something out, not an expert instructing a novice.',
+        'Two colleagues sit across a small café table, each leaning in over their own side of it. One holds both hands apart in the air describing the size of a shape; the other watches the hands with their head tilted, amused. Their hands stay well apart and each keeps to their own side. Coffees pushed to the edge. Warm light. An easy working conversation between equals, not an expert instructing a novice.',
     },
   },
 
@@ -154,7 +154,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     forward: {
       alt: 'A senior colleague swivelled round to face a younger one, listening with hands still.',
       prompt:
-        'A senior colleague has turned their chair fully away from their monitors to face a younger colleague who is talking and gesturing. The senior listens with their hands still. Cool office light, screens dark and ignored behind them. The listening is the subject.',
+        'A senior colleague has swivelled their chair fully around to face a younger colleague sitting opposite, who is talking and gesturing with one open hand. The senior listens with both hands still in their lap. A bare dark desk behind them, cool office light. The listening is the subject.',
     },
   },
 
@@ -167,7 +167,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     forward: {
       alt: 'Two colleagues walking out of a building at dusk, each carrying a coffee.',
       prompt:
-        'Two colleagues walk out of a building at the end of the day, mid-conversation, one carrying both coffees. Low sun behind them, long shadows, the street behind them loosely drawn. Easy and companionable.',
+        'Two colleagues walk out of a building at the end of the day, mid-conversation and turned slightly toward each other, each carrying a paper cup, an arm’s length of space between them. Low sun behind them, long shadows down the pavement, the street loosely drawn. Easy and companionable.',
     },
   },
 };
@@ -201,7 +201,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'A developer with both hands resting still at the keyboard under one desk lamp.',
       prompt:
-        'A developer sits at a desk with both hands resting flat and motionless either side of a keyboard, monitors entirely out of frame. Seen from low at the side. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump.',
+        'A developer sits at a desk with both hands resting still on the keyboard, motionless. The frame is cropped close to the desk so the desk, the keyboard and the two unmoving hands fill it, seen low from the side, monitors entirely out of frame. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump.',
     },
     coordination: {
       alt: 'A staff member behind an empty service counter, hands on the counter, looking toward the door.',
@@ -229,7 +229,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'An engineer with folded arms beside a colleague gesturing at a blank wall panel.',
       prompt:
-        'An engineer stands with arms folded beside a colleague who is gesturing at a whiteboard, looking at the board rather than at them. Whatever is on the board is loose marks with no letterforms. Cool overhead light, flat palette.',
+        'An engineer stands with arms folded beside a colleague who is gesturing at a large plain empty panel on the wall, looking at the panel rather than at them. The panel is a flat blank rectangle, smooth and unmarked. Cool overhead light, flat palette.',
     },
     coordination: {
       alt: 'A staff member standing slightly apart at the edge of a group, listening and not speaking.',
@@ -303,7 +303,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     craft: {
       alt: 'A designer sliding one of two mounted boards toward a client and resting a finger on it.',
       prompt:
-        'A designer pushes one of two blank mounted boards across a table toward a client and rests a fingertip on it, mid-explanation; both are looking at the work. The boards are abstract shape and colour with nothing readable. Clean daylight, muted palette.',
+        'A designer and a client sit either side of a table, one low lamp above it so the light falls only on the table and their hands and faces. The designer pushes one of two blank mounted boards across toward the client and rests a fingertip on it, mid-explanation; both are looking down at the board. The boards carry flat abstract shape and colour only. Muted palette.',
     },
     analysis: {
       alt: 'An adviser in profile mid-sentence on a call, one hand raised and still.',
@@ -313,7 +313,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'An engineer alone in a dark room, marking a few loose shapes on a plain panel.',
       prompt:
-        'An engineer stands close to a whiteboard mid-draw, marker in hand, the shapes on it left as loose marks with no letterforms. No audience. Cool even light, clean board, plain clothing. Small and practical rather than a grand architecture.',
+        'An engineer stands close to a plain wall panel in an otherwise dark room, marker in hand, having drawn a few loose angular marks on it. One lamp picks out the figure and a small area of the panel; the rest of the panel and the room are in deep shadow. No audience, plain clothing. Small and practical rather than a grand architecture.',
     },
     coordination: {
       alt: 'Two colleagues side by side at a desk, one explaining with an open hand.',
@@ -341,7 +341,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'A senior engineer holding a marker out toward a junior in a dark plant room.',
       prompt:
-        'At a whiteboard, a senior developer holds the marker out toward a junior rather than using it, both standing, the junior reaching to take it. The board behind them is blank or loose marks. Cool office light. The handover is the subject.',
+        'Two engineers stand full length in a dark plant room, lit by one overhead fixture. The senior holds a marker out toward the junior rather than using it, and the junior is reaching to take it. A plain bare panel stands behind them, dim rather than bright. The handover is the subject.',
     },
     coordination: {
       alt: 'A staff member walking a corridor alongside a manager who is turned toward them, listening.',

@@ -203,9 +203,13 @@ python tools/comfy/krea2.py --jobs tools/comfy/catalog-jobs.json --out out/catal
 ```
 
 Twenty-six of the 42 are the brief's own text with a lead and tail added.
-**Sixteen are not**: their scene text was rewritten during passes 2 to 4 and
-differs from `imageBriefs.ts`. Each job records which it is under `source`.
-Regenerating those sixteen from the briefs alone will not reproduce what ships.
+**Sixteen are not**: their scene text was rewritten during passes 2 to 4. Each
+job records which it is under `source`. Nine of those sixteen changed what the
+frame shows and have since been folded back into `imageBriefs.ts`, so the brief
+and the picture agree there. The other seven differ only in plumbing — the black
+ground, how an indistinct thing is drawn, emphasis repeated — and some of that
+wording is banned from the briefs by `U-V-15`. So this file, not the briefs,
+remains the record of what was sent.
 
 The three leads used, verbatim, in the order they were introduced:
 
