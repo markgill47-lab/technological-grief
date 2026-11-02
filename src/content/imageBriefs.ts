@@ -16,10 +16,12 @@ export interface ImageBrief {
  * cannot be translated, and a screen reader gets nothing from it.
  */
 export const PROMPT_RULES =
-  'No text, lettering, signage, numerals or legible writing anywhere in frame. ' +
-  'No logos or brand marks. Documentary photograph, natural light, muted palette, ' +
-  'shallow depth of field. Not stock photography: no posed smiles, no eye contact ' +
-  'with the camera, no thumbs up.';
+  'Chalk and pastel drawing on black paper: white chalk with a granular, grainy ' +
+  'texture, heavy contour lines, flat angular planes, red and blue used sparingly ' +
+  'as accents. No text, lettering, signage, numerals or legible writing anywhere ' +
+  'in frame. No logos or brand marks. No posed smiles, no eye contact with the ' +
+  'viewer, no thumbs up. Where something is indistinct, draw it as loose open ' +
+  'outlines rather than as blur: this is a drawing, not a photograph.';
 
 /**
  * One image per modal: forty-two in all, to be generated in Krea2 and dropped
@@ -33,7 +35,7 @@ export const PROMPT_RULES =
  *    still life; the person is what makes it a stage of anything.
  *  - **No text, anywhere.** Not on paper, not on a screen, not on a sign or
  *    a spine or a whiteboard. Where writing would naturally appear, shoot it
- *    out of focus, from behind, or leave it out. `PROMPT_RULES` carries this
+ *    as loose marks, from behind, or leave it out. `PROMPT_RULES` carries this
  *    to the generator and `validate.test.ts` U-V-13 keeps text-bearing props
  *    out of the briefs in the first place.
  *  - **Somewhat abstract.** The situation should read before the detail does:
@@ -49,8 +51,20 @@ export const PROMPT_RULES =
  *    foolish, or behind. Several of these people are standing still, and
  *    standing still is not the same as being stuck.
  *
- * They sit on a near-black ground in dark mode and on white in light, so
- * favour one warm source against cooler shadow over an evenly-lit room.
+ *  - **Drawings, not photographs.** The chosen house style is chalk and
+ *    pastel on black paper: granular white chalk, heavy contours, flat
+ *    angular planes, red and blue as sparing accents. It lives in
+ *    `PROMPT_RULES` and in `tools/comfy/style-refs/house_style.png`.
+ *    Keep camera vocabulary out of the briefs entirely — "motion blur",
+ *    "shallow depth of field", "out of focus", "shot from low" all read as
+ *    an instruction to make a photograph and will override the style
+ *    reference. Where something should be indistinct, say how it is drawn:
+ *    loose open outlines against a fully drawn figure. `U-V-15` enforces
+ *    this, because the first generation run lost seven frames to it.
+ *
+ * The lighting words that remain are about where the light falls in the
+ * scene, which a drawing can honour. They sit on a near-black ground in
+ * dark mode and on white in light, and the black-paper style suits both.
  */
 export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief }> = {
   loss: {
@@ -75,20 +89,20 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     forward: {
       alt: 'A person pausing in a meeting-room doorway, half turned back toward the room.',
       prompt:
-        'A person pauses in the doorway of a meeting room, one hand still on the frame, half turned back toward the people talking inside, who are soft and out of focus. Cool corridor light against warm room light. The hesitation is deliberate rather than timid.',
+        'A person pauses in the doorway of a meeting room, one hand still on the frame, half turned back toward the people talking inside, who are drawn as loose open outlines. Cool corridor light against warm room light. The hesitation is deliberate rather than timid.',
     },
   },
 
   discomfort: {
     why: {
-      alt: 'A person standing still in a busy open-plan office while colleagues move past in blur.',
+      alt: 'A person standing still in a busy open-plan office while colleagues move past as loose outlines.',
       prompt:
-        'A person stands completely still in the middle of a busy open-plan office, arms at their sides, looking at nothing in particular, while two or three colleagues pass as motion blur around them. Flat cool daylight, long-exposure feel. Stillness inside movement.',
+        'A person stands completely still in the middle of a busy open-plan office, arms at their sides, looking at nothing in particular, while two or three colleagues pass around them, drawn as loose open outlines while the still figure is fully drawn. Flat cool daylight. Stillness inside movement.',
     },
     forward: {
       alt: 'A person pulling their chair in at a cleared desk, about to start one thing.',
       prompt:
-        'A person pulls their chair in at a completely cleared desk, sleeves pushed up, both hands flat on the empty surface, about to begin. Everything else has been moved to one side and out of frame. Warm side light, shallow depth of field. The emptiness of the desk is the subject.',
+        'A person pulls their chair in at a completely cleared desk, sleeves pushed up, both hands flat on the empty surface, about to begin. Everything else has been moved to one side and out of frame. Warm side light. The emptiness of the desk is the subject.',
     },
   },
 
@@ -101,7 +115,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     forward: {
       alt: 'Two people at a café table, one describing a shape in the air, both laughing.',
       prompt:
-        'Two people lean toward each other over a café table, one describing a shape in the air with both hands, the other laughing. Coffees pushed to the edge of the table. Golden afternoon light, candid. Two peers working something out, not an expert instructing a novice.',
+        'Two people lean toward each other over a café table, one describing a shape in the air with both hands, the other laughing. Coffees pushed to the edge of the table. Golden afternoon light. Two peers working something out, not an expert instructing a novice.',
     },
   },
 
@@ -109,7 +123,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     why: {
       alt: 'A chef plating during service, one hand steady, entirely calm.',
       prompt:
-        'A chef plates during service, one hand steady with tweezers, entirely calm. Steam, stainless steel and the warm blur of a working kitchen behind. Practical kitchen lighting. Competence that has stopped being remarkable to the person doing it.',
+        'A chef plates during service, one hand steady with tweezers, entirely calm. Steam, stainless steel and the warm mass of a working kitchen behind it, loosely drawn. Practical kitchen lighting. Competence that has stopped being remarkable to the person doing it.',
     },
     forward: {
       alt: 'A senior colleague turned away from their monitors, listening to a younger one.',
@@ -127,7 +141,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
     forward: {
       alt: 'Two colleagues walking out of a building at dusk, one carrying both coffees.',
       prompt:
-        'Two colleagues walk out of a building at the end of the day, mid-conversation, one carrying both coffees. Low sun behind them, long shadows, the street soft and out of focus. Easy and companionable.',
+        'Two colleagues walk out of a building at the end of the day, mid-conversation, one carrying both coffees. Low sun behind them, long shadows, the street behind them loosely drawn. Easy and companionable.',
     },
   },
 };
@@ -161,7 +175,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'A developer with both hands resting flat and still either side of a keyboard.',
       prompt:
-        'A developer sits at a desk with both hands resting flat and motionless either side of a keyboard, monitors entirely out of frame. Shot low from the side. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump.',
+        'A developer sits at a desk with both hands resting flat and motionless either side of a keyboard, monitors entirely out of frame. Seen from low at the side. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump.',
     },
     coordination: {
       alt: 'A staff member behind an empty service counter, hands on the counter, looking toward the door.',
@@ -189,12 +203,12 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'An engineer with folded arms beside a colleague gesturing at a whiteboard.',
       prompt:
-        'An engineer stands with arms folded beside a colleague who is gesturing at a whiteboard, looking at the board rather than at them. Whatever is on the board is an out-of-focus blur of shapes with nothing legible. Cool overhead light, flat palette.',
+        'An engineer stands with arms folded beside a colleague who is gesturing at a whiteboard, looking at the board rather than at them. Whatever is on the board is loose marks with no letterforms. Cool overhead light, flat palette.',
     },
     coordination: {
       alt: 'A staff member standing slightly apart at the edge of a group, listening and not speaking.',
       prompt:
-        'A staff member stands slightly apart at the edge of a group of colleagues in a meeting room, arms loosely folded, listening and not speaking. The others are animated and softly out of focus. Cool overhead light. Present and not included.',
+        'A staff member stands slightly apart at the edge of a group of colleagues in a meeting room, arms loosely folded, listening and not speaking. The others are animated, drawn as loose open outlines. Cool overhead light. Present and not included.',
     },
   },
 
@@ -222,7 +236,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     coordination: {
       alt: 'A staff member caught mid-turn between a ringing phone and someone waiting.',
       prompt:
-        'A staff member is caught mid-turn in a corridor between a telephone on a desk behind them and a person waiting ahead of them, body angled toward one and face toward the other. Everything but the figure is slight motion blur. Cool institutional light.',
+        'A staff member is caught mid-turn in a corridor between a telephone on a desk behind them and a person waiting ahead of them, body angled toward one and face toward the other. Everything but the figure is drawn as loose open outlines. Cool institutional light.',
     },
   },
 
@@ -230,7 +244,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     teaching: {
       alt: 'A teacher crouched at eye level beside a student’s desk, mid-question.',
       prompt:
-        'A teacher crouches beside a student at their desk, down at eye level with them, mid-question with one hand open. Other students work on, out of focus behind. Warm window light. The posture is the shift: alongside rather than at the front.',
+        'A teacher crouches beside a student at their desk, down at eye level with them, mid-question with one hand open. Other students work on behind them, loosely drawn. Warm window light. The posture is the shift: alongside rather than at the front.',
     },
     craft: {
       alt: 'A potter’s hands setting a second bowl beside the first on the bench.',
@@ -271,9 +285,9 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
         'An adviser sits in profile at a desk, mid-sentence on a call, one hand raised and held still. Composed and unhurried, jacket off. Afternoon light across the desk, warm with long shadow. The calm is the subject.',
     },
     building: {
-      alt: 'An engineer close to a whiteboard mid-draw, the shapes deliberately out of focus.',
+      alt: 'An engineer close to a whiteboard mid-draw, the shapes left as loose marks.',
       prompt:
-        'An engineer stands close to a whiteboard mid-draw, marker in hand, the drawn shapes deliberately out of focus and illegible. No audience. Cool even light, clean board, plain clothing. Small and practical rather than a grand architecture.',
+        'An engineer stands close to a whiteboard mid-draw, marker in hand, the shapes on it left as loose marks with no letterforms. No audience. Cool even light, clean board, plain clothing. Small and practical rather than a grand architecture.',
     },
     coordination: {
       alt: 'Two colleagues side by side at a desk, one explaining with an open hand.',
@@ -301,7 +315,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
     building: {
       alt: 'A senior developer holding a marker out toward a junior at a whiteboard.',
       prompt:
-        'At a whiteboard, a senior developer holds the marker out toward a junior rather than using it, both standing, the junior reaching to take it. The board behind them is blank or an out-of-focus blur. Cool office light. The handover is the subject.',
+        'At a whiteboard, a senior developer holds the marker out toward a junior rather than using it, both standing, the junior reaching to take it. The board behind them is blank or loose marks. Cool office light. The handover is the subject.',
     },
     coordination: {
       alt: 'A staff member walking a corridor alongside a manager who is turned toward them, listening.',

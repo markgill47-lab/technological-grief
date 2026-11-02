@@ -375,6 +375,53 @@ describe('content validation', () => {
     }
   });
 
+  it('U-V-15 keeps camera vocabulary out of the briefs', () => {
+    // The house style is a chalk drawing. Camera words are not neutral
+    // description to a generator: they are an instruction to make a
+    // photograph, and they beat the style reference. The first run lost
+    // seven frames to exactly this, so it is a build rule rather than a
+    // note. Where something should be indistinct, the brief says how it is
+    // drawn instead — loose open outlines against a fully drawn figure.
+    const CAMERA = [
+      /\bout[- ]of[- ]focus\b/i,
+      /\bdepth of field\b/i,
+      /\bmotion blur\b/i,
+      /\bblur(red|ry)?\b/i,
+      /\blong[- ]exposure\b/i,
+      /\bbokeh\b/i,
+      /\bshot (from|low|wide|close)\b/i,
+      /\btelephoto|wide[- ]angle|macro lens|lens\b/i,
+      /\bphotograph(y|ic)?\b/i,
+      /\bcandid\b/i,
+      /\bf\/\d/i,
+      /\b\d+mm\b/i,
+      /\bISO \d/i,
+    ];
+
+    const every = [
+      ...Object.values(IMAGE_BRIEFS).flatMap((doors) => Object.values(doors)),
+      ...Object.values(DOMAIN_IMAGE_BRIEFS).flatMap((byDomain) =>
+        Object.values(byDomain!),
+      ),
+    ];
+
+    for (const brief of every) {
+      for (const field of [brief.alt, brief.prompt]) {
+        for (const re of CAMERA) {
+          expect(re.test(field), `"${brief.alt}" uses camera language ${re}`).toBe(
+            false,
+          );
+        }
+      }
+    }
+
+    // PROMPT_RULES names the style, and says the one thing about blur that
+    // has to be said: not to use it. That sentence is allowed to contain the
+    // word; the briefs are not.
+    expect(PROMPT_RULES).toMatch(/chalk/i);
+    expect(PROMPT_RULES).toMatch(/not a photograph/i);
+  });
+
   it('counts 49 authored blocks', () => {
     // 6 stage cores + 30 lenses + 8 threat + 5 pace.
     expect(Object.keys(STAGE_CORES)).toHaveLength(6);
