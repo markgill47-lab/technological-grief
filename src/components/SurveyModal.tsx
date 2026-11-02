@@ -62,7 +62,7 @@ export function SurveyModal({ open, onClose }: Props) {
             </button>
             <p className="welcome__privacy">
               Everything happens in your browser. Nothing you enter is sent anywhere,
-              stored, or seen by anyone — including us. Close the tab and it is gone.
+              stored, or seen by anyone, including us. Close the tab and it is gone.
             </p>
           </div>
         )}

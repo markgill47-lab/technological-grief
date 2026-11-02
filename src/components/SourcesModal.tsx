@@ -53,7 +53,7 @@ export function SourcesModal({ open, onClose, domain }: Props) {
           <p>
             Less than the confident tone of a six-stage diagram suggests. The stages are
             a practitioner model, not a validated instrument. Their <em>order</em> is a
-            convention rather than a finding — the one direct test of stage theory found
+            convention rather than a finding: the one direct test of stage theory found
             the predicted first stage was not first. The Grief Gap is our own hypothesis
             and has never been tested. What is best supported is the part that describes
             rather than predicts: that resistance is usually rational, that this lands as
@@ -64,7 +64,7 @@ export function SourcesModal({ open, onClose, domain }: Props) {
 
         <SourceList
           id="sources-framework"
-          heading="The model, and the case against it"
+          heading="The model"
           sources={FRAMEWORK_SOURCES}
         />
 

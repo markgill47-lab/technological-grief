@@ -20,8 +20,8 @@ export function DiagnosisResult({ diagnosis: d, rationale }: Props) {
       {d.signalConflict && (
         <p className="result__conflict">
           Worth noting: what you’re doing and what you’re feeling are pointing in
-          different directions. Feelings often lag actions by a while — this reading
-          follows the actions.
+          different directions. Feelings often lag actions by a while. This reading follows the
+          actions.
         </p>
       )}
 
@@ -51,8 +51,8 @@ export function DiagnosisResult({ diagnosis: d, rationale }: Props) {
 
       {d.stageConfidence === 'low' && (
         <p className="result__note">
-          This reading is on the uncertain side — your answers pointed in a couple of
-          directions at once, which often means you’re between stages.
+          This reading is on the uncertain side. Your answers pointed in a couple
+          of directions at once, which often means you’re between stages.
         </p>
       )}
 

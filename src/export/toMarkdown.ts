@@ -19,13 +19,13 @@ export function diagnosisToMarkdown(d: Diagnosis, rationale: string | null): str
 
   const lines: string[] = [];
 
-  lines.push(`# ${stage.name} — stage ${stage.position} of 6`);
+  lines.push(`# ${stage.name}, stage ${stage.position} of 6`);
   lines.push('');
 
   if (d.transitionToward) {
     lines.push(
       `You look like you are in **${stage.name}**, with some signs of ` +
-        `**${STAGES[d.transitionToward].name}** — which often means you are in ` +
+        `**${STAGES[d.transitionToward].name}**, which often means you are in ` +
         `transition between them.`,
     );
   } else {
@@ -36,7 +36,7 @@ export function diagnosisToMarkdown(d: Diagnosis, rationale: string | null): str
   if (d.signalConflict) {
     lines.push(
       '> Worth noting: what you are doing and what you are feeling point in ' +
-        'different directions. Feelings often lag actions by a while — this ' +
+        'different directions. Feelings often lag actions by a while. This ' +
         'reading follows the actions.',
     );
     lines.push('');

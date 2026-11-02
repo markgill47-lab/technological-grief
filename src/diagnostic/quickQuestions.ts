@@ -41,7 +41,7 @@ export const Q1 = {
   id: 'q1',
   prompt:
     'How would you describe your current relationship with AI in your work?',
-  help: "There's no wrong answer — I'm just trying to understand where you're starting from.",
+  help: "There's no wrong answer. I'm just trying to understand where you're starting from.",
   options: [
     { id: 'a', label: 'I actively avoid thinking about or using it' },
     { id: 'b', label: "I'm aware it exists but haven't really engaged" },
@@ -69,8 +69,8 @@ export const Q2 = {
   help: "I'm asking so the suggestions are concrete rather than generic.",
   options: [
     { id: 'a', label: "Teaching, training, or assessing people's learning" },
-    { id: 'b', label: 'Making things — writing, design, image, sound, video' },
-    { id: 'c', label: 'Analysis or advisory — research, law, consulting, accounts, policy' },
+    { id: 'b', label: 'Making things: writing, design, image, sound, video' },
+    { id: 'c', label: 'Analysis or advisory: research, law, consulting, accounts, policy' },
     { id: 'd', label: 'Building or running technical systems' },
     { id: 'e', label: 'Coordinating people, operations, admin, or care' },
   ],
@@ -138,7 +138,7 @@ export const Q4 = {
     { id: 'b', label: 'Resentment or irritation' },
     { id: 'c', label: 'Anxiety, or feeling overwhelmed' },
     { id: 'd', label: 'Curiosity, maybe some anticipation' },
-    { id: 'e', label: 'Confidence — I know roughly what I’m doing' },
+    { id: 'e', label: 'Confidence: I know roughly what I’m doing' },
     { id: 'f', label: "Satisfaction. It's settled" },
     { id: 'g', label: 'Honestly, mostly indifference' },
   ],

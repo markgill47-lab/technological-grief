@@ -81,6 +81,20 @@ Content addresses the reader as **you**. Never "users in this stage," never "peo
 
 This is the single most consistent difference between content that lands and content that reads like a textbook, and it is easy to drift out of while writing about a framework.
 
+### 2.6 The voice guide, and what is enforced from it
+
+Every authored block was passed against `ClaudeWritingGuides/marks-voice-guide.md`, Teaching Voice. That guide governs the content; this document's own punctuation follows the technical writing guide instead, which is why there are em-dashes in these specs and none in the product.
+
+Three of its hard rules are mechanically checkable and are now `U-V-16`:
+
+- **No em-dashes.** The guide's objection is not typographic: an em-dash fudges the relationship between two clauses instead of committing to whether it is a cause, a contrast, a list item, or an aside. The pass replaced 80 of them in the domain lenses and 35 across the other three content files, each with the relationship it had been hiding — a period where it was a full stop in disguise, a colon where a list or a definition followed, parentheses around a genuine aside.
+- **No "honest caveat"** or its cousins. A caveat that is not honest is not a caveat.
+- **No letter-plus-number shorthand** in anything a reader sees. Rule ids like `U-V-16` are notation, and they live here and in the tests.
+
+Two more are judgment calls a test cannot make, and a reviewer checks them: an inline list stops at three items (several were cut from four to three in the pass), and a semicolon is only for a trailing clause that leans on its sentence. Six prose semicolons failed that second test and became periods.
+
+The pass also stopped the content attributing its own opinions to "this framework," which was both a voice violation (own the claim) and a §5.1 violation (framework vocabulary should be close to invisible). The Integration core now says "here is my claim" and means it.
+
 ---
 
 ## 3. Register by stage

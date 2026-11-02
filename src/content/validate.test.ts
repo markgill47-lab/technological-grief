@@ -449,6 +449,34 @@ describe('content validation', () => {
     }
   });
 
+  it('U-V-16 holds the content to the voice guide', () => {
+    // ClaudeWritingGuides/marks-voice-guide.md, the hard rules that can be
+    // checked mechanically. The em-dash one is first because it was the whole
+    // of the first pass: the guide's objection is that an em-dash fudges the
+    // relationship between two clauses instead of committing to whether it is
+    // a cause, a contrast, a list item, or an aside. Every one in here was
+    // replaced by the relationship it was hiding, and this keeps them out.
+    for (const block of ALL_BLOCKS) {
+      for (const body of bodiesOf(block)) {
+        expect(body.includes('—'), `${block.id} has an em-dash`).toBe(false);
+
+        // Hard Rule 2: a caveat that is not honest is not a caveat.
+        expect(
+          /\bhonest (caveat|warning|tradeoff|difficulty|truth)\b/i.test(body),
+          `${block.id} qualifies a caveat as honest`,
+        ).toBe(false);
+
+        // Hard Rule 3, for the student-facing half of this product: no
+        // letter-plus-number shorthand reaches a reader. Internal ids like
+        // U-V-16 are notation and live in tests and specs, not in content.
+        expect(
+          /\b[A-Z]-?\d+\b/.test(body),
+          `${block.id} uses letter-plus-number shorthand`,
+        ).toBe(false);
+      }
+    }
+  });
+
   it('avoids the minimising words', () => {
     const SOFT_BANNED = [/\bjust try\b/i, /\bsimply\b/i, /\bembrace\b/i, /\bjourney\b/i];
     for (const block of ALL_BLOCKS) {

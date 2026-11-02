@@ -64,11 +64,15 @@ Two columns: the dial on the left, the stage on the right. The dial is the fixed
 
 | Breakpoint | Dial | Panel |
 |---|---|---|
-| ≥1100px | Sticky left column, 44% (min 420px), max-height 460px | Right column, capped at 72ch, 48px gutters |
-| <1100px | Full width on top, static, max-height 420px | Below, centred, capped at 72ch, 32px gutters |
+| ≥1760px | Even split, up to 960px wide, height capped at min(700px, 64vh) | Centred in its half, 64ch of text at 17px, 64px gutters |
+| ≥1400px | Even split, up to 820px wide, height capped at min(700px, 64vh) | Centred in its half, 68ch of text, 56px gutters |
+| ≥1100px | Sticky left column, 44% (min 420px), max-height 460px | Left of its column, 68ch box (so ~56ch of text), 48px gutters |
+| <1100px | Full width on top, static, max-height 420px | Below, centred, same box, 32px gutters |
 | <768px | Full width, max-height 360px | Full width, 16px gutters |
 
-Content is capped at 72ch regardless of viewport. A full-width prose column on a 1920px display is unreadable, and the whole point of this content is that someone reads it.
+The measure is capped at every width, because a full-width prose column on a 1920px display is unreadable and the whole point of this content is that someone reads it. What the cap is stated in matters: `ch` is the width of a zero, which is wider than the average lowercase letter, so 68ch of box minus its padding was about 56 characters of actual line. The two wide breakpoints state the measure with the padding added back, which is why the numbers went up without the lines getting long: measured in the browser, the 1920px case renders 605px of text, about 64 characters.
+
+> **Corrected after a look at 1920px.** The 44/56 split with a 640px cap on the dial left the divider off the centre line, the ring small in a column half empty, and the panel's text hugging the divider with a third of the window unused to its right. Above 1400px the columns split evenly, which puts the divider in the middle, and each half spends what it is given: the dial scales with its column and the measure opens up. The dial's height is capped in `vh` as well as `px` because its column is sticky and full-height, so a ring taller than the viewport would have its base cut off rather than scroll.
 
 > **Corrected during implementation.** v2.0 put the graphic in a full-bleed banner with everything beneath it, which was right for a wide, short terrain and wrong for a ring: a dial stretched edge to edge is just a very large dial, and the stage text below it started a scroll that never came back to the graphic. The two-column layout also removed the reason the dial had a maximum height at desktop in the first place — it now has a column of its own to fill.
 

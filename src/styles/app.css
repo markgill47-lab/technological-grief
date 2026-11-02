@@ -1474,3 +1474,55 @@ p:last-child {
   line-height: 1.5;
   color: var(--ink-body);
 }
+
+/* ---------- wide screens ---------- */
+
+/* The two-column split was 44/56 with a 640px cap on the dial and a 68ch
+   measure on the panel, which on a 1920px window left the dial small in a
+   large empty column and the text hugging the divider with a third of the
+   window unused to its right. Above 1400px the columns split evenly, which
+   puts the divider on the centre line, and both halves spend the room they
+   get: the dial scales with its column and the measure opens up. The dial's
+   height is capped in vh as well as px because the column is sticky and
+   full-height, so a ring taller than the viewport would have its base cut
+   off rather than scroll. */
+@media (min-width: 1400px) {
+  .layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dial__svg {
+    max-width: 820px;
+    max-height: min(700px, 64vh);
+  }
+
+  /* Centred in its half, so the gutter either side of the text is even
+     instead of all of it falling on the right. The measure is stated with
+     its padding added back, because box-sizing is border-box here and a bare
+     ch value would be the measure minus the padding. */
+  .layout__panel {
+    max-width: calc(68ch + 112px);
+    margin: 0 auto;
+    padding: 64px 56px 104px;
+  }
+}
+
+@media (min-width: 1760px) {
+  .dial__svg {
+    max-width: 960px;
+  }
+
+  .layout__panel {
+    max-width: calc(64ch + 128px);
+    padding: 72px 64px 112px;
+    font-size: 17px;
+  }
+
+  .panel__title {
+    font-size: 46px;
+  }
+
+  .field__summary {
+    font-size: 21px;
+  }
+}

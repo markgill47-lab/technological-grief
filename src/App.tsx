@@ -237,7 +237,7 @@ function PanelIntro({ onPick }: { onPick: (s: Stage) => void }) {
       <p className="intro__lead">
         Six stages people move through when a technology takes something away.
         Each band on the dial is as wide as the options you have there, which is
-        why Discomfort is a sliver — and why the ring never closes.
+        why Discomfort is a sliver, and why the ring never closes.
       </p>
       <p>Pick a stage on the dial, or start anywhere:</p>
       <div className="intro__stages">

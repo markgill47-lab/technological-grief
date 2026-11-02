@@ -24,7 +24,7 @@ describe('markdown export', () => {
   it('includes the reading, the content, and the privacy footer', () => {
     const md = diagnosisToMarkdown(diag(), 'Because of what you said.');
 
-    expect(md).toContain('# Discomfort — stage 3 of 6');
+    expect(md).toContain('# Discomfort, stage 3 of 6');
     expect(md).toContain('Because of what you said.');
     expect(md).toContain('## Your reading');
     expect(md).toContain('| Your work | Teaching & Assessment |');

@@ -442,7 +442,7 @@ export function Dial({
               className="dial__annotation"
               fill="var(--ink-body)"
             >
-              {DOMAINS[domain].name} — {gapLabel(gap!)}
+              {DOMAINS[domain].name}: {gapLabel(gap!)}
             </text>
           )}
         </svg>

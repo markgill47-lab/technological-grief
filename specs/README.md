@@ -229,13 +229,13 @@ None of that authoring has started, deliberately. The evidence review running ag
 
 | Group | Answers |
 |---|---|
-| The model, and the case against it | Is any of this real? |
+| The model | Is any of this real? |
 | In *your kind of work* | Does it apply to me? |
 | What actually helps | What do I do? |
 
 The middle group follows the field selector (D-13), so switching from Craft to Coordination changes the reading as well as the text. With no field chosen it says so and tells the reader how to get one, rather than showing a heading above nothing.
 
-**The group names matter.** It is "the model, **and the case against it**", and the list contains the work that goes against this tool: the one direct empirical test of stage theory, which found the predicted first stage was not first, and the paper warning clinicians against walking people through stages. `U-S-05` asserts both are present, because the pressure to quietly drop them later is real and a sources list that only flatters the thing it supports is an advertisement.
+**The dissenting work is in the first group, and the heading no longer advertises it.** The group was called "the model, and the case against it" until the name was cut back to "The model": a heading that congratulates itself for including a counter-argument is doing a different job than naming a list. What it was protecting is unchanged, because the protection was never the heading. The list still holds the work that goes against this tool: the one direct empirical test of stage theory, which found the predicted first stage was not first, and the paper warning clinicians against walking people through stages. `U-S-05` asserts both are present, because the pressure to quietly drop them later is real and a sources list that only flatters the thing it supports is an advertisement.
 
 Above the groups sits a short answer to "how much of this is established?" — that the stages are a practitioner model, their order is a convention rather than a finding, and the Grief Gap is our own untested hypothesis. It is placed *above* the citations rather than under them, because a caveat printed after the evidence reads as a disclaimer.
 
@@ -272,6 +272,18 @@ Above the groups sits a short answer to "how much of this is established?" — t
 **Two new build rules.** `U-V-13` keeps text-bearing props out of the briefs by name, word-bounded so that "texture" and "nothing legible" still pass while "text" and "printout" do not; it also asserts there are exactly forty-two. `U-V-14` asserts every prompt names a person, because the easiest way to drift back is a frame with nobody in it. The no-text instruction reaches the generator through an exported `PROMPT_RULES` appended to every prompt, rather than being repeated forty-two times where it could be edited out of one.
 
 **What this costs**: the briefs are less literal, so two of them no longer map onto their stage at a glance — `analysis` at Loss is a hand resting on a shelf, and whether that reads as loss depends on the caption beside it. The per-domain signal is now carried by the room and the role rather than by the artefact, which is a weaker distinction between, say, `analysis` and `coordination` than a shelf of volumes against a service counter was.
+
+### D-17 — The content is written to the voice guide, and three of its rules are build rules
+
+**Before**: the forty-nine blocks were written to this project's own content specification, which governs register, banned vocabulary and the stage-by-stage rules about what content may ask for. It said nothing about punctuation, so the prose drifted into an em-dash habit: 115 of them across the four content files, most standing in for a relationship the sentence had not decided on.
+
+**Now**: every block has been passed against `ClaudeWritingGuides/marks-voice-guide.md`. The em-dashes are gone, each replaced by what it was hiding — a period, a colon, or a pair of parentheses. Six prose semicolons became periods, because the guide allows a semicolon only for a trailing clause that cannot stand on its own. Several inline lists were cut from four items to three. The content no longer attributes its own opinions to "this framework," which was a voice violation and a [content-specification.md](content-specification.md) §5.1 violation at the same time.
+
+**Why it is a build rule now.** `U-V-16` asserts no em-dash, no "honest caveat" or cousin, and no letter-plus-number shorthand in any block body. Those three are mechanical. The other two rules that the pass applied, Rule of Three and the supporting semicolon, are judgment calls and stay with the reviewer, which is recorded in [content-specification.md](content-specification.md) §2.6.
+
+**Scope note.** The guide governs the product's words. These specs keep their em-dashes, because the voice guide hands specifications to the technical writing guide instead, and a spec that reads like the product is a spec nobody can scan. The reader-facing strings in the interface, the survey and the Markdown export were included, since a lone em-dash in a survey question would be the only one left in the app.
+
+**What this costs**: a few sentences are now two sentences, which reads slightly flatter than the original. That is the trade the guide asks for, and one place it hurts is the Loss core, where "it is a throttle" lost the dash that gave it its beat.
 
 ---
 

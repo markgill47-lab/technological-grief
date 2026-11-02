@@ -148,8 +148,8 @@ export function StagePanel({
 
           {borrowed && (
             <p className="field__borrowed">
-              Reading as {DOMAINS[domain].name}. Your own position has not moved — the
-              distance to the field has, because it is a different field.
+              Reading as {DOMAINS[domain].name}. Your own position has not moved. The distance to the field
+              has, because it is a different field.
             </p>
           )}
         </section>

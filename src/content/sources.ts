@@ -56,7 +56,7 @@ export const FRAMEWORK_SOURCES: Source[] = [
     title: 'An Empirical Examination of the Stage Theory of Grief',
     venue: 'JAMA, 297(7), 716–723',
     url: 'https://jamanetwork.com/journals/jama/fullarticle/205661',
-    note: 'The one direct test of stage theory. It found the predicted first stage was not first — which is why this tool treats the six stages as a vocabulary of states rather than a sequence you pass through.',
+    note: 'The one direct test of stage theory. It found the predicted first stage was not first, which is why this tool treats the six stages as a vocabulary of states rather than a sequence you pass through.',
   },
   {
     authors: 'Stroebe, M., Schut, H. & Boerner, K.',
@@ -108,7 +108,7 @@ export const FRAMEWORK_SOURCES: Source[] = [
     title: 'AI fear of missing out (AI FOMO): Desire without action under social pressure',
     venue: 'Big Data & Society',
     url: 'https://doi.org/10.1177/20539517261481718',
-    note: 'Wanting to act and not acting, under social pressure — the pattern this tool calls Discomfort.',
+    note: 'Wanting to act and not acting, under social pressure: the pattern this tool calls Discomfort.',
   },
 ];
 
@@ -154,7 +154,7 @@ export const HELP_SOURCES: Source[] = [
     title: 'Understanding Psychological Reactance: New Developments and Findings',
     venue: 'Zeitschrift für Psychologie, 223(4), 205–214',
     url: 'https://doi.org/10.1027/2151-2604/a000222',
-    note: 'Why being pushed produces the opposite of the intended effect — including by a tool like this one.',
+    note: 'Why being pushed produces the opposite of the intended effect, including by a tool like this one.',
   },
   {
     authors: 'Edmondson, A.',
@@ -228,7 +228,7 @@ export const DOMAIN_SOURCES: Record<Domain, Source[]> = {
       venue: 'Society of Authors',
       note: '26% of illustrators had already lost work to generative AI; 78% expected income to fall. In this field the loss is frequently realised, not anticipated.',
       caveat:
-        'n=787 of roughly 12,500 approached, so self-selection is likely — and we have these figures via secondary coverage rather than from the Society of Authors report itself.',
+        'n=787 of roughly 12,500 approached, so self-selection is likely, and we have these figures via secondary coverage rather than from the Society of Authors report itself.',
     },
     {
       authors: 'Anonymous',

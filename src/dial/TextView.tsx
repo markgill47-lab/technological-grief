@@ -50,7 +50,7 @@ export function DialTextView({ stage, domain, gap, confidence }: Props) {
                 <td>{s.position}</td>
                 <th scope="row">
                   {s.name}
-                  {isCurrent && <strong className="textview__you"> — you are here</strong>}
+                  {isCurrent && <strong className="textview__you">, you are here</strong>}
                   {s.isDangerZone && (
                     <span className="textview__note"> (the Danger Zone)</span>
                   )}
@@ -104,17 +104,17 @@ export function DialTextView({ stage, domain, gap, confidence }: Props) {
 function bandNote(position: number): string {
   switch (position) {
     case 1:
-      return 'Narrow — the path starts here';
+      return 'Narrow: the path starts here';
     case 2:
       return 'Narrower';
     case 3:
-      return 'Narrowest — the path forks';
+      return 'Narrowest: the path forks';
     case 4:
       return 'Widening again';
     case 5:
       return 'Wide';
     case 6:
-      return 'Widest — the path ends here';
+      return 'Widest: the path ends here';
     default:
       return '';
   }
