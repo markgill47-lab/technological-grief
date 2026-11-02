@@ -199,7 +199,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
         'A lawyer stands with their back to the camera before a wall of bound volumes, one hand resting at shoulder height on a shelf, taking nothing down. Warm library light, the spines reduced to colour and texture with nothing readable. Composed and still.',
     },
     building: {
-      alt: 'A developer with both hands resting flat and still either side of a keyboard.',
+      alt: 'A developer with both hands resting still at the keyboard under one desk lamp.',
       prompt:
         'A developer sits at a desk with both hands resting flat and motionless either side of a keyboard, monitors entirely out of frame. Seen from low at the side. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump.',
     },
