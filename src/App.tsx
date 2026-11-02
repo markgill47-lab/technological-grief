@@ -7,6 +7,7 @@ import { SourcesModal } from './components/SourcesModal';
 import { assemble } from './content/assemble';
 import { viewDiagnosis, isBorrowedDomain } from './domain/view';
 import { groupIntoPanels } from './content/panels';
+import { imageFor } from './content/imageAssets';
 import { briefFor } from './content/imageBriefs';
 import { useStore } from './store';
 import { useTheme } from './theme/useTheme';
@@ -155,6 +156,7 @@ export default function App() {
             title="Why this happens"
             sections={groups.why}
             brief={briefFor(panelStage, 'why', seen?.domain ?? null)}
+            image={imageFor(panelStage, 'why', seen?.domain ?? null)}
           />
           <DetailModal
             id="detail-forward"
@@ -164,6 +166,7 @@ export default function App() {
             title={panelStage === 'integration' ? 'What to do with it' : 'What to do about it'}
             sections={groups.forward}
             brief={briefFor(panelStage, 'forward', seen?.domain ?? null)}
+            image={imageFor(panelStage, 'forward', seen?.domain ?? null)}
           />
         </>
       )}
