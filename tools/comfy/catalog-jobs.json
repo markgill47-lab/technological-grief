@@ -1,0 +1,464 @@
+[
+  {
+    "id": "discomfort_analysis",
+    "prompt": "Hand-drawn line art. An analyst sits back in an office chair late at night, hands behind their head, looking up at the ceiling. The desk in front of them is covered with stacked material reduced to shapes and shadow. One desk lamp, deep shadow elsewhere. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 671782085,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discomfort_building",
+    "prompt": "Hand-drawn line art. An engineer stands alone in a server aisle with one hand on a rack frame, looking down the length of the row. Hard parallel lines receding, cold blue light with a single warm fixture. The figure is small against the repetition. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1002520144,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discomfort_coordination",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. A staff member is caught mid-turn in a corridor between a telephone on a desk behind them and a person waiting ahead of them, body angled toward one and face toward the other. The corridor around them is drawn in loose open line while the figure is fully drawn. Cool institutional light. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1509673728,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "fixes"
+  },
+  {
+    "id": "discomfort_craft",
+    "prompt": "Hand-drawn line art. A maker stands in the middle of their studio surrounded by materials and half-finished pieces covering every surface, hands at their sides, reaching for none of them. Warm cluttered light, rich texture. Abundance without a next move. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1323100913,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discomfort_forward",
+    "prompt": "Hand-drawn line art. A person pulls their chair in at a completely cleared desk, sleeves pushed up, both hands flat on the empty surface, about to begin. Everything else has been moved to one side and out of frame. Warm side light, shallow depth of field. The emptiness of the desk is the subject. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 12371724,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discomfort_teaching",
+    "prompt": "Hand-drawn line art. A lecturer stands at the front of a large empty lecture theatre facing the tiered seats, one hand resting on the back of a chair. The room is wide and the figure is small in the frame. Flat institutional light, muted greys and warm wood. The scale is the subject. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1435707372,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discomfort_why",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. A person stands completely still in the middle of a busy open-plan office, arms at their sides, head turned slightly away and gaze lowered. Two or three colleagues stride past on either side of them, those figures drawn as loose open outlines while the still figure is fully drawn. Flat cool daylight. Stillness inside movement. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 848957930,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "fixes"
+  },
+  {
+    "id": "discovery_analysis",
+    "prompt": "Hand-drawn line art. Two advisers stand at a tall office window turned slightly toward each other mid-conversation, one with an open hand, both relaxed. The office is soft behind them. Bright overcast daylight, cool and even. Working something out together rather than reporting. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 349292652,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discovery_building",
+    "prompt": "Hand-drawn line art. A developer leans back from their desk with both arms raised briefly behind their head, a small unguarded moment of relief, monitors out of frame. Cool room, one warm lamp. Caught mid-breath rather than celebrating. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1497658387,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discovery_coordination",
+    "prompt": "Hand-drawn line art. A staff member leans on a counter in unhurried conversation with someone whose back is to the camera, giving them full attention, the space behind the visitor empty. Warm light, worn institutional surfaces. Time that has appeared from somewhere. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1952713043,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discovery_craft",
+    "prompt": "Hand-drawn line art. A potter\u2019s hands set a second bowl down beside a first on the bench, the two clearly the same attempt made twice and the second visibly better. Only hands and work in frame. Warm north light, clay dust, earth tones. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1222262818,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discovery_forward",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. Two colleagues sit across a small cafe table, both leaning in over their own side of it. One holds both hands apart in the air describing the size of a shape; the other watches the hands with their head tilted, amused. Their hands stay well apart and each keeps to their own side of the table. Coffees pushed to the edge. An easy working conversation between equals. Warm light. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 372089719,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "content"
+  },
+  {
+    "id": "discovery_teaching",
+    "prompt": "Hand-drawn line art. A teacher crouches beside a student at their desk, down at eye level with them, mid-question with one hand open. Other students work on, out of focus behind. Warm window light. The posture is the shift: alongside rather than at the front. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1124600158,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "discovery_why",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black. A potter's two clay-dusted hands lower one evenly round, upright bowl onto a bare wooden bench. Standing on the bench beside it is a single second bowl of the same size, sitting upright but visibly lopsided, its rim uneven and sloping. Only these two bowls are on the bench. The potter's forearms and hands are in frame, the rest of them above the top edge. Warm light from one side, earth tones against black. The difference in shape between the even bowl and the lopsided one is the subject. No text, lettering, numerals or legible writing anywhere in frame.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 44907,
+    "lora_strength": 1.0,
+    "source": "rewritten",
+    "pass": "content3"
+  },
+  {
+    "id": "doubt_analysis",
+    "prompt": "Hand-drawn line art. Two advisers sit across a conference table, one pressing a single fingertip to the table surface to make a point, the other listening with their hands still. A glass partition and city light behind. Cool daylight. The gesture is precise rather than angry. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1254952775,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "doubt_building",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. An engineer stands with arms folded beside a colleague who is gesturing at a large plain empty panel on the wall, looking at the panel rather than at them. The panel is a flat blank rectangle, smooth and unmarked. Cool overhead light, flat palette. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 408454010,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "fixes"
+  },
+  {
+    "id": "doubt_coordination",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. One staff member stands alone at the edge of the frame with arms loosely folded, listening, lit from one side. A group of four colleagues is gathered together across the room under a single overhead lamp, animated and mid-conversation, drawn in looser line. A gap of dark empty floor separates the single figure from the group, and the walls behind them are lost in black. Present and not included. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1493530753,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "ground"
+  },
+  {
+    "id": "doubt_craft",
+    "prompt": "Hand-drawn line art. A designer stands with arms folded in front of a board of their own pinned-up work, looking at the work rather than at whoever is speaking off-frame. The pieces are abstract shape and colour, nothing readable. High studio window light, muted. An unmoved, considered stance. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 152429791,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "doubt_forward",
+    "prompt": "Hand-drawn line art. A person pauses in the doorway of a meeting room, one hand still on the frame, half turned back toward the people talking inside, who are soft and out of focus. Cool corridor light against warm room light. The hesitation is deliberate rather than timid. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 186598681,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "doubt_teaching",
+    "prompt": "Hand-drawn line art. Two faculty members stand in a departmental corridor mid-disagreement, one leaning against the wall with arms folded, the other turned toward them talking with one hand raised. Doors and boards behind them reduced to shapes. Cool corridor light. Neither is backing down. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 651807652,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "doubt_why",
+    "prompt": "Hand-drawn line art. Two colleagues either side of a table, one leaning back with arms folded and chin slightly raised, the other mid-sentence with one hand open. A closed laptop sits between them, ignored by both. Window light from the left, muted greys and warm skin tones. Professional disagreement, not hostility. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 854074313,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "integration_analysis",
+    "prompt": "Hand-drawn line art. A senior adviser sits beside a junior at the end of a long table, turned fully toward them and pointing at something between them that is out of frame. Both are leaning in. Cool daylight, warm wood, glass partition behind. Handing something over. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1941996603,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "integration_building",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. Two engineers stand full length in a dark plant room, lit by one overhead fixture. The senior holds a marker out toward the junior rather than using it, and the junior is reaching to take it. A plain bare panel stands behind them, dim rather than bright, and the room beyond falls away into black. The handover is the subject. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1184376590,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "ground"
+  },
+  {
+    "id": "integration_coordination",
+    "prompt": "Hand-drawn line art. A staff member walks a corridor alongside a manager, mid-sentence, the manager turned toward them and listening rather than talking. Low warm light through a window at the end of the corridor. Someone being listened to. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 623009331,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "integration_craft",
+    "prompt": "Hand-drawn line art. An older maker leans in to point at one small area of a piece held between them and a younger maker, who is following the finger. Both standing in a workshop, sleeves rolled. Warm side light, material texture. Attention on a detail, not on the whole. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 930512482,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "integration_forward",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. Two colleagues walk out of an office building at the end of the day, mid-conversation and turned slightly toward each other. One carries two paper cups, one in each hand; the other walks with both hands free. Both in work clothes, an arm's length of space between them. Low sun behind them, long shadows down the pavement. Easy and companionable. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1599833812,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "content"
+  },
+  {
+    "id": "integration_teaching",
+    "prompt": "Hand-drawn line art. Two academics have stopped in a stairwell mid-conversation, one listening with full attention while the other talks, both holding coffees. Institutional concrete and glass, softened. Warm daylight from above. Unhurried, companionable. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 773743261,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "integration_why",
+    "prompt": "Hand-drawn line art. An older tradesperson stands a step back in a workshop, hands in pockets, watching an apprentice work at the bench and visibly choosing not to intervene. The apprentice is absorbed and in focus; the older figure is slightly behind and softer. Warm overhead work light. The restraint is the subject. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1661739347,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "loss_analysis",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. A lawyer stands with their back to us before a wall of bound volumes, one hand resting open and flat against the edge of a shelf at shoulder height, the other arm hanging at their side. Every volume stands upright and in place on the shelves, the row unbroken. Warm library light, the spines reduced to colour and texture. Composed and still. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 669359101,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "content"
+  },
+  {
+    "id": "loss_building",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. A developer sits at a desk with both hands resting flat and motionless either side of a keyboard. The frame is cropped close to the desk surface so the desk, the keyboard and the two still hands fill it, seen low from the side. One warm desk lamp against a cool dark room. The absence of motion is the subject; this is a pause, not a slump. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 873931350,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "fixes"
+  },
+  {
+    "id": "loss_coordination",
+    "prompt": "Hand-drawn line art. A staff member stands behind a service counter in a quiet office, both hands resting on the counter top, looking toward a door with nobody coming through it. Warm institutional light, worn surfaces, muted colour. The emptiness in front of them is the subject. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 365026790,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "loss_craft",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. An illustrator sits back from a drawing board in a studio at dusk, hands resting in their lap. The board in front of them is a bare pale empty rectangle, its surface completely blank. The task lamp above it is dark and unlit, and the only light is cool and blue from a window to one side. The stillness of a workspace that is usually in use. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1848650732,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "content"
+  },
+  {
+    "id": "loss_forward",
+    "prompt": "Hand-drawn line art. A man sits sideways on the edge of a desk in a quiet room, forearms on his knees, hands loosely together, looking at the middle distance. His chair is pushed away behind him. One warm lamp, everything else dim. He is working something out, not giving up. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1993346072,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "loss_teaching",
+    "prompt": "Hand-drawn line art. A lecturer sits on the front edge of their desk in an emptied classroom at the end of the day, looking out at rows of chairs left slightly out of line. Low late light through high windows, dust in the air, warm and quiet. Considering rather than sad. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 701126704,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "loss_why",
+    "prompt": "Hand-drawn line art. A woman in her fifties stands at a window in an emptied office at dusk, coat still on, one hand resting on the frame, looking out rather than at anything in particular. The room behind her is dark and the overhead lights are off. Low warm light from outside against deep interior shadow. Stillness, not collapse. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1647724682,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "understanding_analysis",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. An adviser sits in profile at a desk, a telephone handset held to one ear, mid-sentence. The other hand is raised in front of them and held completely still. Composed and unhurried, jacket off. Afternoon light across the desk, warm with long shadow. The calm is the subject. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 2102285539,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "content"
+  },
+  {
+    "id": "understanding_building",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. An engineer stands close to a plain wall panel in an otherwise dark room, marker in hand, having drawn a few loose angular marks on it. One lamp picks out the figure and a small area of the panel; the rest of the panel and the whole room are in deep shadow. No audience. Plain clothing. Small and practical rather than a grand architecture. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 877433046,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "ground"
+  },
+  {
+    "id": "understanding_coordination",
+    "prompt": "Hand-drawn line art. Two colleagues sit side by side at a desk but turned toward each other, one explaining with an open hand while the other nods. The office is soft behind them. Warm overhead light. Comparing rather than reporting. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 886656986,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "understanding_craft",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. A designer and a client sit either side of a table in a dark room, one low lamp above the table so the light falls only on the table and their hands and faces. The designer slides one of two blank mounted boards across toward the client and rests a fingertip on it, mid-explanation; both are looking down at the board. The boards carry flat abstract shape and colour only. Everything beyond the table is black. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 516706521,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "ground"
+  },
+  {
+    "id": "understanding_forward",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. Two people in an office. A senior colleague has swivelled their chair fully around to face a younger colleague who sits opposite, talking and gesturing with one open hand. The senior listens with both hands still in their lap. Behind them a bare dark desk. Cool office light. The listening is the subject. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 854291666,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "fixes"
+  },
+  {
+    "id": "understanding_teaching",
+    "prompt": "Hand-drawn line art. A lecturer perches on the edge of a desk in an emptying classroom in relaxed conversation with two students who have stayed behind, bags half packed. Chairs askew. Warm late light through high windows. Unforced, ordinary competence. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 64404248,
+    "lora_strength": 0.75,
+    "source": "brief",
+    "pass": "catalog"
+  },
+  {
+    "id": "understanding_why",
+    "prompt": "Hand-drawn line art, chalk and ink on black paper. The background is deep solid black and the room falls away into unlit darkness beyond the lit figures. A chef plates during service, one hand steady with tweezers. Their face is relaxed and unhurried, brow smooth and mouth soft, attention entirely on the plate. Steam, stainless steel and the warm blur of a working kitchen behind. Competence that has stopped being remarkable to the person doing it. Plain blank walls, bare unmarked surfaces throughout. No text, lettering, signage, numerals or legible writing anywhere in frame. No logos or brand marks. Not stock photography: no posed smiles, no eye contact with the camera, no thumbs up.",
+    "refs": [
+      "tools/comfy/style-refs/house_style.png"
+    ],
+    "seed": 1826915430,
+    "lora_strength": 0.75,
+    "source": "rewritten",
+    "pass": "content"
+  }
+]
