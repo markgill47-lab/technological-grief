@@ -6,7 +6,13 @@ import { splitStageCore } from './schema';
 import { DOMAIN_IDS, ROGERS_IDS, STAGE_IDS, THREAT_IDS } from '../domain/types';
 import type { Diagnosis, Domain, RogersPosition, Stage, ThreatId } from '../domain/types';
 import { computeGap } from '../domain/gap';
-import { DOMAIN_IMAGE_BRIEFS, IMAGE_BRIEFS, PROMPT_RULES, briefFor } from './imageBriefs';
+import {
+  DOMAIN_IMAGE_BRIEFS,
+  IMAGE_BRIEFS,
+  PROMPT_LEAD,
+  PROMPT_RULES,
+  briefFor,
+} from './imageBriefs';
 
 /**
  * Content validation. These run in CI and fail the build.
@@ -415,11 +421,15 @@ describe('content validation', () => {
       }
     }
 
-    // PROMPT_RULES names the style, and says the one thing about blur that
-    // has to be said: not to use it. That sentence is allowed to contain the
-    // word; the briefs are not.
-    expect(PROMPT_RULES).toMatch(/chalk/i);
-    expect(PROMPT_RULES).toMatch(/not a photograph/i);
+    // The lead is what makes these drawings, and it has to lead: a style
+    // reference loses to camera vocabulary later in the prompt. Both strings
+    // are verbatim from the run that produced the shipped set, so this also
+    // guards against someone tidying the wording.
+    expect(PROMPT_LEAD).toMatch(/^Hand-drawn line art, chalk and ink on black paper\./);
+    expect(PROMPT_LEAD.endsWith(' '), 'the lead concatenates, so it needs its space').toBe(
+      true,
+    );
+    expect(PROMPT_RULES).toMatch(/bare unmarked surfaces/i);
   });
 
   it('counts 49 authored blocks', () => {

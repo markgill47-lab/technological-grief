@@ -8,20 +8,45 @@ export interface ImageBrief {
 }
 
 /**
- * Appended to every prompt before it reaches the generator.
+ * A prompt is assembled as `PROMPT_LEAD + brief.prompt + ' ' + PROMPT_RULES`.
  *
- * Kept out of the prompts themselves so they stay readable, but it is not
- * optional: text is the failure mode these images are most prone to. A
- * generated page of writing is always subtly wrong, it dates the image, it
+ * Both are reproduced verbatim from the run that generated the shipped set —
+ * `tools/comfy/catalog-jobs.json` holds the forty-two prompts exactly as sent,
+ * and these two constants are what they have in common. Do not tidy the
+ * wording: a change here is a change to what the next generation looks like,
+ * and the set on disk was made with these strings. The lead's trailing space
+ * is load-bearing.
+ *
+ * The lead is what makes these drawings rather than photographs, and it has
+ * to lead: the style reference alone loses to any camera vocabulary later in
+ * the prompt, which is why `U-V-15` keeps camera words out of the briefs.
+ *
+ * Earlier runs used two shorter leads — 'Hand-drawn line art. ' and the same
+ * without the darkness sentence. Twenty-six frames came from the first and
+ * five from the second, but they only survived where the frame happened to
+ * come out dark anyway. This one is what produced the black grounds the set
+ * is now uniform on, so it is the one recorded.
+ */
+export const PROMPT_LEAD =
+  'Hand-drawn line art, chalk and ink on black paper. The background is deep ' +
+  'solid black and the room falls away into unlit darkness beyond the lit ' +
+  'figures. ';
+
+/**
+ * Appended to every prompt. Kept out of the prompts themselves so they stay
+ * readable, but not optional: text is the failure mode these images are most
+ * prone to. Generated writing is always subtly wrong, it dates the image, it
  * cannot be translated, and a screen reader gets nothing from it.
+ *
+ * The blank-surfaces sentence was added during the fix passes and earns its
+ * place: it is what stopped a whiteboard and a bank of monitors from pulling
+ * writing back into frames that had been clean without them.
  */
 export const PROMPT_RULES =
-  'Chalk and pastel drawing on black paper: white chalk with a granular, grainy ' +
-  'texture, heavy contour lines, flat angular planes, red and blue used sparingly ' +
-  'as accents. No text, lettering, signage, numerals or legible writing anywhere ' +
-  'in frame. No logos or brand marks. No posed smiles, no eye contact with the ' +
-  'viewer, no thumbs up. Where something is indistinct, draw it as loose open ' +
-  'outlines rather than as blur: this is a drawing, not a photograph.';
+  'Plain blank walls, bare unmarked surfaces throughout. No text, lettering, ' +
+  'signage, numerals or legible writing anywhere in frame. No logos or brand ' +
+  'marks. Not stock photography: no posed smiles, no eye contact with the ' +
+  'camera, no thumbs up.';
 
 /**
  * One image per modal: forty-two in all, to be generated in Krea2 and dropped
@@ -51,10 +76,11 @@ export const PROMPT_RULES =
  *    foolish, or behind. Several of these people are standing still, and
  *    standing still is not the same as being stuck.
  *
- *  - **Drawings, not photographs.** The chosen house style is chalk and
- *    pastel on black paper: granular white chalk, heavy contours, flat
- *    angular planes, red and blue as sparing accents. It lives in
- *    `PROMPT_RULES` and in `tools/comfy/style-refs/house_style.png`.
+ *  - **Drawings, not photographs.** The chosen house style is hand-drawn
+ *    line art, chalk and ink on black paper, with red and blue as sparing
+ *    accents. It lives in `PROMPT_LEAD` and in
+ *    `tools/comfy/style-refs/house_style.png`, with a per-domain abstract
+ *    as the reference for each field's frames.
  *    Keep camera vocabulary out of the briefs entirely — "motion blur",
  *    "shallow depth of field", "out of focus", "shot from low" all read as
  *    an instruction to make a photograph and will override the style
@@ -108,12 +134,12 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
 
   discovery: {
     why: {
-      alt: 'A potter lifting a finished bowl from the wheel, an earlier lopsided attempt beside them.',
+      alt: 'A potter’s hands lowering an even bowl onto a bench beside a lopsided earlier one.',
       prompt:
         'A potter lifts a finished bowl away from the wheel with both hands while an earlier, visibly lopsided attempt sits on the bench beside them. Clay-dusted forearms, face soft or out of frame. Warm north light, earth tones. The difference between the two shapes is the subject.',
     },
     forward: {
-      alt: 'Two people at a café table, one describing a shape in the air, both laughing.',
+      alt: 'Two people at a café table, one describing a size in the air, the other amused.',
       prompt:
         'Two people lean toward each other over a café table, one describing a shape in the air with both hands, the other laughing. Coffees pushed to the edge of the table. Golden afternoon light. Two peers working something out, not an expert instructing a novice.',
     },
@@ -126,7 +152,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
         'A chef plates during service, one hand steady with tweezers, entirely calm. Steam, stainless steel and the warm mass of a working kitchen behind it, loosely drawn. Practical kitchen lighting. Competence that has stopped being remarkable to the person doing it.',
     },
     forward: {
-      alt: 'A senior colleague turned away from their monitors, listening to a younger one.',
+      alt: 'A senior colleague swivelled round to face a younger one, listening with hands still.',
       prompt:
         'A senior colleague has turned their chair fully away from their monitors to face a younger colleague who is talking and gesturing. The senior listens with their hands still. Cool office light, screens dark and ignored behind them. The listening is the subject.',
     },
@@ -139,7 +165,7 @@ export const IMAGE_BRIEFS: Record<Stage, { why: ImageBrief; forward: ImageBrief 
         'An older tradesperson stands a step back in a workshop, hands in pockets, watching an apprentice work at the bench and visibly choosing not to intervene. The apprentice is absorbed and in focus; the older figure is slightly behind and softer. Warm overhead work light. The restraint is the subject.',
     },
     forward: {
-      alt: 'Two colleagues walking out of a building at dusk, one carrying both coffees.',
+      alt: 'Two colleagues walking out of a building at dusk, each carrying a coffee.',
       prompt:
         'Two colleagues walk out of a building at the end of the day, mid-conversation, one carrying both coffees. Low sun behind them, long shadows, the street behind them loosely drawn. Easy and companionable.',
     },
@@ -201,7 +227,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
         'Two advisers sit across a conference table, one pressing a single fingertip to the table surface to make a point, the other listening with their hands still. A glass partition and city light behind. Cool daylight. The gesture is precise rather than angry.',
     },
     building: {
-      alt: 'An engineer with folded arms beside a colleague gesturing at a whiteboard.',
+      alt: 'An engineer with folded arms beside a colleague gesturing at a blank wall panel.',
       prompt:
         'An engineer stands with arms folded beside a colleague who is gesturing at a whiteboard, looking at the board rather than at them. Whatever is on the board is loose marks with no letterforms. Cool overhead light, flat palette.',
     },
@@ -285,7 +311,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
         'An adviser sits in profile at a desk, mid-sentence on a call, one hand raised and held still. Composed and unhurried, jacket off. Afternoon light across the desk, warm with long shadow. The calm is the subject.',
     },
     building: {
-      alt: 'An engineer close to a whiteboard mid-draw, the shapes left as loose marks.',
+      alt: 'An engineer alone in a dark room, marking a few loose shapes on a plain panel.',
       prompt:
         'An engineer stands close to a whiteboard mid-draw, marker in hand, the shapes on it left as loose marks with no letterforms. No audience. Cool even light, clean board, plain clothing. Small and practical rather than a grand architecture.',
     },
@@ -313,7 +339,7 @@ export const DOMAIN_IMAGE_BRIEFS: Partial<
         'A senior adviser sits beside a junior at the end of a long table, turned fully toward them and pointing at something between them that is out of frame. Both are leaning in. Cool daylight, warm wood, glass partition behind. Handing something over.',
     },
     building: {
-      alt: 'A senior developer holding a marker out toward a junior at a whiteboard.',
+      alt: 'A senior engineer holding a marker out toward a junior in a dark plant room.',
       prompt:
         'At a whiteboard, a senior developer holds the marker out toward a junior rather than using it, both standing, the junior reaching to take it. The board behind them is blank or loose marks. Cool office light. The handover is the subject.',
     },
