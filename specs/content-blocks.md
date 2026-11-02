@@ -478,13 +478,32 @@ Five blocks, each with three framings keyed to the gap sign. Target ~60 words pe
 
 ---
 
-## 6. OPEN: remaining 25 domain lenses
+## 6. The domain lens matrix — complete, unreviewed
 
-Phases 4–5 from [content-architecture.md](content-architecture.md) §6 — the domain lenses for Loss, Doubt, Discovery, Understanding, and Integration.
+**All thirty are authored**: six stages by five fields, each with a `summary` for the panel and, where the stage allows one, a first experiment. Twenty carry an experiment; Loss and Doubt do not (see below). Thirty matching image briefs sit in [imageBriefs.ts](../src/content/imageBriefs.ts), asserted complete by `validate.test.ts` U-V-11.
 
-**These are deliberately not drafted here.** The Discomfort set in §3 makes specific claims about what it is like to work in five professions, and those claims are load-bearing — a first experiment that lands wrong for a practitioner is worse than no first experiment at all. All five are marked `domainVerified: pending` for exactly that reason. Generating twenty-five more in the same voice would produce plausible prose with no one standing behind it, and it would read as plausible, which is the problem.
+They were written against [research/evidence-review.md](research/evidence-review.md) §7.1, which establishes what each field actually reports losing. Read that section before touching any of them — two of the five original framings in this document were wrong rather than merely thin, and the corrections run through every stage of those fields:
 
-The right process is the project owner drafting these, or a practitioner in each domain reviewing them. The template below is what each one needs.
+- **`craft`** — the dominant reported loss is **consent**, not taste or authorship, and refusal is held as a considered professional position rather than a stage. The "where value migrates" content stays out of Loss and Doubt entirely; it is Discovery-and-later material, and offered earlier it reads as an argument that the objection is a phase.
+- **`coordination`** — the resistance is specifically relational, not general unease. Documentation is welcome; substitution for contact is refused. The earlier framing had this backwards, and the "you have been told you are safe" line is not what the evidence shows.
+
+### The unresolved question about Loss and Doubt
+
+Three sources disagree about whether those two stages may carry a first experiment:
+
+| Source | Position |
+|---|---|
+| The template below | A *reflective* experiment is allowed — name what is ending, make the objection testable |
+| `validate.test.ts` U-V-10 | `firstExperiment` must be absent entirely |
+| [research/evidence-review.md](research/evidence-review.md) E1 | The restriction is unsupported; vary the size, privacy and stakes by stage, not whether one is offered |
+
+The ten blocks follow the test, because it is the one that fails a build. The move each asks for sits in the body instead. That works and it reads well, but it is a content decision made by a test rather than by an author, and resolving it the other way would change twenty of the thirty blocks — the ten at Loss and Doubt plus the ten whose experiments would need rebalancing against them. **Decide it before the practitioner review, not after.**
+
+### What is actually outstanding
+
+1. **Practitioner review.** All thirty are `domainVerified: false` and the build names them on every run. The checklist below is what that review should use. This is the real gate, and nothing here should be treated as finished without it.
+2. **The images.** Forty-two briefs, no pictures.
+3. **The field constants.** Three of the five are disputed by the review (§4.3). No block cites a position number, deliberately, so the constants can change without touching this prose.
 
 ### Template
 

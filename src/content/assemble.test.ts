@@ -3,6 +3,7 @@ import { assemble } from './assemble';
 import { resolveThreatResponse } from './index';
 import { splitStageCore } from './schema';
 import { STAGE_CORES } from './stageCores';
+import { DOMAIN_LENSES } from './domainLenses';
 import { PACE_NOTES } from './paceNotes';
 import type { Diagnosis } from '../domain/types';
 import { ROGERS_IDS, STAGE_IDS } from '../domain/types';
@@ -49,10 +50,23 @@ describe('assemble', () => {
   });
 
   it('U-C-03 omits the lens where no block is authored for that stage', () => {
-    // Only Discomfort has domain lenses in authoring phase 3.
-    const page = assemble('discovery', diag({ stage: 'discovery' }));
-    expect(kinds(page)).not.toContain('lens');
-    expect(kinds(page)).not.toContain('experiment');
+    // Derived rather than named: this test used to hardcode Discovery as the
+    // unauthored stage, and broke the moment Discovery was written. The
+    // guarantee is about the degradation path, not about which stage happens
+    // to be empty this month.
+    const authored = new Set(DOMAIN_LENSES.map((l) => l.stage));
+    const unauthored = STAGE_IDS.find((s) => !authored.has(s));
+
+    if (!unauthored) {
+      // Every stage has its five lenses now. The same path is still reachable
+      // with no diagnosis at all, so assert it there instead of losing it.
+      expect(kinds(assemble('discomfort', null))).not.toContain('lens');
+      return;
+    }
+
+    const page = assemble(unauthored, diag({ stage: unauthored }));
+    expect(kinds(page), `stage ${unauthored}`).not.toContain('lens');
+    expect(kinds(page), `stage ${unauthored}`).not.toContain('experiment');
     expect(kinds(page)).toContain('threat');
     expect(kinds(page)).toContain('pace');
   });

@@ -218,9 +218,9 @@ The matrix can ship incomplete, because §4.1 degrades cleanly. Recommended orde
 |---|---|---|
 | **1** | 6 stage cores | The app is complete and useful with only these. |
 | **2** | 5 pace notes, 7 threat responses | Cheap, stage-agnostic, high perceived personalization per word. |
-| **3** | 5 domain lenses for **Discomfort** | Stage 3 is the Danger Zone, the highest-population stage, and the one where a concrete first step is the actual intervention. |
-| **4** | 10 lenses for Discovery + Doubt | The adjacent stages, where most remaining traffic sits. |
-| **5** | 15 lenses for Loss, Understanding, Integration | Completes the matrix. |
+| **3** | 5 domain lenses for **Discomfort** | Done. Stage 3 is the Danger Zone and the highest-population stage. |
+| **4** | 10 lenses for Discovery + Doubt | Done. The adjacent stages, where most remaining traffic sits. |
+| **5** | 15 lenses for Loss, Understanding, Integration | Done. Completes the matrix — all 30 authored, none practitioner-reviewed. |
 
 Phases 1–3 are authored in [content-blocks.md](content-blocks.md). Phases 4–5 are left open deliberately — see that document's §6 for the template and the reason.
 
