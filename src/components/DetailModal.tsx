@@ -12,6 +12,8 @@ interface Props {
   title: string;
   sections: AssembledSection[];
   brief: ImageBrief;
+  /** The generated image for this door, or null while one is still to come. */
+  image?: string | null;
   id: string;
 }
 
@@ -31,6 +33,7 @@ export function DetailModal({
   title,
   sections,
   brief,
+  image = null,
   id,
 }: Props) {
   const data = STAGES[stage];
@@ -67,35 +70,42 @@ export function DetailModal({
         </div>
 
         <figure className="shot">
-          <div className="shot__frame">
-            <svg
-              width="40"
-              height="34"
-              viewBox="0 0 40 34"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <rect
-                x="1"
-                y="1"
-                width="38"
-                height="32"
-                rx="2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-              <circle cx="12" cy="11" r="3.5" fill="currentColor" opacity="0.7" />
-              <path
-                d="M4 27 L15 17 L23 24 L29 19 L36 26"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <p className="shot__label">Image to come</p>
-          </div>
+          {image ? (
+            // The caption below already describes the frame, so the image
+            // itself is decorative to a screen reader: alt="" keeps it from
+            // being announced twice.
+            <img className="shot__img" src={image} alt="" loading="lazy" />
+          ) : (
+            <div className="shot__frame">
+              <svg
+                width="40"
+                height="34"
+                viewBox="0 0 40 34"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect
+                  x="1"
+                  y="1"
+                  width="38"
+                  height="32"
+                  rx="2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+                <circle cx="12" cy="11" r="3.5" fill="currentColor" opacity="0.7" />
+                <path
+                  d="M4 27 L15 17 L23 24 L29 19 L36 26"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <p className="shot__label">Image to come</p>
+            </div>
+          )}
           <figcaption className="shot__caption">{brief.alt}</figcaption>
         </figure>
       </div>

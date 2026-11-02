@@ -902,6 +902,17 @@ p:last-child {
   color: var(--ink-muted);
 }
 
+.shot__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
+  /* The images are drawn on black; on the light theme they need an edge so
+     they do not float against the page. */
+  border: 1px solid var(--border);
+}
+
 .shot__label {
   font-size: 13px;
   font-family: var(--font-display);
